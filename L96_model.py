@@ -7,8 +7,7 @@ https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved
 import numpy as np 
 
 def Lorenz_96(X,t,F,J):
-    
-     """
+    """
     Calculate the time increment in the X variables for the Lorenz '96.
     Args:
         X : Values of X variables at the current time step
