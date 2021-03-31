@@ -6,7 +6,7 @@ https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved
 
 import numpy as np 
 
-def L96_eq1_xdot(X,t,F):
+def L96_eq1_xdot(X, t, F):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
         d/dt X[k] = -X[k-2] X[k-1] + X[k-1] X[k+1] - X[k] + F
@@ -31,12 +31,14 @@ def L96_eq1_xdot(X,t,F):
 def EulerFwd(fn, dt, X, t, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,F) using the Euler forward method.
+
     Args:
         fn : The function returning the time rate of change of model variables X
         dt : The time step
         X  : Values of X variables at the current time, t
         t  : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
+
     Returns:
         X at t+dt
     """
@@ -45,12 +47,14 @@ def EulerFwd(fn, dt, X, t, *params):
 def RK2(fn, dt, X, t, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,F) using the second order Runge-Kutta method.
+
     Args:
         fn : The function returning the time rate of change of model variables X
         dt : The time step
         X  : Values of X variables at the current time, t
         t  : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
+
     Returns:
         X at t+dt
     """
@@ -60,12 +64,14 @@ def RK2(fn, dt, X, t, *params):
 def RK4(fn, dt, X, t, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,...) using the fourth order Runge-Kutta method.
+
     Args:
         fn     : The function returning the time rate of change of model variables X
         dt     : The time step
         X      : Values of X variables at the current time, t
         t      : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
+
     Returns:
         X at t+dt
     """
@@ -90,6 +96,7 @@ def integrator_1d(fn, method, dt, X0, nt, *params):
         X0     : Values of X variables at the current time
         nt     : Number of forwards steps
         params : All other arguments that should be passed to fn
+
     Returns:
         X[:,:], time[:] : the full history X[n,k] at times t[n]
     """    
