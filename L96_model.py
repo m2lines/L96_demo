@@ -52,7 +52,7 @@ def L96_eq2_xdot(X, t, Y, F, h, b, c):
     Ysummed = Y.reshape((K,J)).sum(axis=-1)
     
     for k in range(K):
-        Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F + hcb * Ysummed[k]
+        Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F - hcb * Ysummed[k]
     return Xdot
 
 def L96_eq3_ydot(Y, t, X, h, b, c):
