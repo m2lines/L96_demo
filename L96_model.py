@@ -26,21 +26,23 @@ def L96_eq1_xdot(X, t, F):
         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
 
-def L96_eq2_xdot(X, t, Y, F, h, b, c):
+def L96_2t_xdot_ydot(X, Y, t, F, h, b, c):
     """
-    Calculate the time rate of change for the X variables for the Lorenz '96, equation 2:
-        d/dt X[k] = -X[k-1] ( X[k-2] - X[k+1] ) - X[k] + F - h.c/b sum_j Y[j,k]
+    Calculate the time rate of change for the X and Y variables for the Lorenz '96, two time-scale
+    model, equations 2 and 3:
+        d/dt X[k] =     -X[k-1] ( X[k-2] - X[k+1] )   - X[k] + F - h.c/b sum_j Y[j,k]
+        d/dt Y[j] = -b c Y[j+1] ( Y[j+2] - Y[j-1] ) - c Y[j]     + h.c/b X[k]
 
     Args:
         X : Values of X variables at the current time step
-        t : Time
         Y : Values of Y variables at the current time step
+        t : Time
         F : Forcing term
         h : coupling coefficient
         b : ratio of amplitudes
         c : time-scale ratio
     Returns:
-        dXdt : Array of X time tendencies
+        dXdt, dYdt : Array of X and Y time tendencies
     """
 
     JK,K = len(Y),len(X)
@@ -54,35 +56,13 @@ def L96_eq2_xdot(X, t, Y, F, h, b, c):
     #Xdot = np.roll(X,1) * ( np.roll(X,-1) - np.roll(X,2) ) - X + F - hcb * Ysummed
     for k in range(K):
         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F - hcb * Ysummed[k]
-    return Xdot
-
-def L96_eq3_ydot(Y, t, X, h, b, c):
-    """
-    Calculate the time rate of change for the X variables for the Lorenz '96, equation 2:
-      d/dt X[k] = -X[k-1] ( X[k-2] - X[k+1] ) - X[k] + F - h.c/b sum_j Y[j,k]
-
-    Args:
-        Y : Values of Y variables at the current time step
-        t : Time
-        X : Values of X variables at the current time step
-        h : coupling coefficient
-        b : ratio of amplitudes
-        c : time-scale ratio
-    Returns:
-        dXdt : Array of X time tendencies
-    """
-
-    JK,K = len(Y),len(X)
-    J = JK//K
-    assert JK==J*K, "X and Y have incompatible shapes"
-    hcb = (h*c)/b
  
     #for j in range(JK):
     #        k = j//J
     #        Ydot[j] = -c * b * Y[(j+1)%JK] * ( Y[(j+2)%JK] - Y[j-1] ) - c * Y[j] + hcb * X[k]
     Ydot = -c * b * np.roll(Y,-1) * ( np.roll(Y,-2) - np.roll(Y,1) ) - c * Y + hcb * np.repeat(X,J)
 
-    return Ydot
+    return Xdot, Ydot
 
 # Time-stepping methods ##########################################################################################
 
@@ -191,14 +171,11 @@ def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c):
     yhist[0,:] = Y
     for n in range(nt):
         t = dt*n
-        Xdot1 = L96_eq2_xdot(X, t, Y, F, h, b, c)
-        Ydot1 = L96_eq3_ydot(Y, t, X, h, b, c)
-        Xdot2 = L96_eq2_xdot(X+0.5*dt*Xdot1, t+0.5*dt, Y+0.5*dt*Ydot1, F, h, b, c)
-        Ydot2 = L96_eq3_ydot(Y+0.5*dt*Ydot1, t+0.5*dt, X+0.5*dt*Xdot1, h, b, c)
-        Xdot3 = L96_eq2_xdot(X+0.5*dt*Xdot2, t+0.5*dt, Y+0.5*dt*Ydot2, F, h, b, c)
-        Ydot3 = L96_eq3_ydot(Y+0.5*dt*Ydot2, t+0.5*dt, X+0.5*dt*Xdot2, h, b, c)
-        Xdot4 = L96_eq2_xdot(X+dt*Xdot3, t+dt, Y+dt*Ydot3, F, h, b, c)
-        Ydot4 = L96_eq3_ydot(Y+dt*Ydot3, t+dt, X+dt*Xdot3, h, b, c)
+        # RK4 update of X,Y
+        Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, t, F, h, b, c)
+        Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dt*Xdot1, Y+0.5*dt*Ydot1, t+0.5*dt, F, h, b, c)
+        Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dt*Xdot2, Y+0.5*dt*Ydot2, t+0.5*dt, F, h, b, c)
+        Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dt*Xdot3, Y+dt*Ydot3, t+dt, F, h, b, c)
         X = X + (dt/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
         Y = Y + (dt/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
 
