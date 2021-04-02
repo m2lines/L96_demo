@@ -6,14 +6,13 @@ https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved
 
 import numpy as np 
 
-def L96_eq1_xdot(X, t, F):
+def L96_eq1_xdot(X, F):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
         d/dt X[k] = -X[k-2] X[k-1] + X[k-1] X[k+1] - X[k] + F
 
     Args:
         X : Values of X variables at the current time step
-        t : Time
         F : Forcing term
     Returns:
         dXdt : Array of X time tendencies
@@ -26,7 +25,7 @@ def L96_eq1_xdot(X, t, F):
         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
 
-def L96_2t_xdot_ydot(X, Y, t, F, h, b, c):
+def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     """
     Calculate the time rate of change for the X and Y variables for the Lorenz '96, two time-scale
     model, equations 2 and 3:
@@ -36,7 +35,6 @@ def L96_2t_xdot_ydot(X, Y, t, F, h, b, c):
     Args:
         X : Values of X variables at the current time step
         Y : Values of Y variables at the current time step
-        t : Time
         F : Forcing term
         h : coupling coefficient
         b : ratio of amplitudes
@@ -66,7 +64,7 @@ def L96_2t_xdot_ydot(X, Y, t, F, h, b, c):
 
 # Time-stepping methods ##########################################################################################
 
-def EulerFwd(fn, dt, X, t, *params):
+def EulerFwd(fn, dt, X, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,F) using the Euler forward method.
 
@@ -74,15 +72,14 @@ def EulerFwd(fn, dt, X, t, *params):
         fn : The function returning the time rate of change of model variables X
         dt : The time step
         X  : Values of X variables at the current time, t
-        t  : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
 
     Returns:
         X at t+dt
     """
-    return X + dt * fn(X, t, *params)
+    return X + dt * fn(X, *params)
 
-def RK2(fn, dt, X, t, *params):
+def RK2(fn, dt, X, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,F) using the second order Runge-Kutta method.
 
@@ -90,16 +87,15 @@ def RK2(fn, dt, X, t, *params):
         fn : The function returning the time rate of change of model variables X
         dt : The time step
         X  : Values of X variables at the current time, t
-        t  : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
 
     Returns:
         X at t+dt
     """
-    X1 = X + 0.5 * dt * fn(X, t, *params)
-    return X + dt * fn(X1, t+0.5*dt, *params)
+    X1 = X + 0.5 * dt * fn(X, *params)
+    return X + dt * fn(X1, *params)
 
-def RK4(fn, dt, X, t, *params):
+def RK4(fn, dt, X, *params):
     """
     Calculate the new state X(n+1) for d/dt X = fn(X,t,...) using the fourth order Runge-Kutta method.
 
@@ -107,16 +103,15 @@ def RK4(fn, dt, X, t, *params):
         fn     : The function returning the time rate of change of model variables X
         dt     : The time step
         X      : Values of X variables at the current time, t
-        t      : Time at beginning of time step
         params : All other arguments that should be passed to fn, i.e. fn(X, t, *params)
 
     Returns:
         X at t+dt
     """
-    Xdot1 = fn(X, t, *params)
-    Xdot2 = fn(X+0.5*dt*Xdot1, t+0.5*dt, *params)
-    Xdot3 = fn(X+0.5*dt*Xdot2, t+0.5*dt, *params)
-    Xdot4 = fn(X+dt*Xdot3, t+dt, *params)
+    Xdot1 = fn(X, *params)
+    Xdot2 = fn(X+0.5*dt*Xdot1, *params)
+    Xdot3 = fn(X+0.5*dt*Xdot2, *params)
+    Xdot4 = fn(X+dt*Xdot3, *params)
     return X + (dt/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
 
 # Model integrators #############################################################################################
@@ -141,7 +136,7 @@ def integrate_L96_1t(X0, F, dt, nt, method=RK4):
     X = X0.copy()
     hist[0,:] = X
     for n in range(nt):
-        X = method( L96_eq1_xdot, dt, X, n*dt, F )
+        X = method( L96_eq1_xdot, dt, X, F )
         hist[n+1], time[n+1] = X, dt*(n+1)
     return hist, time
 
@@ -169,12 +164,11 @@ def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c):
     xhist[0,:] = X
     yhist[0,:] = Y
     for n in range(nt):
-        t = dt*n
         # RK4 update of X,Y
-        Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, t, F, h, b, c)
-        Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dt*Xdot1, Y+0.5*dt*Ydot1, t+0.5*dt, F, h, b, c)
-        Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dt*Xdot2, Y+0.5*dt*Ydot2, t+0.5*dt, F, h, b, c)
-        Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dt*Xdot3, Y+dt*Ydot3, t+dt, F, h, b, c)
+        Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, F, h, b, c)
+        Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dt*Xdot1, Y+0.5*dt*Ydot1, F, h, b, c)
+        Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dt*Xdot2, Y+0.5*dt*Ydot2, F, h, b, c)
+        Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dt*Xdot3, Y+dt*Ydot3, F, h, b, c)
         X = X + (dt/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
         Y = Y + (dt/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
 
