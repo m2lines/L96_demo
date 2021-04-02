@@ -121,19 +121,18 @@ def RK4(fn, dt, X, t, *params):
 
 # Model integrators #############################################################################################
 
-def integrator_1d(fn, method, dt, X0, nt, *params):
+def integrate_L96_1t(X0, F, dt, nt, method=RK4):
     """
     Integrates forward-in-time the model "fn" using the integration "method". Returns the full history with
     nt+1 values including initial conditions for n=0. The model "fn" is required to have one vector of state
     variables, X, and take the form fn(X, t, *params) where t is current model time.
     
     Args:
-        fn     : The function returning the time rate of change of model variables X
-        method : The time-stepping method that returns X(n+1) givein X(n)
-        dt     : The time step
         X0     : Values of X variables at the current time
+        F      : Forcing term
+        dt     : The time step
         nt     : Number of forwards steps
-        params : All other arguments that should be passed to fn
+        method : The time-stepping method that returns X(n+1) given X(n)
 
     Returns:
         X[:,:], time[:] : the full history X[n,k] at times t[n]
@@ -142,7 +141,7 @@ def integrator_1d(fn, method, dt, X0, nt, *params):
     X = X0.copy()
     hist[0,:] = X
     for n in range(nt):
-        X = method( fn, dt, X, n*dt, *params )
+        X = method( L96_eq1_xdot, dt, X, n*dt, F )
         hist[n+1], time[n+1] = X, dt*(n+1)
     return hist, time
 
