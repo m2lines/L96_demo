@@ -153,7 +153,7 @@ def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
     """
     Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
     Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,
-    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*dt.
+    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*si.
     
     Note the model is intergrated 
     
