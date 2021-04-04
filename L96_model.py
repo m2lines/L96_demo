@@ -149,7 +149,7 @@ def integrate_L96_1t(X0, F, dt, nt, method=RK4, t0=0):
         hist[n+1], time[n+1] = X, t0+dt*(n+1)
     return hist, time
 
-def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c, t0=0, dts=0.001):
+def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
     """
     Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
     Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,
@@ -158,16 +158,16 @@ def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c, t0=0, dts=0.001):
     Note the model is intergrated 
     
     Args:
-        X0  : Values of X variables at the current time
-        Y0  : Values of Y variables at the current time
-        dt  : Separation in time between output samples
-        nt  : Number of sample segments (results in nt+1 samples incl. initial state)
-        F   : Forcing term
-        h   : coupling coefficient
-        b   : ratio of amplitudes
-        c   : time-scale ratio
-        t0  : Initial time (defaults to 0)
-        dts : The actual time step. If dts<dt, the dt is used. Otherwise dt/dts must be a whole number. Default 0.001.
+        X0 : Values of X variables at the current time
+        Y0 : Values of Y variables at the current time
+        si : Sampling time interval
+        nt : Number of sample segments (results in nt+1 samples incl. initial state)
+        F  : Forcing term
+        h  : coupling coefficient
+        b  : ratio of amplitudes
+        c  : time-scale ratio
+        t0 : Initial time (defaults to 0)
+        dt : The actual time step. If dt<si, then si is used. Otherwise si/dt must be a whole number. Default 0.001.
 
     Returns:
         X[:,:], Y[:,:], time[:] : the full history X[n,k] and Y[n,k] at times t[n]
@@ -181,20 +181,21 @@ def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c, t0=0, dts=0.001):
     X,Y = X0.copy(), Y0.copy()
     xhist[0,:] = X
     yhist[0,:] = Y
-    if dt<dts:
-        dts, ns = dt, 1
+    if si<dt:
+        dt, ns = si, 1
     else:
-        ns = int(dt/dts+0.5)
-        assert abs(ns*dts - dt)<1e-14, "dt is not an integer multiple of dts, %f, %f, %i"%(dt,dts,ns)
+        ns = int(si/dt+0.5)
+        assert abs(ns*dt - si)<1e-14, "si is not an integer multiple of dt: si=%f dt=%f ns=%i"%(si,dt,ns)
+
     for n in range(nt):
         for s in range(ns):
             # RK4 update of X,Y
             Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, F, h, b, c)
-            Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dts*Xdot1, Y+0.5*dts*Ydot1, F, h, b, c)
-            Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dts*Xdot2, Y+0.5*dts*Ydot2, F, h, b, c)
-            Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dts*Xdot3, Y+dts*Ydot3, F, h, b, c)
-            X = X + (dts/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
-            Y = Y + (dts/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
+            Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dt*Xdot1, Y+0.5*dt*Ydot1, F, h, b, c)
+            Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dt*Xdot2, Y+0.5*dt*Ydot2, F, h, b, c)
+            Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dt*Xdot3, Y+dt*Ydot3, F, h, b, c)
+            X = X + (dt/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
+            Y = Y + (dt/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
 
-        xhist[n+1], yhist[n+1], time[n+1] = X, Y, t0+dt*(n+1)
+        xhist[n+1], yhist[n+1], time[n+1] = X, Y, t0+si*(n+1)
     return xhist, yhist, time
