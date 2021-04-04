@@ -77,6 +77,7 @@ def EulerFwd(fn, dt, X, *params):
     Returns:
         X at t+dt
     """
+
     return X + dt * fn(X, *params)
 
 def RK2(fn, dt, X, *params):
@@ -92,6 +93,7 @@ def RK2(fn, dt, X, *params):
     Returns:
         X at t+dt
     """
+
     X1 = X + 0.5 * dt * fn(X, *params)
     return X + dt * fn(X1, *params)
 
@@ -108,6 +110,7 @@ def RK4(fn, dt, X, *params):
     Returns:
         X at t+dt
     """
+
     Xdot1 = fn(X, *params)
     Xdot2 = fn(X+0.5*dt*Xdot1, *params)
     Xdot3 = fn(X+0.5*dt*Xdot2, *params)
@@ -116,11 +119,11 @@ def RK4(fn, dt, X, *params):
 
 # Model integrators #############################################################################################
 
-def integrate_L96_1t(X0, F, dt, nt, method=RK4):
+def integrate_L96_1t(X0, F, dt, nt, method=RK4, t0=0):
     """
-    Integrates forward-in-time the model "fn" using the integration "method". Returns the full history with
-    nt+1 values including initial conditions for n=0. The model "fn" is required to have one vector of state
-    variables, X, and take the form fn(X, t, *params) where t is current model time.
+    Integrates forward-in-time the single time-scale Lorenz 1996 model, using the integration "method".
+    Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0, and ending
+    with the final state, X[:,nt+1] at time t0+nt*dt.
     
     Args:
         X0     : Values of X variables at the current time
@@ -128,49 +131,70 @@ def integrate_L96_1t(X0, F, dt, nt, method=RK4):
         dt     : The time step
         nt     : Number of forwards steps
         method : The time-stepping method that returns X(n+1) given X(n)
+        t0     : Initial time (defaults to 0)
 
     Returns:
         X[:,:], time[:] : the full history X[n,k] at times t[n]
-    """    
-    time, hist = np.zeros((nt+1)), np.zeros((nt+1,len(X0)))
+    
+    Example usage:
+        X,t = integrate_L96_1t(5+5*np.random.rand(8), 18, 0.01, 500)
+        plt.plot(t, X);
+    """
+
+    time, hist = t0+np.zeros((nt+1)), np.zeros((nt+1,len(X0)))
     X = X0.copy()
     hist[0,:] = X
     for n in range(nt):
         X = method( L96_eq1_xdot, dt, X, F )
-        hist[n+1], time[n+1] = X, dt*(n+1)
+        hist[n+1], time[n+1] = X, t0+dt*(n+1)
     return hist, time
 
-def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c):
+def integrate_L96_2t(X0, Y0, dt, nt, F, h, b, c, t0=0, dts=0.001):
     """
-    Integrates forward-in-time the model two time-scale L96 model using RK4. Returns the full history with
-    nt+1 values including initial conditions for n=0. The model "fn" is required to have one vector of state
-    variables, X, and take the form fn(X, t, *params) where t is current model time.
+    Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
+    Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,
+    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*dt.
+    
+    Note the model is intergrated 
     
     Args:
-        X0 : Values of X variables at the current time
-        Y0 : Values of Y variables at the current time
-        dt : The time step
-        nt : Number of forwards steps
-        F  : Forcing term
-        h  : coupling coefficient
-        b  : ratio of amplitudes
-        c  : time-scale ratio
+        X0  : Values of X variables at the current time
+        Y0  : Values of Y variables at the current time
+        dt  : Separation in time between output samples
+        nt  : Number of sample segments (results in nt+1 samples incl. initial state)
+        F   : Forcing term
+        h   : coupling coefficient
+        b   : ratio of amplitudes
+        c   : time-scale ratio
+        t0  : Initial time (defaults to 0)
+        dts : The actual time step. If dts<dt, the dt is used. Otherwise dt/dts must be a whole number. Default 0.001.
 
     Returns:
-        X[:,:], time[:] : the full history X[n,k] at times t[n]
+        X[:,:], Y[:,:], time[:] : the full history X[n,k] and Y[n,k] at times t[n]
+
+    Example usage:
+        X,Y,t = integrate_L96_2t(5+5*np.random.rand(8), np.random.rand(8*4), 0.01, 500, 18, 1, 10, 10)
+        plt.plot( t, X);
     """
-    time, xhist, yhist = np.zeros((nt+1)), np.zeros((nt+1,len(X0))), np.zeros((nt+1,len(Y0)))
+
+    time, xhist, yhist = t0+np.zeros((nt+1)), np.zeros((nt+1,len(X0))), np.zeros((nt+1,len(Y0)))
     X,Y = X0.copy(), Y0.copy()
     xhist[0,:] = X
     yhist[0,:] = Y
+    if dt<dts:
+        dts, ns = dt, 1
+    else:
+        ns = int(dt/dts+0.5)
+        assert abs(ns*dts - dt)<1e-14, "dt is not an integer multiple of dts, %f, %f, %i"%(dt,dts,ns)
     for n in range(nt):
-        # RK4 update of X,Y
-        Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, F, h, b, c)
-        Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dt*Xdot1, Y+0.5*dt*Ydot1, F, h, b, c)
-        Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dt*Xdot2, Y+0.5*dt*Ydot2, F, h, b, c)
-        Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dt*Xdot3, Y+dt*Ydot3, F, h, b, c)
-        X = X + (dt/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
-        Y = Y + (dt/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
+        for s in range(ns):
+            # RK4 update of X,Y
+            Xdot1,Ydot1 = L96_2t_xdot_ydot(X, Y, F, h, b, c)
+            Xdot2,Ydot2 = L96_2t_xdot_ydot(X+0.5*dts*Xdot1, Y+0.5*dts*Ydot1, F, h, b, c)
+            Xdot3,Ydot3 = L96_2t_xdot_ydot(X+0.5*dts*Xdot2, Y+0.5*dts*Ydot2, F, h, b, c)
+            Xdot4,Ydot4 = L96_2t_xdot_ydot(X+dts*Xdot3, Y+dts*Ydot3, F, h, b, c)
+            X = X + (dts/6.) * ( ( Xdot1 + Xdot4 ) + 2. * ( Xdot2 + Xdot3 ) )
+            Y = Y + (dts/6.) * ( ( Ydot1 + Ydot4 ) + 2. * ( Ydot2 + Ydot3 ) )
 
-        xhist[n+1], yhist[n+1], time[n+1] = X, Y, dt*(n+1)
+        xhist[n+1], yhist[n+1], time[n+1] = X, Y, t0+dt*(n+1)
     return xhist, yhist, time
