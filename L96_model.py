@@ -5,7 +5,9 @@ https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved
 """
 
 import numpy as np
+from numba import jit
 
+# @jit
 def L96_eq1_xdot(X, F):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
@@ -25,6 +27,7 @@ def L96_eq1_xdot(X, F):
         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
 
+# @jit
 def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     """
     Calculate the time rate of change for the X and Y variables for the Lorenz '96, two time-scale
@@ -119,6 +122,7 @@ def RK4(fn, dt, X, *params):
 
 # Model integrators #############################################################################################
 
+# @jit(forceobj=True)
 def integrate_L96_1t(X0, F, dt, nt, method=RK4, t0=0):
     """
     Integrates forward-in-time the single time-scale Lorenz 1996 model, using the integration "method".
@@ -149,6 +153,7 @@ def integrate_L96_1t(X0, F, dt, nt, method=RK4, t0=0):
         hist[n+1], time[n+1] = X, t0+dt*(n+1)
     return hist, time
 
+# @jit(forceobj=True)
 def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
     """
     Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
@@ -212,13 +217,11 @@ class L96:
     h = "Coupling coefficient"
     b = "Ratio of timescales"
     c = "Ratio of amplitudes"
-    si = "Sampling time interval"
     dt = "Time step"
-    def __init__(self, K, J, si, F=18, h=1, b=10, c=10, t=0, dt=0.001):
+    def __init__(self, K, J, F=18, h=1, b=10, c=10, t=0, dt=0.001):
         """Construct a two time-scale model with parameters:
         K  : Number of X values
         J  : Number of Y values per X value
-        si : Sample time interval
         F  : Forcing term (default 18.)
         h  : coupling coefficient (default 1.)
         b  : ratio of amplitudes (default 10.)
@@ -226,25 +229,24 @@ class L96:
         t  : Initial time (default 0.)
         dt : Time step (default 0.001)
         """
-        self.F, self.h, self.b, self.c, self.dt, self.si = F, h, b, c, dt, si
+        self.F, self.h, self.b, self.c, self.dt = F, h, b, c, dt
         self.X, self.Y, self.t = b * np.random.randn(K), np.random.randn(J*K), t
         self.K, self.J, self.JK = K, J, J*K # For convenience
         self.k, self.j = np.arange(self.K), np.arange(self.JK) # For plotting
     def __repr__(self):
         return "L96: " + "K=" + str(self.K) + " J=" + str(self.J) + " F="+str(self.F) \
                    + " h="+str(self.h) + " b="+str(self.b) + " c="+str(self.c) \
-                   + " dt=" + str(self.dt) + " si=" + str(self.si)
+                   + " dt=" + str(self.dt)
     def __str__(self):
         return self.__repr__() + "\n X="+str(self.X) + "\n Y="+str(self.Y) + "\n t="+str(self.t)
     def copy(self):
-        copy = L96(self.K, self.J, self.si, F=self.F, h=sle.fh, b=self.b, c=self.c, dt=self.dt)
+        copy = L96(self.K, self.J, F=self.F, h=sle.fh, b=self.b, c=self.c, dt=self.dt)
         copy.set_state(self.X, self.Y, t=self.t)
         return copy
     def print(self):
         print(self)
-    def set_param(self, si=None, dt=None, F=None, h=None, b=None, c=None, t=0):
+    def set_param(self, dt=None, F=None, h=None, b=None, c=None, t=0):
         """Set a model parameter, e.g. .set_param(si=0.01, dt=0.002)"""
-        if si is not None: self.si = si
         if dt is not None: self.dt = dt
         if F is not None: self.F = F
         if h is not None: self.h = h
@@ -265,11 +267,12 @@ class L96:
         """Randomize the initial conditions (or current state)"""
         X,Y = self.b * np.random.rand( self.X.size ), np.random.rand( self.Y.size )
         return self.set_state(X,Y)
-    def run(self, nt, store=False):
-        """Run model for nt sampling intervals, for a total time of nt*si.
+    def run(self, si, T, store=False):
+        """Run model for a total time of T, sampling at intervals of si.
         If store=Ture, then stores the final state as the initial conditions for the next segment.
         Returns sampled history: X[:,:],Y[:,:],t[:]."""
-        X,Y,t = integrate_L96_2t(self.X, self.Y, self.si, nt, self.F, self.h, self.b, self.c, t0=self.t, dt=self.dt)
+        nt = int(T/si)
+        X,Y,t = integrate_L96_2t(self.X, self.Y, si, nt, self.F, self.h, self.b, self.c, t0=self.t, dt=self.dt)
         if store:
             self.X, self.Y, self.t = X[-1], Y[-1], t[-1]
         return X,Y,t
@@ -325,10 +328,11 @@ class L96s:
         """Randomize the initial conditions (or current state)"""
         self.X = self.F * np.random.rand( self.X.size )
         return self
-    def run(self, nt, store=False):
-        """Run model for nt steps, , for a total time of nt*dt.
+    def run(self, T, store=False):
+        """Run model for a total time of T.
         If store=Ture, then stores the final state as the initial conditions for the next segment.
         Returns full history: X[:,:],t[:]."""
+        nt = int(T/self.dt)
         X,t = integrate_L96_1t(self.X, self.F, self.dt, nt, method=self.method, t0=self.t)
         if store:
             self.X, self.t = X[-1], t[-1]
