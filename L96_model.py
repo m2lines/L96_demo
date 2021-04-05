@@ -4,7 +4,7 @@ Predictability. Proc 1995. ECMWF Seminar, 1-18.
 https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved 
 """
 
-import numpy as np 
+import numpy as np
 
 def L96_eq1_xdot(X, F):
     """
@@ -217,7 +217,7 @@ class L96:
     def __init__(self, K, J, si, F=18, h=1, b=10, c=10, t=0, dt=0.001):
         """Construct a two time-scale model with parameters:
         K  : Number of X values
-        J  : Number of Y values
+        J  : Number of Y values per X value
         si : Sample time interval
         F  : Forcing term (default 18.)
         h  : coupling coefficient (default 1.)
@@ -228,12 +228,10 @@ class L96:
         """
         self.F, self.h, self.b, self.c, self.dt, self.si = F, h, b, c, dt, si
         self.X, self.Y, self.t = b * np.random.randn(K), np.random.randn(J*K), t
-        self.K, self.J = self.X.size, self.Y.size # For convenience
-        self.k, self.j = np.arange(self.K), np.arange(self.J) # For plotting
+        self.K, self.J, self.JK = K, J, J*K # For convenience
+        self.k, self.j = np.arange(self.K), np.arange(self.JK) # For plotting
     def __repr__(self):
-        K = self.X.shape
-        J = self.Y.shape
-        return "L96: " + "K=" + str(K) + " J=" + str(J) + " F="+str(self.F) \
+        return "L96: " + "K=" + str(self.K) + " J=" + str(self.J) + " F="+str(self.F) \
                    + " h="+str(self.h) + " b="+str(self.b) + " c="+str(self.c) \
                    + " dt=" + str(self.dt) + " si=" + str(self.si)
     def __str__(self):
@@ -259,14 +257,14 @@ class L96:
         self.X, self.Y = X, Y
         if t is not None:
             self.t = t
-        self.K, self.J = self.X.size, self.Y.size # For convenience
-        self.k, self.j = np.arange(self.K), np.arange(self.J) # For plotting
+        self.K, self.JK = self.X.size, self.Y.size # For convenience
+        self.J = self.JK//self.K
+        self.k, self.j = np.arange(self.K), np.arange(self.JK) # For plotting
         return self
     def randomize_IC(self):
         """Randomize the initial conditions (or current state)"""
-        self.X = self.b * np.random.rand( self.X.size )
-        self.Y = np.random.rand( self.Y.size )
-        return self
+        X,Y = self.b * np.random.rand( self.X.size ), np.random.rand( self.Y.size )
+        return self.set_state(X,Y)
     def run(self, nt, store=False):
         """Run model for nt sampling intervals, for a total time of nt*si.
         If store=Ture, then stores the final state as the initial conditions for the next segment.
