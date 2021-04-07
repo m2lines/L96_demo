@@ -10,6 +10,7 @@ Contents:
 - jupyter (for notebooks)
 - numpy (used in computations)
 - matplotlib (for plots)
+- numba (for significant speed up)
 
 ### Conda
 
