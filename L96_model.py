@@ -240,7 +240,7 @@ class L96:
     def __str__(self):
         return self.__repr__() + "\n X="+str(self.X) + "\n Y="+str(self.Y) + "\n t="+str(self.t)
     def copy(self):
-        copy = L96(self.K, self.J, F=self.F, h=sle.fh, b=self.b, c=self.c, dt=self.dt)
+        copy = L96(self.K, self.J, F=self.F, h=self.h, b=self.b, c=self.c, dt=self.dt)
         copy.set_state(self.X, self.Y, t=self.t)
         return copy
     def print(self):
