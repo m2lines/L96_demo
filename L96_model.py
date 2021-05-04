@@ -23,8 +23,9 @@ def L96_eq1_xdot(X, F):
     K = len(X)
     Xdot = np.zeros(K)
     
-    for k in range(K):
-        Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
+    Xdot = np.roll(X,1) * ( np.roll(X,-1) - np.roll(X,2) ) - X + F
+#     for k in range(K):
+#         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
 
 @jit
@@ -54,9 +55,9 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
 
     Ysummed = Y.reshape((K,J)).sum(axis=-1)
     
-    #Xdot = np.roll(X,1) * ( np.roll(X,-1) - np.roll(X,2) ) - X + F - hcb * Ysummed
-    for k in range(K):
-        Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F - hcb * Ysummed[k]
+    Xdot = np.roll(X,1) * ( np.roll(X,-1) - np.roll(X,2) ) - X + F - hcb * Ysummed
+#     for k in range(K):
+#         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F - hcb * Ysummed[k]
  
     #for j in range(JK):
     #        k = j//J
@@ -240,7 +241,7 @@ class L96:
     def __str__(self):
         return self.__repr__() + "\n X="+str(self.X) + "\n Y="+str(self.Y) + "\n t="+str(self.t)
     def copy(self):
-        copy = L96(self.K, self.J, F=self.F, h=self.h, b=self.b, c=self.c, dt=self.dt)
+        copy = L96(self.K, self.J, F=self.F, h=sle.fh, b=self.b, c=self.c, dt=self.dt)
         copy.set_state(self.X, self.Y, t=self.t)
         return copy
     def print(self):
