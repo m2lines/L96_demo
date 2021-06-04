@@ -246,7 +246,7 @@ class L96:
         return copy
     def print(self):
         print(self)
-    def set_param(self, dt=None, F=None, h=None, b=None, c=None, t=0):
+    def set_param(self, dt=None, F=None, h=None, b=None, c=None, t=None):
         """Set a model parameter, e.g. .set_param(si=0.01, dt=0.002)"""
         if dt is not None: self.dt = dt
         if F is not None: self.F = F
@@ -310,7 +310,7 @@ class L96s:
         return copy
     def print(self):
         print(self)
-    def set_param(self, dt=None, F=None, t=0, method=EulerFwd):
+    def set_param(self, dt=None, F=None, t=None, method=None):
         """Set a model parameter, e.g. .set_param(dt=0.002)"""
         if dt is not None: self.dt = dt
         if F is not None: self.F = F
