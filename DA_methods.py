@@ -66,7 +66,7 @@ def EnKF(prior,obs,H,R,B):
     mR = R.shape[0]
     nB = B.shape[0]
     mH, nH = H.shape
-    assert m==mR, "obseravtion and obs_cov_matrix have incompatible size"
+    assert m==mR, "observation and obs_cov_matrix have incompatible size"
     assert nB==n, "state and state_cov_matrix have incompatible size"
     assert m==mH, "obseravtion and obs operator have incompatible size"
     assert n==nH, "state and obs operator have incompatible size"
