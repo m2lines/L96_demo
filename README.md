@@ -1,6 +1,6 @@
 # Lorenz 1996 two time-scale model
 
-Contents:
+Contents in 01Intro:
 - L96-description.ipynb : Equation and demonstration of the single time-scale model
 - L96-two-scale-description.ipynb : Equations and demonstration of the two time-scale model
 - L96_model.py : Functions providing tendancies and integrators for the L96 models
