@@ -17,7 +17,7 @@ def Lin3dvar(ub,w,H,R,B,opt):
         Bi = np.linalg.inv(B)
         Ri = np.linalg.inv(R)
         A = Bi + (H.T)@Ri@H
-        b = Bi@ub + (H.T)@Ri@w
+        b = Bi@ub + (H.T)@Ri@w[:,np.newaxis]
         ua = np.linalg.solve(A,b) #solve a linear system 
     
     elif opt == 2: #model-space incremental approach
@@ -25,14 +25,14 @@ def Lin3dvar(ub,w,H,R,B,opt):
         Bi = np.linalg.inv(B)
         Ri = np.linalg.inv(R)
         A = Bi + (H.T)@Ri@H
-        b = (H.T)@Ri@(w-H@ub)
+        b = (H.T)@Ri@(w[:,np.newaxis]-H@ub)
         ua = ub + np.linalg.solve(A,b) #solve a linear system 
         
         
     elif opt == 3: #observation-space incremental approach
     
         A = R + H@B@(H.T)
-        b = (w-H@ub)
+        b = (w[:,np.newaxis]-H@ub)
         ua = ub + B@(H.T)@np.linalg.solve(A,b) #solve a linear system
         
     return ua
