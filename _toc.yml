@@ -1,0 +1,38 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Intro
+    chapters:
+    - file: 01Intro/slides/presentation-model-setup.ipynb
+    - file: 01Intro/L96-description.ipynb
+    - file: 01Intro/L96-two-scale-description.ipynb
+    - file: 01Intro/gcm-analog-demo.ipynb
+  - caption: Type of Parametrization
+    chapters:
+    - file: 02type-of-parametrization/estimating-gcm-parameters.ipynb
+    - file: 02type-of-parametrization/gcm-parameterization-problem.ipynb
+  - caption: Data Assimilation
+    chapters:
+    - file: 03Data-Assimilation/DA_demo_L96.ipynb
+  - caption: Subgrid Patermetrization
+    chapters:
+    - file: 04Subgrid-parametrization-pytorch/Neural_network_for_Lorenz96.ipynb
+    - file: 04Subgrid-parametrization-pytorch/gradient_decent.ipynb
+  - caption: Offline DA Increments
+    chapters:
+    - file: 05Offline-DA-increments/Figure-for-DA.ipynb
+    - file: 5Offline-DA-increments/DA_demo_repeat.ipynb
+    - file: 05Offline-DA-increments/Learning-DA-increments.ipynb
+  - caption: Different ML Models
+    chapters:
+    - file: 06Different-ML-models/random_forest_parameterization.ipynb
+  - caption: Interpretability of ML
+    chapters:
+    - file: 07-Interpretability-of-ML/LRP-L96.ipynb
+  - caption: Implementation
+    chapters:
+    - file: 08-Implementation/Neural Network Advection FwdEuler.ipynb
+    - file: 08-Implementation/Neural Network Advection.ipynb
