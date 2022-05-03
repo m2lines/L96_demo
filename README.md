@@ -1,6 +1,15 @@
 # Lorenz 1996 two time-scale model
 
-Contents in 01Intro:
+## Building the Jupyter Book locally
+
+```
+pip install requirements.txt
+jupyter book build .
+cd _build/html
+python -m http.server
+```
+
+## Contents in 01Intro:
 - L96-description.ipynb : Equation and demonstration of the single time-scale model
 - L96-two-scale-description.ipynb : Equations and demonstration of the two time-scale model
 - L96_model.py : Functions providing tendancies and integrators for the L96 models
