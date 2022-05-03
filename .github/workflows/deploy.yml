@@ -1,13 +1,7 @@
 name: build-and-deploy-book
 
 # Trigger the workflow on push to main branch and PRs
-on:
-  push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
+on: [push, pull_request]
 
 # This job installs dependencies, builds the book, and deploys the html
 jobs:
@@ -36,7 +30,7 @@ jobs:
 
     # Deploy the book's html to earth-env-data-science.github.io
     - name: GitHub Pages action
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
