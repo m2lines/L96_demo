@@ -3,7 +3,7 @@
 ## Building the Jupyter Book locally
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 jupyter book build .
 cd _build/html
 python -m http.server
