@@ -1,5 +1,20 @@
 # Lorenz 1996 two time-scale model
 
+## Contributing
+
+### Pre-commit
+
+We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
+In order to use pre-commit, run the following commands in the repo top-level directory:
+
+```
+pip install pre-commit
+pre-commit install
+```
+
+At this point, pre-commit will automatically be run every time you make a commit.
+
+
 ## Building the Jupyter Book locally
 
 ```
