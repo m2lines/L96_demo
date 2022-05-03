@@ -4,7 +4,7 @@
 
 ```
 pip install requirements.txt
-jupyter book build
+jupyter book build .
 cd _build/html
 python -m http.server
 ```
