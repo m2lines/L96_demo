@@ -9,7 +9,7 @@ from numba import jit
 
 
 @jit
-def L96_eq1_xdot(X, F):
+def L96_eq1_xdot(X, F, advect=True):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
         d/dt X[k] = -X[k-2] X[k-1] + X[k-1] X[k+1] - X[k] + F
@@ -24,7 +24,10 @@ def L96_eq1_xdot(X, F):
     K = len(X)
     Xdot = np.zeros(K)
 
-    Xdot = np.roll(X, 1) * (np.roll(X, -1) - np.roll(X, 2)) - X + F
+    if advect:
+        Xdot = np.roll(X, 1) * (np.roll(X, -1) - np.roll(X, 2)) - X + F
+    else:
+        Xdot = -X + F
     #     for k in range(K):
     #         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
