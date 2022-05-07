@@ -9,7 +9,7 @@ from numba import jit
 
 
 @jit
-def L96_eq1_xdot(X, F):
+def L96_eq1_xdot(X, F, advect=True):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
         d/dt X[k] = -X[k-2] X[k-1] + X[k-1] X[k+1] - X[k] + F
@@ -24,7 +24,10 @@ def L96_eq1_xdot(X, F):
     K = len(X)
     Xdot = np.zeros(K)
 
-    Xdot = np.roll(X, 1) * (np.roll(X, -1) - np.roll(X, 2)) - X + F
+    if advect:
+        Xdot = np.roll(X, 1) * (np.roll(X, -1) - np.roll(X, 2)) - X + F
+    else:
+        Xdot = -X + F
     #     for k in range(K):
     #         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F
     return Xdot
@@ -46,7 +49,7 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
         b : ratio of amplitudes
         c : time-scale ratio
     Returns:
-        dXdt, dYdt : Array of X and Y time tendencies
+        dXdt, dYdt, C : Arrays of X and Y time tendencies, and the coupling term -hc/b*sum(Y,j)
     """
 
     JK, K = len(Y), len(X)
@@ -65,13 +68,12 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     #        k = j//J
     #        Ydot[j] = -c * b * Y[(j+1)%JK] * ( Y[(j+2)%JK] - Y[j-1] ) - c * Y[j] + hcb * X[k]
     Ydot = (
-        -c * b * np.roll(Y, -1) * (np.roll(Y, -2) - np.roll(Y, 1))
+        - c * b * np.roll(Y, -1) * (np.roll(Y, -2) - np.roll(Y, 1))
         - c * Y
         + hcb * np.repeat(X, J)
     )
 
-    return Xdot, Ydot
-
+    return Xdot, Ydot, - hcb * Ysummed
 
 # Time-stepping methods ##########################################################################################
 
@@ -195,14 +197,51 @@ def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
         plt.plot( t, X);
     """
 
-    time, xhist, yhist = (
+    xhist, yhist, time, _ = integrate_L96_2t_with_coupling(
+            X0, Y0, si, nt, F, h, b, c, t0=t0, dt=dt
+            )
+
+    return xhist, yhist, time
+
+# @jit(forceobj=True)
+def integrate_L96_2t_with_coupling(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
+    """
+    Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
+    Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,
+    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*si.
+
+    Note the model is intergrated
+
+    Args:
+        X0 : Values of X variables at the current time
+        Y0 : Values of Y variables at the current time
+        si : Sampling time interval
+        nt : Number of sample segments (results in nt+1 samples incl. initial state)
+        F  : Forcing term
+        h  : coupling coefficient
+        b  : ratio of amplitudes
+        c  : time-scale ratio
+        t0 : Initial time (defaults to 0)
+        dt : The actual time step. If dt<si, then si is used. Otherwise si/dt must be a whole number. Default 0.001.
+
+    Returns:
+        X[:,:], Y[:,:], time[:], hcbY[:,:] : the full history X[n,k] and Y[n,k] at times t[n], and coupling term
+
+    Example usage:
+        X,Y,t,_ = integrate_L96_2t_with_coupling(5+5*np.random.rand(8), np.random.rand(8*4), 0.01, 500, 18, 1, 10, 10)
+        plt.plot( t, X);
+    """
+
+    time, xhist, yhist, xytend_hist = (
         t0 + np.zeros((nt + 1)),
         np.zeros((nt + 1, len(X0))),
         np.zeros((nt + 1, len(Y0))),
+        np.zeros((nt + 1, len(X0))),
     )
     X, Y = X0.copy(), Y0.copy()
     xhist[0, :] = X
     yhist[0, :] = Y
+    xytend_hist[0, :] = 0
     if si < dt:
         dt, ns = si, 1
     else:
@@ -214,19 +253,27 @@ def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
     for n in range(nt):
         for s in range(ns):
             # RK4 update of X,Y
-            Xdot1, Ydot1 = L96_2t_xdot_ydot(X, Y, F, h, b, c)
-            Xdot2, Ydot2 = L96_2t_xdot_ydot(
+            Xdot1, Ydot1, XYtend = L96_2t_xdot_ydot(X, Y, F, h, b, c)
+            Xdot2, Ydot2, _ = L96_2t_xdot_ydot(
                 X + 0.5 * dt * Xdot1, Y + 0.5 * dt * Ydot1, F, h, b, c
             )
-            Xdot3, Ydot3 = L96_2t_xdot_ydot(
+            Xdot3, Ydot3, _ = L96_2t_xdot_ydot(
                 X + 0.5 * dt * Xdot2, Y + 0.5 * dt * Ydot2, F, h, b, c
             )
-            Xdot4, Ydot4 = L96_2t_xdot_ydot(X + dt * Xdot3, Y + dt * Ydot3, F, h, b, c)
+            Xdot4, Ydot4, _ = L96_2t_xdot_ydot(
+                X + dt * Xdot3, Y + dt * Ydot3, F, h, b, c
+            )
             X = X + (dt / 6.0) * ((Xdot1 + Xdot4) + 2.0 * (Xdot2 + Xdot3))
             Y = Y + (dt / 6.0) * ((Ydot1 + Ydot4) + 2.0 * (Ydot2 + Ydot3))
 
-        xhist[n + 1], yhist[n + 1], time[n + 1] = X, Y, t0 + si * (n + 1)
-    return xhist, yhist, time
+        xhist[n + 1], yhist[n + 1], time[n + 1], xytend_hist[n + 1] = (
+            X,
+            Y,
+            t0 + si * (n + 1),
+            XYtend,
+        )
+    return xhist, yhist, time, xytend_hist
+
 
 
 # Class for convenience
@@ -330,12 +377,13 @@ class L96:
         X, Y = self.b * np.random.rand(self.X.size), np.random.rand(self.Y.size)
         return self.set_state(X, Y)
 
-    def run(self, si, T, store=False):
+    def run(self, si, T, store=False, return_coupling=False):
         """Run model for a total time of T, sampling at intervals of si.
         If store=Ture, then stores the final state as the initial conditions for the next segment.
-        Returns sampled history: X[:,:],Y[:,:],t[:]."""
+        If return_coupling=True, returns C in addition to X,Y,t.
+        Returns sampled history: X[:,:],Y[:,:],t[:],C[:,:]."""
         nt = int(T / si)
-        X, Y, t = integrate_L96_2t(
+        X, Y, t, C = integrate_L96_2t_with_coupling(
             self.X,
             self.Y,
             si,
@@ -349,7 +397,10 @@ class L96:
         )
         if store:
             self.X, self.Y, self.t = X[-1], Y[-1], t[-1]
-        return X, Y, t
+        if return_coupling:
+            return X, Y, t, C
+        else:
+            return X, Y, t
 
 
 class L96s:
