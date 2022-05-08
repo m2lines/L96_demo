@@ -68,12 +68,13 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     #        k = j//J
     #        Ydot[j] = -c * b * Y[(j+1)%JK] * ( Y[(j+2)%JK] - Y[j-1] ) - c * Y[j] + hcb * X[k]
     Ydot = (
-        - c * b * np.roll(Y, -1) * (np.roll(Y, -2) - np.roll(Y, 1))
+        -c * b * np.roll(Y, -1) * (np.roll(Y, -2) - np.roll(Y, 1))
         - c * Y
         + hcb * np.repeat(X, J)
     )
 
-    return Xdot, Ydot, - hcb * Ysummed
+    return Xdot, Ydot, -hcb * Ysummed
+
 
 # Time-stepping methods ##########################################################################################
 
@@ -198,10 +199,11 @@ def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
     """
 
     xhist, yhist, time, _ = integrate_L96_2t_with_coupling(
-            X0, Y0, si, nt, F, h, b, c, t0=t0, dt=dt
-            )
+        X0, Y0, si, nt, F, h, b, c, t0=t0, dt=dt
+    )
 
     return xhist, yhist, time
+
 
 # @jit(forceobj=True)
 def integrate_L96_2t_with_coupling(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
@@ -273,7 +275,6 @@ def integrate_L96_2t_with_coupling(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
             XYtend,
         )
     return xhist, yhist, time, xytend_hist
-
 
 
 # Class for convenience
