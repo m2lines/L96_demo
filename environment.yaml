@@ -1,0 +1,14 @@
+name: L96M2lines
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - matplotlib
+  - numba
+  - pytorch
+  - torchvision
+  - scikit-learn
+  - jupyter-book
+  - pip
+  - pip:
+    - torch-lr-finder
