@@ -10,6 +10,7 @@ dependencies:
   - torchvision
   - scikit-learn
   - jupyter-book
+  - jupyterlab
   - pre-commit
   - pip
   - pip:
