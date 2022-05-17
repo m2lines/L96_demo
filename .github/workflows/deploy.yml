@@ -16,7 +16,7 @@ jobs:
     - name: Get PR number
       run: echo "Your PR is ${PR}"
       env:
-        PR: ${{ github.event.issue.number }}
+        PR: ${{ github.event.pull_request.number }}
     - name: 📦 Cache Conda
       uses: actions/cache@v2
       env:
@@ -64,22 +64,22 @@ jobs:
         publish_dir: _build/html
         keep_files: false
     - name: 🚀 Deploy Preview to GitHub Pages
-      if: ${{ github.event.issue.number }}
+      if: ${{ github.event.pull_request.number }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: _build/html
         keep_files: false
-        destination_dir: preview-${{ github.event.issue.number }}
+        destination_dir: preview-${{ github.event.pull_request.number }}
     - name: Post comment on PR
       uses: actions/github-script@v5
-      if: success() && ${{ github.event.issue.number }}
+      if: success() && ${{ github.event.pull_request.number }}
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           github.rest.issues.createComment({
-            issue_number: context.issue.number,
+            issue_number: context.pull_request.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '🚀 A preview of the book is available at https://m2lines.github.io/L96_demo/preview-${{ github.event.issue.number }}'
+            body: '🚀 A preview of the book is available at https://m2lines.github.io/L96_demo/preview-${{ github.event.pull_request.number }}'
           })
