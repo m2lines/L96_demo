@@ -7,6 +7,7 @@
 ```
 conda env create -f environment.yaml
 conda activate L96M2lines
+mkdir -p _notebook_cache
 jupyter book build .
 cd _build/html
 python -m http.server
