@@ -34,9 +34,10 @@ jobs:
         auto-update-conda: false
         python-version: ${{ matrix.python-version }}
         use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+    - name: 👀 Check Conda environment
+      run: conda list; which jupyter-book
     - name: 📖 Build the book
-      run: |
-        jupyter-book build .
+      run: jupyter-book build .
     - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
