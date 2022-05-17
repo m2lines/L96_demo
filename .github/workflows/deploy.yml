@@ -13,17 +13,10 @@ jobs:
         python-version: [3.9]
     steps:
     - uses: actions/checkout@v2
-    - uses: jwalton/gh-find-current-pr@v1
-      id: findPr
-      with:
-        # Can be "open", "closed", or "all".  Defaults to "open".
-        state: open
-    # This will echo "Your PR is 7", or be skipped if there is no current PR.
     - name: Get PR number
       run: echo "Your PR is ${PR}"
-      if: success() && steps.findPr.outputs.number
       env:
-        PR: ${{ steps.findPr.outputs.pr }}
+        PR: ${{ context.issue.number }}
     - name: 📦 Cache Conda
       uses: actions/cache@v2
       env:
@@ -69,18 +62,20 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: _build/html
+        keep_files: false
     - name: 🚀 Deploy Preview to GitHub Pages
-      if: ${{ steps.findPr.outputs.pr }}
+      if: ${{ context.issue.number }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: _build/html
-        destination_dir: preview-${{ steps.findPr.outputs.pr }}
+        keep_files: false
+        destination_dir: preview-${{ context.issue.number }}
     - name: Post comment on PR
       uses: actions/github-script@v5
-      if: success() && steps.findPr.outputs.number
+      if: success() && context.issue.number
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           github.rest.issues.createComment({
             issue_number: context.issue.number,
