@@ -25,6 +25,73 @@ pre-commit install
 
 At this point, pre-commit will automatically be run every time you make a commit.
 
+### Pull Requests and Feature Branches
+
+In order to contribute a PR, you should start from a new feature branch.
+
+```
+git checkout -b my_new_feature
+```
+
+(Replace `my_new_feature` with a descriptive name of the feature you're working on.)
+
+Make your changes and then make a new commit:
+
+```
+git add changed_file_1.ipynb changed_file_2.ipynb
+git commit -m "message about my new feature"
+```
+
+You can also automatically commit changes to existing files as:
+
+```
+git commit -am "message about my new feature"
+```
+
+Then push your changes to your remote on GitHub (usually call `origin`
+
+```
+git push my_new_feature origin
+```
+
+Then navigate to https://github.com/m2lines/L96_demo to open your pull request.
+
+### Synchronizing from upstream
+
+To synchronize your local branch with upstream changes, first make sure you have the upstream remote configured.
+To check your remotes, run
+
+```
+% git remote -v
+origin	git@github.com:rabernat/L96_demo.git (fetch)
+origin	git@github.com:rabernat/L96_demo.git (push)
+upstream	git@github.com:m2lines/L96_demo.git (fetch)
+upstream	git@github.com:m2lines/L96_demo.git (push)
+```
+
+If you don't have `upstream`, you need to add it as follows
+
+```
+git remote add upstream git@github.com:m2lines/L96_demo.git
+```
+
+Then, make sure you are on the main branch locally:
+
+```
+git checkout main
+```
+
+And then run
+```
+git fetch upstream
+git merge upstream/main
+```
+
+Ideally you will not have any merge conflicts.
+You are now ready to make a new feature branch.
+
+
+
 
 ## References
 
