@@ -44,7 +44,7 @@ jobs:
     - name: 📦 Cache Notebooks
       uses: actions/cache@v2
       with:
-        path: _notebook_cache
+        path: _build/.jupyter_cache
         key: notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}
         restore-keys: |
             notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}

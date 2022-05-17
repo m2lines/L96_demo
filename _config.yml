@@ -9,7 +9,6 @@ logo: newlogo.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: cache
-  cache: _notebook_cache
 
 parse:
   myst_enable_extensions:
