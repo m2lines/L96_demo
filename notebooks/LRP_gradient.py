@@ -117,7 +117,7 @@ Xtrue, _, _, xytrue = W.run(dt, T, store=True)
 
 
 # Specify a path
-PATH = "../04Subgrid-parametrization-pytorch/networks/network_3_layers_100_epoches.pth"
+PATH = "networks/network_3_layers_100_epoches.pth"
 # Load
 model = torch.load(PATH)
 model.keys()
