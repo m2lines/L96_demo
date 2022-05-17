@@ -33,7 +33,6 @@ jobs:
         environment-file: environment.yaml
         activate-environment: L96M2lines # Defined in environment.yaml
         mamba-version: '*'
-        channel-priority: strict
         auto-update-conda: false
         python-version: ${{ matrix.python-version }}
         use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!

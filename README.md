@@ -1,49 +1,28 @@
 # Lorenz 1996 two time-scale model
 
-## Contributing
-
-### Pre-commit
-
-We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
-In order to use pre-commit, run the following commands in the repo top-level directory:
-
-```
-pip install pre-commit
-pre-commit install
-```
-
-At this point, pre-commit will automatically be run every time you make a commit.
-
-
 ## Building the Jupyter Book locally
 
 ```
-pip install -r requirements.txt
+conda env create -f environment.yaml
+conda activate L96M2lines
 jupyter book build .
 cd _build/html
 python -m http.server
 ```
 
-## Contents in 01Intro:
-- L96-description.ipynb : Equation and demonstration of the single time-scale model
-- L96-two-scale-description.ipynb : Equations and demonstration of the two time-scale model
-- L96_model.py : Functions providing tendancies and integrators for the L96 models
+## Contributing
 
-## Required packages
+### Pre-commit
 
-- jupyter (for notebooks)
-- numpy (used in computations)
-- matplotlib (for plots)
-- numba (for significant speed up)
+We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
+In order to use pre-commit, run the following command in the repo top-level directory:
 
-### Conda
-
-If you are starting from scratch, install conda and then:
-```bash
-conda create -n py3 jupyter numpy matplotlib
-conda activate py3
-jupyter notebook
 ```
+pre-commit install
+```
+
+At this point, pre-commit will automatically be run every time you make a commit.
+
 
 ## References
 
