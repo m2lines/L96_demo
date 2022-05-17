@@ -35,8 +35,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
         use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
     - name: 👀 Check Conda environment
-      run: conda list; which jupyter-book
+      shell: bash -l {0}
+      run: |
+          conda info
+          conda list
     - name: 📖 Build the book
+      shell: bash -l {0}
       run: jupyter-book build .
     - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
