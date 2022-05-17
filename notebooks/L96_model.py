@@ -49,7 +49,7 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
         b : ratio of amplitudes
         c : time-scale ratio
     Returns:
-        dXdt, dYdt : Array of X and Y time tendencies
+        dXdt, dYdt, C : Arrays of X and Y time tendencies, and the coupling term -hc/b*sum(Y,j)
     """
 
     JK, K = len(Y), len(X)
@@ -198,6 +198,42 @@ def integrate_L96_2t(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
         plt.plot( t, X);
     """
 
+    xhist, yhist, time, _ = integrate_L96_2t_with_coupling(
+        X0, Y0, si, nt, F, h, b, c, t0=t0, dt=dt
+    )
+
+    return xhist, yhist, time
+
+
+# @jit(forceobj=True)
+def integrate_L96_2t_with_coupling(X0, Y0, si, nt, F, h, b, c, t0=0, dt=0.001):
+    """
+    Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.
+    Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,
+    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*si.
+
+    Note the model is intergrated
+
+    Args:
+        X0 : Values of X variables at the current time
+        Y0 : Values of Y variables at the current time
+        si : Sampling time interval
+        nt : Number of sample segments (results in nt+1 samples incl. initial state)
+        F  : Forcing term
+        h  : coupling coefficient
+        b  : ratio of amplitudes
+        c  : time-scale ratio
+        t0 : Initial time (defaults to 0)
+        dt : The actual time step. If dt<si, then si is used. Otherwise si/dt must be a whole number. Default 0.001.
+
+    Returns:
+        X[:,:], Y[:,:], time[:], hcbY[:,:] : the full history X[n,k] and Y[n,k] at times t[n], and coupling term
+
+    Example usage:
+        X,Y,t,_ = integrate_L96_2t_with_coupling(5+5*np.random.rand(8), np.random.rand(8*4), 0.01, 500, 18, 1, 10, 10)
+        plt.plot( t, X);
+    """
+
     time, xhist, yhist, xytend_hist = (
         t0 + np.zeros((nt + 1)),
         np.zeros((nt + 1, len(X0))),
@@ -256,7 +292,6 @@ class L96:
     b = "Ratio of timescales"
     c = "Ratio of amplitudes"
     dt = "Time step"
-    XYtend = "tendency of X due to small scale vars"
 
     def __init__(self, K, J, F=18, h=1, b=10, c=10, t=0, dt=0.001):
         """Construct a two time-scale model with parameters:
@@ -271,7 +306,6 @@ class L96:
         """
         self.F, self.h, self.b, self.c, self.dt = F, h, b, c, dt
         self.X, self.Y, self.t = b * np.random.randn(K), np.random.randn(J * K), t
-        self.XYtend = 0
         self.K, self.J, self.JK = K, J, J * K  # For convenience
         self.k, self.j = np.arange(self.K), np.arange(self.JK)  # For plotting
 
@@ -313,7 +347,7 @@ class L96:
     def print(self):
         print(self)
 
-    def set_param(self, dt=None, F=None, h=None, b=None, c=None, t=0):
+    def set_param(self, dt=None, F=None, h=None, b=None, c=None, t=None):
         """Set a model parameter, e.g. .set_param(si=0.01, dt=0.002)"""
         if dt is not None:
             self.dt = dt
@@ -344,12 +378,13 @@ class L96:
         X, Y = self.b * np.random.rand(self.X.size), np.random.rand(self.Y.size)
         return self.set_state(X, Y)
 
-    def run(self, si, T, store=False):
+    def run(self, si, T, store=False, return_coupling=False):
         """Run model for a total time of T, sampling at intervals of si.
         If store=Ture, then stores the final state as the initial conditions for the next segment.
-        Returns sampled history: X[:,:],Y[:,:],t[:]."""
+        If return_coupling=True, returns C in addition to X,Y,t.
+        Returns sampled history: X[:,:],Y[:,:],t[:],C[:,:]."""
         nt = int(T / si)
-        X, Y, t, XYtend = integrate_L96_2t(
+        X, Y, t, C = integrate_L96_2t_with_coupling(
             self.X,
             self.Y,
             si,
@@ -363,7 +398,10 @@ class L96:
         )
         if store:
             self.X, self.Y, self.t = X[-1], Y[-1], t[-1]
-        return X, Y, t, XYtend
+        if return_coupling:
+            return X, Y, t, C
+        else:
+            return X, Y, t
 
 
 class L96s:
@@ -414,7 +452,7 @@ class L96s:
     def print(self):
         print(self)
 
-    def set_param(self, dt=None, F=None, t=0, method=EulerFwd):
+    def set_param(self, dt=None, F=None, t=None, method=None):
         """Set a model parameter, e.g. .set_param(dt=0.002)"""
         if dt is not None:
             self.dt = dt
