@@ -1,3 +1,7 @@
 # Lorenz 1996 two time-scale model for learning machine learning
 
-Hello world
+The climate system is composed of many interacting components and described by complex nonlinear equations. These equations are solved numerically under a number of simplifications, therefore leading to errors. The errors are the result of numerics used to solve the equations and the lack of an approximate representation of processes occurring below the resolution of the climate model grid.
+
+The goal of this book is to conceptualize the problems associated with climate models within a simple and computationally accessible framework. We will introduce the readers to climate modeling by using a simple tool, the Lorenz 96 (L96) 2-timescale model. We discuss the numerical aspects of the L96 models, the parameterizations of small-scale processes, and simple data assimilation problems. We will then use the L96 results to learn subgrid parameterizations with machine learning, and then test the parameterizations offline and online, with a focus on the interpretability of the results.
+
+The book was created by and as part of M2LInES for our team to work together, the team to learn from each other, and for team members to get up to speed on the key scientific aspects of our proposal (parameterizations, machine learning, data assimilation, uncertainty quantification) and to develop new ideas. Ultimately, we are happy to share these resources with the scientific community and foster the use of machine learning techniques for tackling climate science problems.
