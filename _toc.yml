@@ -1,0 +1,38 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Intro
+    chapters:
+    - file: notebooks/presentation-model-setup.ipynb
+    - file: notebooks/L96-description.ipynb
+    - file: notebooks/L96-two-scale-description.ipynb
+    - file: notebooks/gcm-analog-demo.ipynb
+  - caption: Type of Parametrization
+    chapters:
+    - file: notebooks/estimating-gcm-parameters.ipynb
+    - file: notebooks/gcm-parameterization-problem.ipynb
+  - caption: Data Assimilation
+    chapters:
+    - file: notebooks/DA_demo_L96.ipynb
+  - caption: Subgrid Patermetrization
+    chapters:
+    - file: notebooks/Neural_network_for_Lorenz96.ipynb
+    - file: notebooks/gradient_decent.ipynb
+  - caption: Offline DA Increments
+    chapters:
+    - file: notebooks/Figure-for-DA.ipynb
+    - file: notebooks/DA_demo_repeat.ipynb
+    - file: notebooks/Learning-DA-increments.ipynb
+  - caption: Different ML Models
+    chapters:
+    - file: notebooks/random_forest_parameterization.ipynb
+  - caption: Interpretability of ML
+    chapters:
+    - file: notebooks/LRP-L96.ipynb
+  - caption: Implementation
+    chapters:
+    - file: notebooks/Neural-Network-Advection-FwdEuler.ipynb
+    - file: notebooks/Neural-Network-Advection.ipynb

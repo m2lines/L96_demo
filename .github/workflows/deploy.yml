@@ -1,0 +1,63 @@
+name: build-and-deploy-book
+
+# Trigger the workflow on push to main branch and PRs
+on: [push, pull_request]
+
+# This job installs dependencies, builds the book, and deploys the html
+jobs:
+  build-and-deploy-book:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get PR number
+      run: echo "Your PR is ${PR}"
+      env:
+        PR: ${{ github.event.pull_request.number }}
+    - name: 📦 Cache Conda
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if etc/example-environment.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+          hashFiles('environment.yaml') }}
+    - uses: conda-incubator/setup-miniconda@v2
+      name: 🐍 Set up Conda environment
+      with:
+        environment-file: environment.yaml
+        activate-environment: L96M2lines # Defined in environment.yaml
+        mamba-version: '*'
+        auto-update-conda: false
+        python-version: ${{ matrix.python-version }}
+        use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+    - name: 👀 Check Conda environment
+      shell: bash -l {0}
+      run: |
+          conda info
+          conda list
+    - name: 📦 Cache Notebooks
+      uses: actions/cache@v2
+      with:
+        path: _build/.jupyter_cache
+        key: notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}
+        restore-keys: |
+            notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}
+            notebook_cache-
+    - name: 📖 Build the book
+      shell: bash -l {0}
+      run:  |
+        mkdir -p _notebook_cache
+        jupyter-book build .
+    - name: 🚀 Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: _build/html
+        keep_files: false
