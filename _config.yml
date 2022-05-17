@@ -8,7 +8,8 @@ logo: newlogo.png
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: auto
+  execute_notebooks: cache
+  cache: _notebook_cache
 
 parse:
   myst_enable_extensions:
