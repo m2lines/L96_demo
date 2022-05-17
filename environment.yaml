@@ -9,6 +9,7 @@ dependencies:
   - torchvision
   - scikit-learn
   - jupyter-book
+  - pre-commit
   - pip
   - pip:
     - torch-lr-finder

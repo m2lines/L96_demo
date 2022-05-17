@@ -26,13 +26,18 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       name: 🐍 Set up Conda environment
       with:
-        channel-priority: strict
         environment-file: environment.yaml
+        activate-environment: L96M2lines # Defined in environment.yaml
+        channels: conda-forge
+        mamba-version: '*'
+        channel-priority: strict
+        auto-update-conda: false
+        python-version: ${{ matrix.python-version }}
         use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
     - name: 📖 Build the book
       run: |
         jupyter-book build .
-    - name: 🚀 Deplot to GitHub Pages
+    - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
