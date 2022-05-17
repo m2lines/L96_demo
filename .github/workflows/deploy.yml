@@ -13,25 +13,51 @@ jobs:
         python-version: [3.9]
     steps:
     - uses: actions/checkout@v2
-
-    # Install dependencies
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - name: Get PR number
+      run: echo "Your PR is ${PR}"
+      env:
+        PR: ${{ github.event.pull_request.number }}
+    - name: 📦 Cache Conda
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if etc/example-environment.yml has not changed
+        CACHE_NUMBER: 0
       with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+          hashFiles('environment.yaml') }}
+    - uses: conda-incubator/setup-miniconda@v2
+      name: 🐍 Set up Conda environment
+      with:
+        environment-file: environment.yaml
+        activate-environment: L96M2lines # Defined in environment.yaml
+        mamba-version: '*'
+        auto-update-conda: false
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+        use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+    - name: 👀 Check Conda environment
+      shell: bash -l {0}
       run: |
-        pip install -r requirements.txt
-
-    # Build the book
-    - name: Build the book
-      run: |
+          conda info
+          conda list
+    - name: 📦 Cache Notebooks
+      uses: actions/cache@v2
+      with:
+        path: _build/.jupyter_cache
+        key: notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}
+        restore-keys: |
+            notebook_cache-${{hashFiles('notebooks/*.ipynb', 'notebooks/*.py') }}
+            notebook_cache-
+    - name: 📖 Build the book
+      shell: bash -l {0}
+      run:  |
+        mkdir -p _notebook_cache
         jupyter-book build .
-
-    # Deploy the book's html to earth-env-data-science.github.io
-    - name: GitHub Pages action
+    - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: _build/html
+        keep_files: false

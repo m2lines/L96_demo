@@ -1,49 +1,97 @@
 # Lorenz 1996 two time-scale model
 
-## Contributing
-
-### Pre-commit
-
-We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
-In order to use pre-commit, run the following commands in the repo top-level directory:
-
-```
-pip install pre-commit
-pre-commit install
-```
-
-At this point, pre-commit will automatically be run every time you make a commit.
-
+[![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
 
 ## Building the Jupyter Book locally
 
 ```
-pip install -r requirements.txt
+conda env create -f environment.yaml
+conda activate L96M2lines
 jupyter book build .
 cd _build/html
 python -m http.server
 ```
 
-## Contents in 01Intro:
-- L96-description.ipynb : Equation and demonstration of the single time-scale model
-- L96-two-scale-description.ipynb : Equations and demonstration of the two time-scale model
-- L96_model.py : Functions providing tendancies and integrators for the L96 models
+## Contributing
 
-## Required packages
+### Pre-commit
 
-- jupyter (for notebooks)
-- numpy (used in computations)
-- matplotlib (for plots)
-- numba (for significant speed up)
+We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
+In order to use pre-commit, run the following command in the repo top-level directory:
 
-### Conda
-
-If you are starting from scratch, install conda and then:
-```bash
-conda create -n py3 jupyter numpy matplotlib
-conda activate py3
-jupyter notebook
 ```
+pre-commit install
+```
+
+At this point, pre-commit will automatically be run every time you make a commit.
+
+### Pull Requests and Feature Branches
+
+In order to contribute a PR, you should start from a new feature branch.
+
+```
+git checkout -b my_new_feature
+```
+
+(Replace `my_new_feature` with a descriptive name of the feature you're working on.)
+
+Make your changes and then make a new commit:
+
+```
+git add changed_file_1.ipynb changed_file_2.ipynb
+git commit -m "message about my new feature"
+```
+
+You can also automatically commit changes to existing files as:
+
+```
+git commit -am "message about my new feature"
+```
+
+Then push your changes to your remote on GitHub (usually call `origin`
+
+```
+git push my_new_feature origin
+```
+
+Then navigate to https://github.com/m2lines/L96_demo to open your pull request.
+
+### Synchronizing from upstream
+
+To synchronize your local branch with upstream changes, first make sure you have the upstream remote configured.
+To check your remotes, run
+
+```
+% git remote -v
+origin	git@github.com:rabernat/L96_demo.git (fetch)
+origin	git@github.com:rabernat/L96_demo.git (push)
+upstream	git@github.com:m2lines/L96_demo.git (fetch)
+upstream	git@github.com:m2lines/L96_demo.git (push)
+```
+
+If you don't have `upstream`, you need to add it as follows
+
+```
+git remote add upstream git@github.com:m2lines/L96_demo.git
+```
+
+Then, make sure you are on the main branch locally:
+
+```
+git checkout main
+```
+
+And then run
+```
+git fetch upstream
+git merge upstream/main
+```
+
+Ideally you will not have any merge conflicts.
+You are now ready to make a new feature branch.
+
+
+
 
 ## References
 
