@@ -9,7 +9,6 @@ parts:
     - file: notebooks/presentation-model-setup.ipynb
     - file: notebooks/L96-description.ipynb
     - file: notebooks/L96-two-scale-description.ipynb
-    - file: notebooks/gcm-analog-demo.ipynb
   - caption: Type of Parametrization
     chapters:
     - file: notebooks/estimating-gcm-parameters.ipynb
