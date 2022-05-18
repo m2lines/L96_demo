@@ -31,7 +31,7 @@ parts:
     - file: notebooks/random_forest_parameterization.ipynb
   - caption: Interpretability of ML
     chapters:
-    - file: notebooks/LRP-L96.ipynb
+    - file: notebooks/Neural-Network-Saliency-Maps.ipynb
   - caption: Implementation
     chapters:
     - file: notebooks/Neural-Network-Advection-FwdEuler.ipynb
