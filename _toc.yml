@@ -36,6 +36,6 @@ parts:
     chapters:
     - file: notebooks/Neural-Network-Advection-FwdEuler.ipynb
     - file: notebooks/Neural-Network-Advection.ipynb
-  - caption:
+  - caption: References
     chapters:
     - file: bibliography.md
