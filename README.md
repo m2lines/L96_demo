@@ -15,7 +15,7 @@ Jupyter Notebooks into a website.
 
 ## The Environment
 
-The environment in which to run the notebooks and build the books is defined in 
+The environment in which to run the notebooks and build the books is defined in
 [environment.yaml](https://github.com/m2lines/L96_demo/blob/main/environment.yaml).
 To recreate and activate the environment locally, run
 
@@ -77,7 +77,7 @@ jcache cache clear -p _build/.jupyter_cache
 
 We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
 In order to use pre-commit, run the following command in the repo top-level directory:
-The pre commit 
+The pre commit
 
 ```
 pre-commit install
