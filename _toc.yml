@@ -33,7 +33,6 @@ parts:
     - file: notebooks/LRP-L96.ipynb
   - caption: Implementation
     chapters:
-    - file: notebooks/Neural-Network-Advection-FwdEuler.ipynb
     - file: notebooks/Neural-Network-Advection.ipynb
   - caption: References
     chapters:
