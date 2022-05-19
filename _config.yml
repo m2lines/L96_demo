@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Lorenz 1996 two time-scale model for learning machine learning
+title: Learning Machine Learning with Lorenz-96
 author: The M2LinES Community
 logo: newlogo.png
 
