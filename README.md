@@ -2,14 +2,73 @@
 
 [![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
 
-## Building the Jupyter Book locally
+## Structure and Organization of the Repo
+
+This project uses [Jupyter Book](https://jupyterbook.org/) to organize a collection of
+Jupyter Notebooks into a website.
+- The notebooks all live in the [notebooks](https://github.com/m2lines/L96_demo/tree/main/notebooks) directory.
+  Note that the notebooks are stored in "stripped" form, without any outputs of execution saved.
+  (They are executed as part of the build process.)
+- The table of contents is located in [_toc.yml](https://github.com/m2lines/L96_demo/blob/main/_toc.yml).
+- The book configuration is in [_config.yml](https://github.com/m2lines/L96_demo/blob/main/_config.yml).
+- The references are in [_references.bib](https://github.com/m2lines/L96_demo/blob/main/references.bib).
+
+## The Environment
+
+The environment in which to run the notebooks and build the books is defined in 
+[environment.yaml](https://github.com/m2lines/L96_demo/blob/main/environment.yaml).
+To recreate and activate the environment locally, run
 
 ```
 conda env create -f environment.yaml
 conda activate L96M2lines
+```
+
+
+To speed up the continuous integration, we also generated a
+[conda lock](https://conda-incubator.github.io/conda-lock/) file for linux as follows.
+
+```
+conda-lock lock --mamba -f environment.yaml -p linux-64
+```
+
+This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blob/main/conda-linux-64.lock).
+It should be regenerated periorically.
+
+## Building the Book
+
+To build the book locally, you should first create and activate your environment,
+as described above. Then run
+
+```
 jupyter book build .
+```
+
+
+When you run this command, the notebooks will be executed.
+The built html will be placed in '_build/html`.
+To preview the book, run
+
+```
 cd _build/html
 python -m http.server
+```
+
+The build process can take a long time, so we have configured the setup to use
+[jupyter-cache](https://jupyter-cache.readthedocs.io/en/latest/).
+If you re-run the `build` command, it will only re-execute notebooks
+that have been changed. The cache files live in `_build/.jupyter_cache`
+
+To check the status of the cache, run
+
+```
+jcache cache list -p _build/.jupyter_cache
+```
+
+To clear the cache, run
+
+```
+jcache cache clear -p _build/.jupyter_cache
 ```
 
 ## Contributing
@@ -18,6 +77,7 @@ python -m http.server
 
 We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
 In order to use pre-commit, run the following command in the repo top-level directory:
+The pre commit 
 
 ```
 pre-commit install
