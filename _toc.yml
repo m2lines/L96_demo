@@ -21,8 +21,6 @@ parts:
     - file: notebooks/gradient_decent.ipynb
   - caption: Offline DA Increments
     chapters:
-    - file: notebooks/Figure-for-DA.ipynb
-    - file: notebooks/DA_demo_repeat.ipynb
     - file: notebooks/Learning-DA-increments.ipynb
   - caption: Different ML Models
     chapters:
