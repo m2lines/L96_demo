@@ -7,7 +7,6 @@ parts:
   - caption: Intro
     chapters:
     - file: notebooks/presentation-model-setup.ipynb
-    - file: notebooks/L96-description.ipynb
     - file: notebooks/L96-two-scale-description.ipynb
   - caption: Type of Parametrization
     chapters:
