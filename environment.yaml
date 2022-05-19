@@ -14,3 +14,4 @@ dependencies:
   - jupyter-book
   - jupyterlab
   - pre-commit
+  - ffmpeg
