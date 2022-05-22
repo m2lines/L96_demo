@@ -5,7 +5,7 @@ format: jb-book
 root: intro
 chapters:
   - file: notebooks/L96-two-scale-description.ipynb
-  - file: notebooks/presentation-model-setup.ipynb
+  - file: notebooks/gcm-analogue.ipynb
   - file: notebooks/gcm-parameterization-problem.ipynb
   - file: notebooks/estimating-gcm-parameters.ipynb
   - file: notebooks/DA_demo_L96.ipynb
