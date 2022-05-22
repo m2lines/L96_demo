@@ -1,3 +1,5 @@
+# to turn this into a conda-linux-64.lock file, run:
+# conda-lock lock --mamba -f environment.yaml -p linux-64
 name: L96M2lines
 channels:
   - conda-forge
@@ -12,6 +14,4 @@ dependencies:
   - jupyter-book
   - jupyterlab
   - pre-commit
-  - pip
-  - pip:
-    - torch-lr-finder
+  - ffmpeg
