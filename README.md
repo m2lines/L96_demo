@@ -110,7 +110,7 @@ git commit -am "message about my new feature"
 Then push your changes to your remote on GitHub (usually call `origin`
 
 ```
-git push my_new_feature origin
+git push origin my_new_feature
 ```
 
 Then navigate to https://github.com/m2lines/L96_demo to open your pull request.
