@@ -6,12 +6,13 @@
 
 This project uses [Jupyter Book](https://jupyterbook.org/) to organize a collection of
 Jupyter Notebooks into a website.
+
 - The notebooks all live in the [notebooks](https://github.com/m2lines/L96_demo/tree/main/notebooks) directory.
   Note that the notebooks are stored in "stripped" form, without any outputs of execution saved.
   (They are executed as part of the build process.)
-- The table of contents is located in [_toc.yml](https://github.com/m2lines/L96_demo/blob/main/_toc.yml).
-- The book configuration is in [_config.yml](https://github.com/m2lines/L96_demo/blob/main/_config.yml).
-- The references are in [_references.bib](https://github.com/m2lines/L96_demo/blob/main/references.bib).
+- The table of contents is located in [\_toc.yml](https://github.com/m2lines/L96_demo/blob/main/_toc.yml).
+- The book configuration is in [\_config.yml](https://github.com/m2lines/L96_demo/blob/main/_config.yml).
+- The references are in [\_references.bib](https://github.com/m2lines/L96_demo/blob/main/references.bib).
 
 ## The Environment
 
@@ -24,9 +25,8 @@ conda env create -f environment.yaml
 conda activate L96M2lines
 ```
 
-
 To speed up the continuous integration, we also generated a
-[conda lock](https://conda-incubator.github.io/conda-lock/) file for linux as follows.
+[conda lock](https://conda.github.io/conda-lock/) file for linux as follows.
 
 ```
 conda-lock lock --mamba -f environment.yaml -p linux-64
@@ -44,9 +44,8 @@ as described above. Then run
 jupyter book build .
 ```
 
-
 When you run this command, the notebooks will be executed.
-The built html will be placed in '_build/html`.
+The built html will be placed in '\_build/html`.
 To preview the book, run
 
 ```
@@ -142,6 +141,7 @@ git checkout main
 ```
 
 And then run
+
 ```
 git fetch upstream
 git merge upstream/main
@@ -149,9 +149,6 @@ git merge upstream/main
 
 Ideally you will not have any merge conflicts.
 You are now ready to make a new feature branch.
-
-
-
 
 ## References
 
