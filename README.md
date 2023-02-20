@@ -64,10 +64,10 @@ To check the status of the cache, run
 jcache cache list -p _build/.jupyter_cache
 ```
 
-To clear the cache, run
+To remove cached notebooks, run
 
 ```
-jcache cache clear -p _build/.jupyter_cache
+jcache cache remove -p _build/.jupyter_cache
 ```
 
 ## Contributing
