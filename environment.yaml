@@ -15,3 +15,4 @@ dependencies:
   - jupyterlab
   - pre-commit
   - ffmpeg
+  - tabulate
