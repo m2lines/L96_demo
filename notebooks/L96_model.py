@@ -61,12 +61,6 @@ def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     Ysummed = Y.reshape((K, J)).sum(axis=-1)
 
     Xdot = np.roll(X, 1) * (np.roll(X, -1) - np.roll(X, 2)) - X + F - hcb * Ysummed
-    #     for k in range(K):
-    #         Xdot[k] = ( X[(k+1)%K] - X[k-2] ) * X[k-1] - X[k] + F - hcb * Ysummed[k]
-
-    # for j in range(JK):
-    #        k = j//J
-    #        Ydot[j] = -c * b * Y[(j+1)%JK] * ( Y[(j+2)%JK] - Y[j-1] ) - c * Y[j] + hcb * X[k]
     Ydot = (
         -c * b * np.roll(Y, -1) * (np.roll(Y, -2) - np.roll(Y, 1))
         - c * Y
