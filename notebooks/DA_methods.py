@@ -8,7 +8,6 @@ from numba import jit
 
 @jit
 def Lin3dvar(ub, w, H, R, B, opt):
-
     # The solution of the 3DVAR problem in the linear case requires
     # the solution of a linear system of equations.
     # Here we utilize the built-in numpy function to do this.
@@ -22,7 +21,6 @@ def Lin3dvar(ub, w, H, R, B, opt):
         ua = np.linalg.solve(A, b)  # solve a linear system
 
     elif opt == 2:  # model-space incremental approach
-
         Bi = np.linalg.inv(B)
         Ri = np.linalg.inv(R)
         A = Bi + (H.T) @ Ri @ H
@@ -30,7 +28,6 @@ def Lin3dvar(ub, w, H, R, B, opt):
         ua = ub + np.linalg.solve(A, b)  # solve a linear system
 
     elif opt == 3:  # observation-space incremental approach
-
         A = R + H @ B @ (H.T)
         b = w - H @ ub
         ua = ub + B @ (H.T) @ np.linalg.solve(A, b)  # solve a linear system
@@ -40,7 +37,6 @@ def Lin3dvar(ub, w, H, R, B, opt):
 
 @jit
 def ens_inflate(posterior, prior, opt, factor):
-
     inflated = np.zeros(posterior.shape)
     n, N = prior.shape
     if opt == "multiplicative":
@@ -61,7 +57,6 @@ def ens_inflate(posterior, prior, opt, factor):
 
 @jit
 def EnKF(prior, obs, H, R, B):
-
     # The analysis step for the (stochastic) ensemble Kalman filter
     # with virtual observations
 
