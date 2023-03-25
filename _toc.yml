@@ -11,13 +11,16 @@ parts:
   - file: notebooks/gcm-parameterization-problem.ipynb
   - file: notebooks/estimating-gcm-parameters.ipynb
 - caption: Machine Learning
+  chapters:
   - file: notebooks/gradient_decent.ipynb
   - file: notebooks/Neural_network_for_Lorenz96.ipynb
   - file: notebooks/Neural-Network-Saliency-Maps.ipynb
   - file: notebooks/Neural-Network-Advection.ipynb
   - file: notebooks/random_forest_parameterization.ipynb
  - caption: Data Assimilation
+  chapters:
   - file: notebooks/DA_demo_L96.ipynb
   - file: notebooks/Learning-DA-increments.ipynb
  - caption: End Matter
+  chapters
   - file: bibliography.md
