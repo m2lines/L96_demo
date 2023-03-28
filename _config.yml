@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Learning Machine Learning with Lorenz-96
-author: The M2LinES Community
+author: The M<sup>2</sup>LInES Community
 logo: newlogo.png
 
 # Force re-execution of notebooks on each build.
