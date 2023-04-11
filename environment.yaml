@@ -16,3 +16,4 @@ dependencies:
   - pre-commit
   - ffmpeg
   - tabulate
+  - torch-lr-finder

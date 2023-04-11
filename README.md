@@ -1,6 +1,7 @@
 # Lorenz 1996 two time-scale model
 
 [![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/m2lines/L96_demo/HEAD)
 
 ## Structure and Organization of the Repo
 
