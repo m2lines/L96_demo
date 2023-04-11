@@ -30,7 +30,7 @@ To speed up the continuous integration, we also generated a
 [conda lock](https://conda.github.io/conda-lock/) file for linux as follows.
 
 ```
-conda-lock lock --mamba -f environment.yaml -p linux-64
+conda-lock lock --mamba -f environment.yaml -p linux-64 --kind explicit
 ```
 
 This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blob/main/conda-linux-64.lock).
