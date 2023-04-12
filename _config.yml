@@ -25,6 +25,12 @@ latex:
 bibtex_bibfiles:
   - references.bib
 
+# set to author_year format
+sphinx:
+  html4_writer: {"citation_show_urls": False, "citation_references": "full", "external_links": False}
+  config:
+    bibtex_reference_style: author_year
+
 # Information about where the book exists on the web
 repository:
   url: https://github.com/m2lines/L96_demo # Online location of your book
