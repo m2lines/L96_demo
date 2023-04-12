@@ -27,6 +27,7 @@ bibtex_bibfiles:
 
 # set to author_year format
 sphinx:
+  html4_writer: {"citation_show_urls": False, "citation_references": "full", "external_links": False}
   config:
     bibtex_reference_style: author_year
 
