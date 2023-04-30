@@ -13,6 +13,7 @@ parts:
 - caption: Machine Learning with Lorenz-96
   chapters:
   - file: notebooks/gradient_decent.ipynb
+  - file: notebooks/Universal_approximation.ipynb
   - file: notebooks/Neural_network_for_Lorenz96.ipynb
   - file: notebooks/feature_importance.ipynb
   - file: notebooks/Neural-Network-Saliency-Maps.ipynb
