@@ -18,3 +18,4 @@ dependencies:
   - tabulate
   - torch-lr-finder
   - pandas
+  - conda-lock
