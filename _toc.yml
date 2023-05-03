@@ -23,6 +23,7 @@ parts:
   chapters:
   - file: notebooks/DA_demo_L96.ipynb
   - file: notebooks/Learning-DA-increments.ipynb
+  - file: notebooks/sindy_L96_2scale.ipynb
 - caption: End Matter
   chapters:
   - file: bibliography.md
