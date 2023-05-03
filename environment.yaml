@@ -19,3 +19,6 @@ dependencies:
   - torch-lr-finder
   - pandas
   - conda-lock
+  - pip
+  - pip:
+      - jupyterlab_myst
