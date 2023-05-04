@@ -1,8 +1,11 @@
 name: build-and-deploy-book
 
 # Trigger the workflow on push to main branch and PRs
-on: [push, pull_request]
-
+# on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 # This job installs dependencies, builds the book, and deploys the html
 jobs:
   build-and-deploy-book:
@@ -52,8 +55,11 @@ jobs:
         find _build/html -name "*.log" -print -exec cat {} \;
     - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v3
+      #uses: peaceiris/actions-gh-pages@v3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: _build/html
-        keep_files: false
+        #publish_dir: _build/html
+        #keep_files: false
+        folder: _build/html
+        clean-exclude: pr-preview/
