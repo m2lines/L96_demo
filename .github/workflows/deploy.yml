@@ -4,8 +4,7 @@ name: build-and-deploy-book
 on:
   push:
     branches:
-      base:
-        - main
+      - main
 
 # This job installs dependencies, builds the book, and deploys the html
 jobs:
