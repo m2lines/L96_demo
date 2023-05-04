@@ -1,0 +1,65 @@
+# .github/workflows/preview.yml
+name: Deploy PR previews
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
+
+
+# This job installs dependencies, builds the book, and deploys the html
+jobs:
+  build-and-preview-book:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get PR number
+      run: echo "Your PR is ${PR}"
+      env:
+        PR: ${{ github.event.pull_request.number }}
+    - name: 📦 Cache Conda Packages
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if etc/example-environment.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('conda-linux-64.lock') }}
+    - name: 🐍 Set up Conda environment
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: false
+        activate-environment: L96M2lines
+        environment-file: conda-linux-64.lock
+    - name: 👀 Check Conda environment
+      shell: bash -l {0}
+      run: |
+          conda info
+          conda list
+    - name: 📦 Cache Notebooks
+      uses: actions/cache@v2
+      with:
+        path: _build/.jupyter_cache
+        key: notebook_cache-${{hashFiles('_toc.yml', '_config.yml', 'environment.yaml') }}
+    - name: 📖 Build the book
+      shell: bash -l {0}
+      run:  |
+        mkdir -p _notebook_cache
+        jupyter-book build .
+    - name: 📖 Show logs from the book build
+      shell: bash -l {0}
+      run:  |
+        find _build/html -name "*.log" -print -exec cat {} \;
+    - name: 🚀 Deploy Preview to GitHub Pages
+      uses: rossjrw/pr-preview-action@v1
+      with:
+        source-dir: _build/html
