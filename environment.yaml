@@ -20,6 +20,6 @@ dependencies:
   - pandas
   - conda-lock
   - pip
-  - pip:
-      - jupyterlab_myst
-      - pysindy
+  # - pip:
+  #     - jupyterlab_myst
+  #     - pysindy
