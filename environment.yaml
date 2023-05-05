@@ -19,5 +19,7 @@ dependencies:
   - torch-lr-finder
   - pandas
   - conda-lock
+  - pip
   - pip:
-    - pysindy
+      - jupyterlab_myst
+      - pysindy

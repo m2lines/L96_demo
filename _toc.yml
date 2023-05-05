@@ -4,26 +4,29 @@
 format: jb-book
 root: intro
 parts:
-- caption: Lorenz-96 and General Circulation Models
-  chapters:
-  - file: notebooks/L96-two-scale-description.ipynb
-  - file: notebooks/gcm-analogue.ipynb
-  - file: notebooks/gcm-parameterization-problem.ipynb
-  - file: notebooks/estimating-gcm-parameters.ipynb
-- caption: Machine Learning with Lorenz-96
-  chapters:
-  - file: notebooks/gradient_decent.ipynb
-  - file: notebooks/Universal_approximation.ipynb
-  - file: notebooks/Neural_network_for_Lorenz96.ipynb
-  - file: notebooks/feature_importance.ipynb
-  - file: notebooks/Neural-Network-Saliency-Maps.ipynb
-  - file: notebooks/Neural-Network-Advection.ipynb
-  - file: notebooks/random_forest_parameterization.ipynb
-- caption: Data Assimilation with Lorenz-96
-  chapters:
-  - file: notebooks/DA_demo_L96.ipynb
-  - file: notebooks/Learning-DA-increments.ipynb
-  - file: notebooks/sindy_L96_2scale.ipynb
-- caption: End Matter
-  chapters:
-  - file: bibliography.md
+  - caption: Lorenz-96 and General Circulation Models
+    chapters:
+      - file: notebooks/L96-two-scale-description.ipynb
+      - file: notebooks/gcm-analogue.ipynb
+      - file: notebooks/gcm-parameterization-problem.ipynb
+      - file: notebooks/estimating-gcm-parameters.ipynb
+  - caption: Machine Learning with Lorenz-96
+    chapters:
+      - file: notebooks/gradient_decent.ipynb
+      - file: notebooks/Universal_approximation.ipynb
+      - file: notebooks/Neural_network_for_Lorenz96.ipynb
+      - file: notebooks/Improving_Neural_networks.ipynb
+      - file: notebooks/feature_importance.ipynb
+      - file: notebooks/Neural-Network-Saliency-Maps.ipynb
+      - file: notebooks/Neural-Network-Advection.ipynb
+      - file: notebooks/random_forest_parameterization.ipynb
+  - caption: Data Assimilation with Lorenz-96
+    chapters:
+      - file: notebooks/DA_demo_L96.ipynb
+      - file: notebooks/Learning-DA-increments.ipynb
+  - caption: Equation Discovery with Lorenz-96
+    chapters:
+      - file: notebooks/sindy_L96_2scale.ipynb
+  - caption: End Matter
+    chapters:
+      - file: bibliography.md

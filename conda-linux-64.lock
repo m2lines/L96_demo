@@ -314,7 +314,7 @@ https://conda.anaconda.org/conda-forge/noarch/virtualenv-20.23.0-pyhd8ed1ab_0.co
 https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.2.0-pyhd8ed1ab_0.conda#58ca2d50c3b27b86fd7df62eaadbf9a9
 https://conda.anaconda.org/conda-forge/linux-64/keyring-23.13.1-py39hf3d152e_0.conda#ae2df7a822f7671da22da24ead24cc0a
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.8.0-pyhd8ed1ab_0.conda#1ca43103a08456b19222d93fd9d119ac
-https://conda.anaconda.org/conda-forge/noarch/pre-commit-3.2.2-pyha770c72_0.conda#c4aab94cab4ddeb340e36d4c670a5f24
+https://conda.anaconda.org/conda-forge/noarch/pre-commit-3.3.1-pyha770c72_0.conda#c3ad8d291556452edb6c301c91f330ed
 https://conda.anaconda.org/conda-forge/noarch/prompt_toolkit-3.0.38-hd8ed1ab_0.conda#45b74f64d8808eda7e6f6e6b1d641fd2
 https://conda.anaconda.org/conda-forge/linux-64/qt-main-5.15.8-h5c52f38_9.conda#a80700497d2f343a8448778308aa5dfa
 https://repo.anaconda.com/pkgs/main/noarch/torch-lr-finder-0.2.1-pyhd3eb1b0_0.conda#f3a251d14fde4f7be34973be3fbacf6e
@@ -356,9 +356,13 @@ https://conda.anaconda.org/conda-forge/noarch/jupyter-book-0.15.1-pyhd8ed1ab_0.c
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-0.5.6-pyh8b2e9e2_0.conda#f73c8310a096cbac87c88a9af4fc019d
 https://conda.anaconda.org/conda-forge/noarch/notebook-6.5.4-pyha770c72_0.conda#ec4ce3ce0a55ce21b6f5b86049b97af9
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.5.3-pyhd8ed1ab_0.conda#69f71bc3d176b3ad3d9564a32bd049b8
+<<<<<<< HEAD
 # pip cmake @ https://files.pythonhosted.org/packages/1d/de/48d485d12285cd53e322fb7bdb263778820984d4be54c2bb2fb5eced5e87/cmake-3.26.3-py2.py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl#sha256=1bc7b47456256bdcc41069f5c658f232bd6e15bf4796d115f6ec98800793daff
 # pip sklearn @ https://files.pythonhosted.org/packages/99/b2/165110013aa66fae6fc13918ad0e9de4801e5f1691d371bf8b63328037e6/sklearn-0.0.post4.tar.gz#sha256=0e81ec9c32d4bb418e7be8f1ec1027d174975502dc84cbc4f4564b4cba31e674
 # pip derivative @ https://files.pythonhosted.org/packages/d8/13/cec3418c10fee8a9c43fe8e58657e3042d85c458ac1a6824d3d9f9b96a31/derivative-0.4.2-py3-none-any.whl#sha256=96506787033fb208c4d870f6fd5456535fea2c9f9904abcf1bd886cd52ee170c
 # pip scs @ https://files.pythonhosted.org/packages/ce/37/3a914ed76198500193ca6198912f5f530fec8d8ebd7a553a4e974c80e10c/scs-3.2.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl#sha256=f1b24176de97ecedf698596086f85da6dad472fe38a4b21cf4b460f87cae2c37
 # pip setuptools-scm @ https://files.pythonhosted.org/packages/1d/66/8f42c941be949ef2b22fe905d850c794e7c170a526023612aad5f3a121ad/setuptools_scm-7.1.0-py3-none-any.whl#sha256=73988b6d848709e2af142aa48c986ea29592bbcfca5375678064708205253d8e
 # pip pysindy @ https://files.pythonhosted.org/packages/3f/90/b574bcbd68a8db8dc01b6a0098f506cf698ac2e77cfee19b43a9ed2240c8/pysindy-1.7.5-py3-none-any.whl#sha256=c93177f4ddf30b400d1a573c466540f7f027b47e92720fe4ad80527dcb8b4fe2
+=======
+# pip jupyterlab-myst @ https://files.pythonhosted.org/packages/bc/22/3dd1ef3acfe5a0436f7de8609ae4fc1f7454461931020f6f5b02e8af8544/jupyterlab_myst-1.1.3-py3-none-any.whl#sha256=73a50ac2e9653e2ee411e482f7fff3699966b7e6fa8588dc7345cc73a79fbd16
+>>>>>>> 994c1bb4584a0c8384b02e24e04474d8d889398c
