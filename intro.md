@@ -1,5 +1,3 @@
-title: Learning Machine Learning with Lorenz-96
-
 # Introduction
 
 The climate system is composed of many interacting components (e.g., ocean, atmosphere, ice) and described by complex nonlinear equations. To simulate, understand and predict climate, these equations are solved numerically under a number of simplifications, therefore leading to errors. The errors are the result of numerics used to solve the equations and the lack of appropriate representations of processes occurring below the resolution of the climate model grid (i.e., subgrid processes).
