@@ -8,3 +8,7 @@ __pycache__
 *.pth
 _build/*
 _notebook_cache/*
+notebooks/figs/symbolic_regression.png
+notebooks/figs/symbolic_regression_pw.png
+notebooks/Source.gv
+*.pkl
