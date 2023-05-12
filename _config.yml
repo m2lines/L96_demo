@@ -9,7 +9,7 @@ logo: newlogo.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: auto
-  timeout: 120
+  timeout: 2400
 
 parse:
   myst_enable_extensions:
@@ -27,7 +27,12 @@ bibtex_bibfiles:
 
 # set to author_year format
 sphinx:
-  html4_writer: {"citation_show_urls": False, "citation_references": "full", "external_links": False}
+  html4_writer:
+    {
+      "citation_show_urls": False,
+      "citation_references": "full",
+      "external_links": False,
+    }
   config:
     bibtex_reference_style: author_year
 

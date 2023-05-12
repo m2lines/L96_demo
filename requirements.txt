@@ -1,2 +1,6 @@
 jupyterlab_myst
+pydot
 pysindy
+torch-lr-finder
+gplearn
+pysr
