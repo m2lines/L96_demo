@@ -17,5 +17,6 @@ dependencies:
   - ffmpeg
   - tabulate
   - pandas
+  - seaborn
   - conda-lock
   - pip
