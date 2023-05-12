@@ -26,6 +26,7 @@ parts:
       - file: notebooks/Learning-DA-increments.ipynb
   - caption: Equation Discovery with Lorenz-96
     chapters:
+      - file: notebooks/symbolic_methods_comparison.ipynb
       - file: notebooks/sindy_L96_2scale.ipynb
       - file: notebooks/symbolic_vs_nn_multiscale_L96.ipynb
   - caption: End Matter

@@ -16,6 +16,10 @@ jobs:
         run: echo "Your PR is ${PR}"
         env:
           PR: ${{ github.event.pull_request.number }}
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: 1.9.0
+      - run: julia -e 'println("Hello, World from Julia!")'
       - name: 📦 Cache Conda Packages
         uses: actions/cache@v2
         env:
@@ -38,6 +42,10 @@ jobs:
           conda list
       - name: 📦 Installing graphviz
         uses: ts-graphviz/setup-graphviz@v1
+      - name: 📦 Setting up PySR
+        shell: bash -l {0}
+        run: |
+          python -c 'import pysr; pysr.install()'
       - name: 📦 Cache Notebooks
         uses: actions/cache@v2
         with:
