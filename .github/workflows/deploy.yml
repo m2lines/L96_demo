@@ -1,11 +1,7 @@
 name: build-and-deploy-book
 
-# Trigger the workflow on push to main branch and PRs
-# on: [push, pull_request]
-on:
-  push:
-    branches:
-      - main
+
+on: [push, pull_request]
 # This job installs dependencies, builds the book, and deploys the html
 jobs:
   build-and-deploy-book:
@@ -37,6 +33,7 @@ jobs:
     - name: 👀 Check Conda environment
       shell: bash -l {0}
       run: |
+          pip install -r requirements.txt
           conda info
           conda list
     - name: 📦 Cache Notebooks
