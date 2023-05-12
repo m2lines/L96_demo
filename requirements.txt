@@ -1,2 +1,5 @@
 jupyterlab_myst
 pysindy
+torch-lr-finder
+gplearn
+pysr

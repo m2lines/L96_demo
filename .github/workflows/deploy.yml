@@ -1,6 +1,6 @@
 name: build-and-deploy-book
 
-
+# Trigger the workflow on push to main branch and PRs
 on: [push, pull_request]
 # This job installs dependencies, builds the book, and deploys the html
 jobs:
@@ -11,52 +11,54 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.9]
     steps:
-    - uses: actions/checkout@v2
-    - name: Get PR number
-      run: echo "Your PR is ${PR}"
-      env:
-        PR: ${{ github.event.pull_request.number }}
-    - name: 📦 Cache Conda Packages
-      uses: actions/cache@v2
-      env:
-        # Increase this value to reset cache if etc/example-environment.yml has not changed
-        CACHE_NUMBER: 0
-      with:
-        path: ~/conda_pkgs_dir
-        key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('conda-linux-64.lock') }}
-    - name: 🐍 Set up Conda environment
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        auto-update-conda: false
-        activate-environment: L96M2lines
-        environment-file: conda-linux-64.lock
-    - name: 👀 Check Conda environment
-      shell: bash -l {0}
-      run: |
+      - uses: actions/checkout@v2
+      - name: Get PR number
+        run: echo "Your PR is ${PR}"
+        env:
+          PR: ${{ github.event.pull_request.number }}
+      - name: 📦 Cache Conda Packages
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if etc/example-environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('conda-linux-64.lock') }}
+      - name: 🐍 Set up Conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: false
+          activate-environment: L96M2lines
+          environment-file: conda-linux-64.lock
+      - name: 👀 Check Conda environment
+        shell: bash -l {0}
+        run: |
           pip install -r requirements.txt
           conda info
           conda list
-    - name: 📦 Cache Notebooks
-      uses: actions/cache@v2
-      with:
-        path: _build/.jupyter_cache
-        key: notebook_cache-${{hashFiles('_toc.yml', '_config.yml', 'environment.yaml') }}
-    - name: 📖 Build the book
-      shell: bash -l {0}
-      run:  |
-        mkdir -p _notebook_cache
-        jupyter-book build .
-    - name: 📖 Show logs from the book build
-      shell: bash -l {0}
-      run:  |
-        find _build/html -name "*.log" -print -exec cat {} \;
-    - name: 🚀 Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main'
-      #uses: peaceiris/actions-gh-pages@v3
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        #publish_dir: _build/html
-        #keep_files: false
-        folder: _build/html
-        clean-exclude: pr-preview/
+      - name: 📦 Installing graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      - name: 📦 Cache Notebooks
+        uses: actions/cache@v2
+        with:
+          path: _build/.jupyter_cache
+          key: notebook_cache-${{hashFiles('_toc.yml', '_config.yml', 'environment.yaml') }}
+      - name: 📖 Build the book
+        shell: bash -l {0}
+        run: |
+          mkdir -p _notebook_cache
+          jupyter-book build .
+      - name: 📖 Show logs from the book build
+        shell: bash -l {0}
+        run: |
+          find _build/html -name "*.log" -print -exec cat {} \;
+      - name: 🚀 Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        #uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          #publish_dir: _build/html
+          #keep_files: false
+          folder: _build/html
+          clean-exclude: pr-preview/
