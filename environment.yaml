@@ -8,6 +8,7 @@ dependencies:
   - python=3.9
   - matplotlib
   - numba
+  - ipywidgets
   - pytorch
   - torchvision
   - scikit-learn
