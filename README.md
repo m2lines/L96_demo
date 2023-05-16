@@ -1,4 +1,4 @@
-# Lorenz 1996 two time-scale model
+# Lorenz 1996 Two Time-Scale Model
 
 [![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/m2lines/L96_demo/HEAD)
@@ -15,43 +15,52 @@ Jupyter Notebooks into a website.
 - The book configuration is in [\_config.yml](https://github.com/m2lines/L96_demo/blob/main/_config.yml).
 - The references are in [\_references.bib](https://github.com/m2lines/L96_demo/blob/main/references.bib).
 
-## The Environment
+## Setting up the Environment
 
-The environment in which to run the notebooks and build the books is defined in
-[environment.yaml](https://github.com/m2lines/L96_demo/blob/main/environment.yaml).
-To recreate and activate the environment locally, run
+### Installing Julia
 
-```
-conda env create -f environment.yaml
-conda activate L96M2lines
+The equation discovery notebooks, require Julia to be installed on your machine. Depending on the platform, download and install the appropriate Julia binary from [here](https://julialang.org/downloads/).
+
+_**Note:** The `PyCall` package does not work on Silicon Macbooks. This causes build errors for the equation discovery notebooks when building on a silicon macbook. So to build the entire project, you can either omit the equation discovery notebooks from the `_toc.yml` file if you are working on a silicon macbook, or you can build the project on a linux machine directly._
+
+### Installing Python Dependencies
+
+The python packages required to run and build the notebooks are listed in the
+[environment.yaml](https://github.com/m2lines/L96_demo/blob/main/environment.yaml) and the [requirements.txt](https://github.com/m2lines/L96_demo/blob/main/requirements.txt) file.
+To install all these dependencies in a virtual environment, run
+
+```bash
+$ conda env create -f environment.yaml
+$ conda activate L96M2lines
+$ python -m pip install -r requirements.txt
+$ python -c 'import pysr; pysr.install()'
 ```
 
 To speed up the continuous integration, we also generated a
 [conda lock](https://conda.github.io/conda-lock/) file for linux as follows.
 
-```
-conda-lock lock --mamba -f environment.yaml -p linux-64 --kind explicit
+```bash
+$ conda-lock lock --mamba -f environment.yaml -p linux-64 --kind explicit
 ```
 
-This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blob/main/conda-linux-64.lock).
-It should be regenerated periorically.
+This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blob/main/conda-linux-64.lock) and should be regenerated periorically.
 
 ## Building the Book
 
 To build the book locally, you should first create and activate your environment,
 as described above. Then run
 
-```
-jupyter book build .
+```bash
+$ jupyter book build .
 ```
 
 When you run this command, the notebooks will be executed.
 The built html will be placed in '\_build/html`.
 To preview the book, run
 
-```
-cd _build/html
-python -m http.server
+```bash
+$ cd _build/html
+$ python -m http.server
 ```
 
 The build process can take a long time, so we have configured the setup to use
@@ -61,14 +70,14 @@ that have been changed. The cache files live in `_build/.jupyter_cache`
 
 To check the status of the cache, run
 
-```
-jcache cache list -p _build/.jupyter_cache
+```bash
+$ jcache cache list -p _build/.jupyter_cache
 ```
 
 To remove cached notebooks, run
 
-```
-jcache cache remove -p _build/.jupyter_cache
+```bash
+$ jcache cache remove -p _build/.jupyter_cache
 ```
 
 ## Contributing
@@ -79,8 +88,8 @@ We use [pre-commit](https://pre-commit.com/) to keep the notebooks clean.
 In order to use pre-commit, run the following command in the repo top-level directory:
 The pre commit
 
-```
-pre-commit install
+```bash
+$ pre-commit install
 ```
 
 At this point, pre-commit will automatically be run every time you make a commit.
@@ -89,29 +98,29 @@ At this point, pre-commit will automatically be run every time you make a commit
 
 In order to contribute a PR, you should start from a new feature branch.
 
-```
-git checkout -b my_new_feature
+```bash
+$ git checkout -b my_new_feature
 ```
 
 (Replace `my_new_feature` with a descriptive name of the feature you're working on.)
 
 Make your changes and then make a new commit:
 
-```
-git add changed_file_1.ipynb changed_file_2.ipynb
-git commit -m "message about my new feature"
+```bash
+$ git add changed_file_1.ipynb changed_file_2.ipynb
+$ git commit -m "message about my new feature"
 ```
 
 You can also automatically commit changes to existing files as:
 
-```
-git commit -am "message about my new feature"
+```bash
+$ git commit -am "message about my new feature"
 ```
 
 Then push your changes to your remote on GitHub (usually call `origin`
 
-```
-git push origin my_new_feature
+```bash
+$ git push origin my_new_feature
 ```
 
 Then navigate to https://github.com/m2lines/L96_demo to open your pull request.
@@ -121,8 +130,8 @@ Then navigate to https://github.com/m2lines/L96_demo to open your pull request.
 To synchronize your local branch with upstream changes, first make sure you have the upstream remote configured.
 To check your remotes, run
 
-```
-% git remote -v
+```bash
+$ git remote -v
 origin	git@github.com:rabernat/L96_demo.git (fetch)
 origin	git@github.com:rabernat/L96_demo.git (push)
 upstream	git@github.com:m2lines/L96_demo.git (fetch)
@@ -131,21 +140,21 @@ upstream	git@github.com:m2lines/L96_demo.git (push)
 
 If you don't have `upstream`, you need to add it as follows
 
-```
-git remote add upstream git@github.com:m2lines/L96_demo.git
+```bash
+$ git remote add upstream git@github.com:m2lines/L96_demo.git
 ```
 
 Then, make sure you are on the main branch locally:
 
-```
-git checkout main
+```bash
+$ git checkout main
 ```
 
 And then run
 
-```
-git fetch upstream
-git merge upstream/main
+```bash
+$ git fetch upstream
+$ git merge upstream/main
 ```
 
 Ideally you will not have any merge conflicts.

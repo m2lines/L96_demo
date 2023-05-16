@@ -9,7 +9,7 @@ logo: newlogo.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: auto
-  timeout: 2400
+  timeout: 1800
 
 parse:
   myst_enable_extensions:
@@ -35,6 +35,7 @@ sphinx:
     }
   config:
     bibtex_reference_style: author_year
+    nb_merge_streams: true
 
 # Information about where the book exists on the web
 repository:
