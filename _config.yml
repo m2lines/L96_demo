@@ -3,7 +3,7 @@
 
 title: Learning Machine Learning with Lorenz-96
 author: The M<sup>2</sup>LInES Community
-# logo: newlogo.png
+logo: newlogo.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
