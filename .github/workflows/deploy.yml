@@ -62,11 +62,9 @@ jobs:
           find _build/html -name "*.log" -print -exec cat {} \;
       - name: 🚀 Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
-        #uses: peaceiris/actions-gh-pages@v3
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          #publish_dir: _build/html
-          #keep_files: false
-          folder: _build/html
-          clean-exclude: pr-preview/
+          publish_dir: _build/html
+          keep_files: false
+          force_orphan: true
