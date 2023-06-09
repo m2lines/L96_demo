@@ -21,3 +21,4 @@ dependencies:
   - seaborn
   - conda-lock
   - pip
+  - xarray
