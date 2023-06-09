@@ -22,3 +22,4 @@ dependencies:
   - conda-lock
   - pip
   - xarray
+  - scipy
