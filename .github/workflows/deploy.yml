@@ -45,8 +45,8 @@ jobs:
       - name: 📦 Setting up PySR
         shell: bash -l {0}
         run: |
-          sudo apt-get install -y libstdc++6
-          python -c 'import pysr; pysr.install()'
+          pip install -U pysr
+          python -m pysr install
       - name: 📦 Cache Notebooks
         uses: actions/cache@v2
         with:
