@@ -16,6 +16,7 @@ parts:
       - file: notebooks/Universal_approximation.ipynb
       - file: notebooks/Neural_network_for_Lorenz96.ipynb
       - file: notebooks/Improving_Neural_networks.ipynb
+      - file: notebooks/constraints.ipynb
       - file: notebooks/feature_importance.ipynb
       - file: notebooks/Neural-Network-Saliency-Maps.ipynb
       - file: notebooks/Neural-Network-Advection.ipynb

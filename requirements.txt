@@ -3,4 +3,3 @@ pydot
 pysindy
 torch-lr-finder
 gplearn
-pysr
