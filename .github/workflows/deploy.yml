@@ -40,8 +40,8 @@ jobs:
           pip install -r requirements.txt
           conda info
           conda list
-      - name: 📦 Installing graphviz
-        uses: ts-graphviz/setup-graphviz@v1
+      # - name: 📦 Installing graphviz
+      #   uses: ts-graphviz/setup-graphviz@v1
       - name: 👀 Check Tensorflow installation
         shell: bash -l {0}
         run: |
