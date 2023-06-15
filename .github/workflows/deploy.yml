@@ -42,6 +42,10 @@ jobs:
           conda list
       - name: 📦 Installing graphviz
         uses: ts-graphviz/setup-graphviz@v1
+      - name: 👀 Check Tensorflow installation
+        shell: bash -l {0}
+        run: |
+          python -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
       # - name: 📦 Setting up PySR
       #   shell: bash -l {0}
       #   run: |

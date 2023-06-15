@@ -8,7 +8,7 @@ import numpy as np
 from numba import jit
 
 
-@jit
+@jit(nopython=False)
 def L96_eq1_xdot(X, F, advect=True):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
@@ -33,7 +33,7 @@ def L96_eq1_xdot(X, F, advect=True):
     return Xdot
 
 
-@jit
+@jit(nopython=False)
 def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     """
     Calculate the time rate of change for the X and Y variables for the Lorenz '96, two time-scale

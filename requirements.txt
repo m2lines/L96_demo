@@ -3,3 +3,4 @@ pydot
 pysindy
 torch-lr-finder
 gplearn
+gpflow
