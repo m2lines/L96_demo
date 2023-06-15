@@ -4,6 +4,7 @@ name: L96M2lines
 channels:
   - conda-forge
   - defaults
+  - anaconda
 dependencies:
   - python=3.9
   - matplotlib
@@ -24,3 +25,4 @@ dependencies:
   - xarray
   - pysr
   - nomkl
+  - graphviz
