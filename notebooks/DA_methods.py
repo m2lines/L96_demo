@@ -3,10 +3,10 @@ Adapted form PyDA project: https://github.com/Shady-Ahmed/PyDA
 Reference: https://www.mdpi.com/2311-5521/5/4/225
 """
 import numpy as np
-from numba import jit
+from numba import njit
 
 
-@jit
+@njit
 def Lin3dvar(ub, w, H, R, B, opt):
     # The solution of the 3DVAR problem in the linear case requires
     # the solution of a linear system of equations.
@@ -35,7 +35,7 @@ def Lin3dvar(ub, w, H, R, B, opt):
     return ua
 
 
-@jit
+@njit
 def ens_inflate(posterior, prior, opt, factor):
     inflated = np.zeros(posterior.shape)
     n, N = prior.shape
@@ -55,7 +55,7 @@ def ens_inflate(posterior, prior, opt, factor):
     return inflated
 
 
-@jit
+@njit
 def EnKF(prior, obs, H, R, B):
     # The analysis step for the (stochastic) ensemble Kalman filter
     # with virtual observations

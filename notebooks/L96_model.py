@@ -5,10 +5,10 @@ https://www.ecmwf.int/en/elibrary/10829-predictability-problem-partly-solved
 """
 
 import numpy as np
-from numba import jit
+from numba import jit, njit
 
 
-@jit
+@njit
 def L96_eq1_xdot(X, F, advect=True):
     """
     Calculate the time rate of change for the X variables for the Lorenz '96, equation 1:
@@ -33,7 +33,7 @@ def L96_eq1_xdot(X, F, advect=True):
     return Xdot
 
 
-@jit
+@njit
 def L96_2t_xdot_ydot(X, Y, F, h, b, c):
     """
     Calculate the time rate of change for the X and Y variables for the Lorenz '96, two time-scale
