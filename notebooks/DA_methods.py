@@ -5,6 +5,7 @@ Reference: https://www.mdpi.com/2311-5521/5/4/225
 import numpy as np
 from numba import njit
 
+
 def observation_operator(K, l_obs, t_obs, i_t):
     """Observation operator to map between model and observation space,
     assuming linearity and model space observations.
@@ -23,6 +24,7 @@ def observation_operator(K, l_obs, t_obs, i_t):
     H[range(n), l_obs[t_obs == i_t]] = 1
     return H
 
+
 def get_dist(i, j, K):
     """Compute the absolute distance between two element indices
     within a square matrix of size (K x K)
@@ -36,6 +38,7 @@ def get_dist(i, j, K):
         Distance
     """
     return abs(i - j) if abs(i - j) <= K / 2 else K - abs(i - j)
+
 
 def gaspari_cohn(distance, radius):
     """Compute the appropriate distance dependent weighting of a
@@ -76,6 +79,7 @@ def gaspari_cohn(distance, radius):
                 )
     return weight
 
+
 def localize_covariance(B, loc=0):
     """Localize the model climatology covariance matrix, based on
     the Gaspari-Cohn function.
@@ -93,6 +97,7 @@ def localize_covariance(B, loc=0):
     dist = np.vectorize(get_dist)(X, Y, M)
     W = np.vectorize(gaspari_cohn)(dist, loc)
     return B * W, W
+
 
 def running_average(X, N):
     """Compute running mean over a user-specified window.
@@ -113,6 +118,7 @@ def running_average(X, N):
         X_sum = X_sum + np.roll(X, int(i), axis=0)
     return X_sum / N
 
+
 def find_obs(loc, obs, t_obs, l_obs, period):
     """NOTE: This function is for plotting purposes only."""
     t_period = np.where((t_obs[:, 0] >= period[0]) & (t_obs[:, 0] < period[1]))
@@ -122,6 +128,7 @@ def find_obs(loc, obs, t_obs, l_obs, period):
         if np.any(l_obs[t_period[0][i]] == loc):
             obs_period[i] = obs[t_period[0][i]][l_obs[t_period[0][i]] == loc]
     return obs_period
+
 
 @njit
 def Lin3dvar(ub, w, H, R, B, opt):
