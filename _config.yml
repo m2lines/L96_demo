@@ -12,6 +12,7 @@ exclude_patterns: ['env/*', '_build/*']
 execute:
   execute_notebooks: auto
   timeout: 1800
+  exclude_patterns: ['*old_notebooks/*']
 
 parse:
   myst_enable_extensions:
