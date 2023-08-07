@@ -13,8 +13,9 @@ parts:
   - caption: Machine Learning with Lorenz-96
     chapters:
       - file: notebooks/intro_ML_and_NNs.ipynb
-      - file: notebooks/L96_offline_NN.ipynb
+      - file: notebooks/L96_offline_training_NN.ipynb
       - file: notebooks/L96_online_implement_NN.ipynb
+      - file: notebooks/L96_online_training_NN.ipynb
       - file: notebooks/Improving_Neural_networks.ipynb
       - file: notebooks/constraints.ipynb
       - file: notebooks/feature_importance.ipynb
