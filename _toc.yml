@@ -10,18 +10,15 @@ parts:
       - file: notebooks/gcm-analogue.ipynb
       - file: notebooks/gcm-parameterization-problem.ipynb
       - file: notebooks/estimating-gcm-parameters.ipynb
-  - caption: Machine Learning with Lorenz-96
+  - caption: Neural Networks with Lorenz-96
     chapters:
       - file: notebooks/intro_ML_and_NNs.ipynb
       - file: notebooks/L96_offline_NN.ipynb.ipynb
       - file: notebooks/L96_online_implement_NN.ipynb
+      - file: notebooks/L96_online_training_NN.ipynb
       - file: notebooks/Improving_Neural_networks.ipynb
+      - file: notebooks/Neural-Network-Interpretation.ipynb
       - file: notebooks/constraints.ipynb
-      - file: notebooks/feature_importance.ipynb
-      - file: notebooks/Neural-Network-Saliency-Maps.ipynb
-      - file: notebooks/Neural-Network-Advection.ipynb
-      - file: notebooks/random_forest_parameterization.ipynb
-      - file: notebooks/GP_lorenz96.ipynb
   - caption: Data Assimilation with Lorenz-96
     chapters:
       - file: notebooks/DA_demo_L96.ipynb
@@ -31,6 +28,11 @@ parts:
       - file: notebooks/symbolic_methods_comparison.ipynb
       - file: notebooks/sindy_L96_2scale.ipynb
       - file: notebooks/symbolic_vs_nn_multiscale_L96.ipynb
+  - caption: Other ML approaches for Lorenz-96
+    chapters:
+      - file: notebooks/random_forest_parameterization.ipynb 
+      - file: notebooks/GP_lorenz96.ipynb
   - caption: End Matter
     chapters:
+      - file: notebooks/closing_remarks.ipynb
       - file: bibliography.md
