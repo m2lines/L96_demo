@@ -30,7 +30,7 @@ parts:
       - file: notebooks/symbolic_vs_nn_multiscale_L96.ipynb
   - caption: Other ML approaches for Lorenz-96
     chapters:
-      - file: notebooks/random_forest_parameterization.ipynb 
+      - file: notebooks/random_forest_parameterization.ipynb
       - file: notebooks/GP_lorenz96.ipynb
   - caption: End Matter
     chapters:
