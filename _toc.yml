@@ -32,6 +32,8 @@ parts:
     chapters:
       - file: notebooks/random_forest_parameterization.ipynb
       - file: notebooks/GP_lorenz96.ipynb
+      - file: notebooks/local_map_L96_and_Burgers.ipynb
+      - file: notebooks/L96_ResNet_RNN.ipynb
   - caption: End Matter
     chapters:
       - file: notebooks/closing_remarks.ipynb
