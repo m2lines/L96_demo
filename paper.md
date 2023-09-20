@@ -4,7 +4,7 @@ tags:
   - Python
   - Machine Learning
   - Neural Networks
-  - dynamical systems
+  - Dynamical systems
 authors:
   - name: Dhruv Balwada
     orcid: 0000-0001-6632-0187
@@ -18,12 +18,18 @@ authors:
   - name: Alistair Adcroft
     orcid: 0000-0001-9413-1017
     affiliation: 3
+  - name: Judith Brener
+    orcid: 0000-0003-2168-0431
+    affiliation: 12
   - name: Mohamed Aziz Bhouri
     orcid: 0000-0003-1140-7415
     affiliation: 4
   - name: Mitch Bushuk
     orcid: 0000-0002-0063-1465
     affiliation: 9
+  - name: Will Chapman
+    orcid: 0000-0002-0472-7069
+    affiliation: 12
   - name: Alex Connolly
     orcid: 0000-0002-2310-0480
     affiliation: 4
@@ -54,6 +60,9 @@ authors:
   - name: Feiyu Lu
     orcid: 0000-0001-6532-0740
     affiliation: 9
+  - name: Paul O'Gorman
+    orcid: 0000-0001-6532-0740
+    affiliation: 11
   - name: Pavel Perezhogin
     orcid: 0000-0003-2098-3457
     affiliation: 3
@@ -103,11 +112,13 @@ affiliations:
     index: 8
   - name: NOAA Geophysical Fluid Dynamics Laboratory
     index: 9 
-  - name: Sorbonne Universités (UPMC, Univ Paris 06)-CNRS-IRD-MNHN, LOCEAN Laboratory, Paris, France
+  - name: Sorbonne Universités, LOCEAN Laboratory, Paris, France
     index: 10
-  - name: Massachusetts Institute of Technology
+  - name: Department of Earth, Atmospheric, and Planetary Sciences, Massachusetts Institute of Technology
     index: 11
-date: 7 September 2023
+  - name: National Center for Atmospheric Research
+    index: 12
+date: 20 September 2023
 
 
 bibliography: paper.bib
