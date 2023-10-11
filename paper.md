@@ -24,6 +24,8 @@ authors:
   - name: Mohamed Aziz Bhouri
     orcid: 0000-0003-1140-7415
     affiliation: 4
+  - name: Joan Bruna
+    affiliation: "2, 13"
   - name: Mitch Bushuk
     orcid: 0000-0002-0063-1465
     affiliation: 9
@@ -36,6 +38,12 @@ authors:
   - name: Julie Deshayes
     orcid: 0000-0002-1462-686X
     affiliation: 10
+  - name: Carlos Fernandez-Granda
+    orcid: 0000-0001-7039-8606
+    affiliation: "2, 13"
+  - name: Pierre Gentine
+    orcid: 0000-0002-0845-8345
+    affiliation: "4, 14"
   - name: Anastasiia Gorbunova
     orcid: 0000-0002-3271-2024
     affiliation: 6
@@ -48,6 +56,12 @@ authors:
   - name: Shubham Gupta
     orcid: 0009-0002-6966-588X
     affiliation: 8
+  - name: Marika Holland
+    orcid: 0000-0001-5621-8939
+    affiliation: 12
+  - name: J Emmanuel Johnsson
+    orcid: 0000-0002-6739-0053
+    affiliation: 6
   - name: Julien Le Sommer
     orcid: 0000-0002-6882-2938
     affiliation: 6
@@ -118,8 +132,11 @@ affiliations:
     index: 11
   - name: National Center for Atmospheric Research
     index: 12
-date: 9 October 2023
-
+  - name: Center for Data Science, New York University
+    index: 13
+  - name: Columbia Climate School, Columbia University
+    index: 14
+date: 10 October 2023
 
 bibliography: paper.bib
 ---
@@ -136,6 +153,6 @@ The book was created by and as part of M2LInES, an international collaboration s
 
 
 # Acknowledgements
-This work is supported by the generosity of Eric and Wendy Schmidt by recommendation of Schmidt Futures, as part of its Virtual Earth System Research Institute (VESRI).
+This work is supported by the generosity of Eric and Wendy Schmidt by recommendation of Schmidt Futures, as part of its Virtual Earth System Research Institute (VESRI). MAB acknowledges support from National Science Foundation's AGS-PRF Fellowship Award (AGS2218197).
 
 # References
