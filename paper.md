@@ -25,6 +25,7 @@ authors:
     orcid: 0000-0003-1140-7415
     affiliation: 4
   - name: Joan Bruna
+    orcid: 0000-0002-2847-1512
     affiliation: "2, 13"
   - name: Mitch Bushuk
     orcid: 0000-0002-0063-1465
