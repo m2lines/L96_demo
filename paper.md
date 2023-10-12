@@ -21,6 +21,9 @@ authors:
   - name: Judith Brener
     orcid: 0000-0003-2168-0431
     affiliation: 12
+  - name: V Balaji
+    orcid: 0000-0001-7561-5438
+    affiliation: 15
   - name: Mohamed Aziz Bhouri
     orcid: 0000-0003-1140-7415
     affiliation: 4
@@ -137,6 +140,8 @@ affiliations:
     index: 13
   - name: Columbia Climate School, Columbia University
     index: 14
+  - name: Schmidt Futures
+    index: 15
 date: 10 October 2023
 
 bibliography: paper.bib
