@@ -37,4 +37,5 @@ parts:
   - caption: End Matter
     chapters:
       - file: notebooks/closing_remarks.ipynb
+      - file: notebooks/citing.ipynb
       - file: bibliography.md
