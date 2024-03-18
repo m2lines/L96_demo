@@ -2,6 +2,7 @@
 Partly adapted form PyDA project: https://github.com/Shady-Ahmed/PyDA
 Reference: https://www.mdpi.com/2311-5521/5/4/225
 """
+
 import numpy as np
 from numba import njit
 
