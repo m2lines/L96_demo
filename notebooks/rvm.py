@@ -26,6 +26,7 @@ likelihood (i.e. the evidence approximation). The type-II maximum likelihood
 calculation is conducted iteratively.
 
 """
+
 import numpy as np
 
 from scipy.optimize import minimize
@@ -36,7 +37,6 @@ from sklearn.metrics import r2_score
 
 
 class BaseRVM(BaseEstimator):
-
     """Base Relevance Vector Machine class.
 
     Implementation of Mike Tipping's Relevance Vector Machine using the
@@ -236,7 +236,6 @@ class BaseRVM(BaseEstimator):
 
 
 class RVR(BaseRVM, RegressorMixin):
-
     """Relevance Vector Machine Regression.
 
     Implementation of Mike Tipping's Relevance Vector Machine for regression
