@@ -33,7 +33,7 @@ To install all these dependencies in a virtual environment, run
 $ conda env create -f environment.yaml
 $ conda activate L96M2lines
 $ python -m pip install -r requirements.txt
-$ python -c 'import pysr; pysr.install()'
+$ python -c "import pysr; pysr.install()"
 ```
 
 To speed up the continuous integration, we also generated a

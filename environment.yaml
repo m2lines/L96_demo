@@ -1,10 +1,11 @@
 # to turn this into a conda-linux-64.lock file, run:
 # conda-lock lock --mamba -f environment.yaml -p linux-64
-name: L96M2lines
+name: L96M2lines2
 channels:
   - conda-forge
   - defaults
   - anaconda
+  - numba/label/dev
 dependencies:
   - python=3.9
   - matplotlib
@@ -24,5 +25,5 @@ dependencies:
   - pip
   - xarray
   - pysr
-  - nomkl
+  # - nomkl
   - graphviz
