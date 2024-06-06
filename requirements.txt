@@ -4,3 +4,4 @@ pysindy
 torch-lr-finder
 gplearn
 gpflow
+tf-keras
