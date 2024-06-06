@@ -5,6 +5,7 @@ channels:
   - conda-forge
   - defaults
   - anaconda
+  - numba/label/dev
 dependencies:
   - python=3.9
   - matplotlib
@@ -24,5 +25,5 @@ dependencies:
   - pip
   - xarray
   - pysr
-  - nomkl
+  # - nomkl
   - graphviz
