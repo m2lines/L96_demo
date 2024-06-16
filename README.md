@@ -3,7 +3,7 @@
 [![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/m2lines/L96_demo/HEAD)
 
-This repository provides a set of notebooks to pedagogically introduce the reader to the problem of parameterization in the climate sciences and how machine learning may be used to address it. 
+This repository provides a set of notebooks to pedagogically introduce the reader to the problem of parameterization in the climate sciences and how machine learning may be used to address it.
 
 The original goal for these notebooks in this Jupyter book was for our [M2LInES](https://m2lines.github.io/) team to work together and learn from each other; in particular, to get up to speed on the key scientific aspects of our collaboration (parameterizations, machine learning, data assimilation, uncertainty quantification) and to develop new ideas. Now this material is presented here for anyone to learn from. The primary audience for this guide is researchers and students trained in climate science wanting to be introduced to machine learning or trained in machine learning and want to get acquainted with the parameterization problem in climate sciences. It could be used as a teaching tool, for self-study, or as a reference manual.
 
