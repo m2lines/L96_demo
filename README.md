@@ -54,7 +54,7 @@ This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blo
 
 ## Building the Book
 
-Most readers interested in learning from this material could just run individual notebooks once they have setup the appropriate environment, or use the binder link provided at the top of this readme. However, some more advanced readers, particularly those wishing to contribute back, may be interested in building the book locally for testing purposes. 
+Most readers interested in learning from this material could just run individual notebooks once they have setup the appropriate environment, or use the binder link provided at the top of this readme. However, some more advanced readers, particularly those wishing to contribute back, may be interested in building the book locally for testing purposes.
 
 To build the book locally, you should first create and activate your environment,
 as described above. Then run
