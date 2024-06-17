@@ -3,9 +3,13 @@
 [![build-and-deploy-book](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/m2lines/L96_demo/actions/workflows/deploy.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/m2lines/L96_demo/HEAD)
 
+
 This repository provides a set of notebooks to pedagogically introduce the reader to the problem of parameterization in the climate sciences and how machine learning may be used to address it.
 
-The original goal for these notebooks in this Jupyter book was for our [M2LInES](https://m2lines.github.io/) team to work together and learn from each other; in particular, to get up to speed on the key scientific aspects of our collaboration (parameterizations, machine learning, data assimilation, uncertainty quantification) and to develop new ideas. Now this material is presented here for anyone to learn from. The primary audience for this guide is researchers and students trained in climate science wanting to be introduced to machine learning or trained in machine learning and want to get acquainted with the parameterization problem in climate sciences. It could be used as a teaching tool, for self-study, or as a reference manual.
+The original goal for these notebooks in this Jupyter book was for our [M2LInES](https://m2lines.github.io/) team to work together and learn from each other; in particular, to get up to speed on the key scientific aspects of our collaboration (parameterizations, machine learning, data assimilation, uncertainty quantification) and to develop new ideas. 
+
+**Statement of need**: Now this material is presented here for anyone to learn from. The primary audience for this guide is researchers and students trained in climate science wanting to be introduced to machine learning or trained in machine learning and want to get acquainted with the parameterization problem in climate sciences. Since the book addresses people from multiple fields the level of pre-requisites required is minimal; a basic understanding of Python and some experience with PDEs or dynamical systems and solving them numerically (an introductory course in numerical methods) can be helpful. This book could be used as a teaching tool, for self-study, or as a reference manual. 
+
 
 ## Structure and Organization of the Repo
 
@@ -51,6 +55,8 @@ This file lives in [conda-linux-64.lock](https://github.com/m2lines/L96_demo/blo
 
 ## Building the Book
 
+Most readers interested in learning from this material could just run individual notebooks once they have setup the appropriate environment, or use the binder link provided at the top of this readme. However, some more advanced readers, particularly those wishing to contribute back, may be interested in building the book locally for testing purposes. 
+
 To build the book locally, you should first create and activate your environment,
 as described above. Then run
 
@@ -85,6 +91,7 @@ $ jcache cache remove -p _build/.jupyter_cache
 ```
 
 ## Contributing
+
 
 ### Pre-commit
 
