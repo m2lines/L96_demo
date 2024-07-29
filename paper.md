@@ -83,7 +83,7 @@ authors:
     affiliation: 11
   - name: Pavel Perezhogin
     orcid: 0000-0003-2098-3457
-    affiliation: 3
+    affiliation: 2
   - name: Brandon Reichl
     orcid: 0000-0001-9047-0767
     affiliation: 9
@@ -95,7 +95,7 @@ authors:
     affiliation: 3
   - name: Sara Shamekh
     orcid: 0000-0001-7441-4116
-    affiliation: 4
+    affiliation: "4, 2"
   - name: Tarun Verma
     orcid: 0000-0001-7730-1483
     affiliation: 3
