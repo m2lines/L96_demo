@@ -1,0 +1,1690 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to Equation Discovery - Comparing Symbolic Regression Methods &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/symbolic_methods_comparison';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Applying SINDy equation identification to L96" href="sindy_L96_2scale.html" />
+    <link rel="prev" title="Learning Data Assimilation Increments" href="Learning-DA-increments.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="L96-two-scale-description.html">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-parameterization-problem.html">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Improving_Neural_networks.html">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning-DA-increments.html">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GP_lorenz96.html">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/symbolic_methods_comparison.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction to Equation Discovery - Comparing Symbolic Regression Methods</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data">Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-programming">Genetic Programming</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gplearn">gplearn</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-gplearn">Run gplearn</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpret-results">Interpret results</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysr">PySR</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-pysr">Run PySR</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Interpret results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manually-constructed-library-sparse-regression">Manually Constructed Library + Sparse Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression">Linear regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#l1-regularized-linear-regression-lasso">L1-regularized linear regression (LASSO)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relevance-vector-machines-rvm">Relevance vector machines (RVM)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sequentially-thresholded-least-squares-stlsq-from-pysindy">Sequentially Thresholded Least Squares (STLSQ) from pysindy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tweaking-the-feature-library">Tweaking the Feature Library</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-noise">Handling noise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-methods-for-symbolic-regression">Other Methods for Symbolic Regression</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="introduction-to-equation-discovery-comparing-symbolic-regression-methods">
+<h1>Introduction to Equation Discovery - Comparing Symbolic Regression Methods<a class="headerlink" href="#introduction-to-equation-discovery-comparing-symbolic-regression-methods" title="Permalink to this headline">#</a></h1>
+<p>Upto now we have seen that the climate models we developed are using physical equations that are based on our understanding of the physical processes that govern the climate. However, these equations are often complex and difficult to solve, and they can only be used to model the climate at a coarse resolution.</p>
+<p><strong>Equation discovery is a different approach that uses machine learning to automatically discover equations that can be used to model the climate.</strong> Specifically, equation discovery in climate modeling can be used to:</p>
+<ul class="simple">
+<li><p><strong>Automate the process of developing subgrid parameterizations.</strong> Subgrid parameterizations are mathematical equations that are used to represent the effects of processes that are too small to be resolved by climate models. These equations are often complex and difficult to develop, but they can be automatically discovered using equation discovery.</p></li>
+<li><p><strong>Identify relationships between variables that are important for understanding climate change.</strong> Machine learning algorithms can learn from large datasets of climate data to identify relationships between variables that are important for understanding climate change.</p></li>
+<li><p><strong>Develop models that are more interpretable and that can be used to make better decisions about how to mitigate and adapt to climate change.</strong> Machine learning algorithms can generate equations that are easier to understand than traditional physical equations. This can help scientists and policymakers to understand how climate models work and to make better decisions about how to mitigate and adapt to climate change.</p></li>
+</ul>
+<p>In this notebook, we’ll review some common techniques for <strong>Symbolic Regression (SR)</strong>, a family of methods of discovering (simple) equations that relate inputs to outputs.</p>
+<p>In particular, we’ll cover the following methods:</p>
+<ul class="simple">
+<li><p>Symbolic regression based on <a class="reference internal" href="#genetic-programming-section"><span class="std std-ref">Genetic Programming</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#gplearn-sec"><span class="std std-ref">gplearn</span></a></p></li>
+<li><p><a class="reference internal" href="#pysr-sec"><span class="std std-ref">PySR</span></a></p></li>
+</ul>
+</li>
+<li><p>Symbolic regression based on <a class="reference internal" href="#sparse-regression-sec"><span class="std std-ref">Manually Constructed Library + Sparse Regression</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#linear-regression-sec"><span class="std std-ref">Linear regression</span></a></p></li>
+<li><p><a class="reference internal" href="#lasso-sec"><span class="std std-ref">L1-regularized linear regression (LASSO)</span></a></p></li>
+<li><p><a class="reference internal" href="#rvm-sec"><span class="std std-ref">Relevance vector machines (RVM)</span></a></p></li>
+<li><p><a class="reference internal" href="#stlsq-sec"><span class="std std-ref">Sequentially Thresholded Least Squares (STLSQ) from pysindy</span></a></p></li>
+</ul>
+</li>
+<li><p>Brief overview of other techniques</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pysindy</span> <span class="k">as</span> <span class="nn">ps</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Number</span><span class="p">,</span> <span class="n">latex</span>
+
+<span class="kn">from</span> <span class="nn">rvm</span> <span class="kn">import</span> <span class="n">RVR</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data">
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h2>
+<p>When explaining the methods, we’ll consider the following bivariate system:</p>
+<div class="math notranslate nohighlight">
+\[
+y = x_0^2 - \frac{1}{2}x_1^2 + \sin\left(\frac{1}{2} x_0 x_1\right)
+\]</div>
+<p>Although the equation is relatively simple, discovering it from <span class="math notranslate nohighlight">\(x_0\)</span> and <span class="math notranslate nohighlight">\(x_1\)</span> directly is a bit tough, since the <span class="math notranslate nohighlight">\(\sin\)</span> term requires going at least three levels deep in term combinations, and also involves an inner multiplication by a constant (which not all symbolic regression frameworks support).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">toy_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x0</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">contour</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+<span class="p">):</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+    <span class="n">xyg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="p">))</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">xyg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">zg</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">xg</span><span class="p">,</span> <span class="n">yg</span> <span class="o">=</span> <span class="n">xyg</span>
+    <span class="n">vlim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">zg</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">zg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xg</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">300</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="n">vlim</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vlim</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;bwr&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">toy_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">contour</span><span class="p">(</span><span class="n">toy_function</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Function value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Toy domain for illustrating</span><span class="se">\n</span><span class="s2">symbolic regression&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x_0$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d500949fe2d1e400e2ab002527fb1a76c012fd88ddb886fe827b47d6acab3360.png" src="../_images/d500949fe2d1e400e2ab002527fb1a76c012fd88ddb886fe827b47d6acab3360.png" />
+</div>
+</div>
+</div>
+<div class="section" id="genetic-programming">
+<span id="genetic-programming-section"></span><h2>Genetic Programming<a class="headerlink" href="#genetic-programming" title="Permalink to this headline">#</a></h2>
+<p>Genetic programming is a classic technique in AI, and interest in the idea dates back at least to Alan Turing (who proposes the idea in the <a class="reference external" href="https://doi.org/10.1093/mind/LIX.236.433">same paper</a> that introduces the imitation game, or Turing test).</p>
+<p>The general idea is to have a:</p>
+<ul class="simple">
+<li><p>“Population” of programs (in our case, possible symbolic expressions, usually represented as trees)</p></li>
+<li><p>Some notion of individual “fitness” (in our case, how well they model the data, as well as their simplicity)</p></li>
+<li><p>Some means of applying random “mutations” (e.g. adding a term, deleting a term)</p></li>
+</ul>
+<div class="figure align-default" id="genetic-programming-mutation-types">
+<img alt="../_images/gp_mutation_types.png" src="../_images/gp_mutation_types.png" />
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Some examples for different mutation types</span><a class="headerlink" href="#genetic-programming-mutation-types" title="Permalink to this image">#</a></p>
+</div>
+<p>“Crossover” and “subtree” mutations combine features from multiple candidate equations, imitating the process of genetic recombination from sexual reproduction. “Hoist” and “point” mutations modify individual equations, imitating the process of genetic mutation from, e.g., random errors in DNA replication.</p>
+<p>Specific mutations aside, programs can have a limited lifespan, and those with high “fitness” produce more “offspring” (possibly-mutated versions of themselves). However, everything is probabilistic, so programs with lower fitness can still persist. This is critically important, because it allows genetic programming to overcome local minima during optimization.</p>
+<p>Note that although genetic programming can be a robust way to solve extremely difficult non-convex optimization problems (as perhaps evidenced by life itself), it also tends to be slow and resource-intensive.</p>
+<div class="section" id="gplearn">
+<span id="gplearn-sec"></span><h3>gplearn<a class="headerlink" href="#gplearn" title="Permalink to this headline">#</a></h3>
+<p>One nicely-documented library for “pure” genetic programming-based symbolic regression is <a class="reference external" href="https://gplearn.readthedocs.io/en/stable/">gplearn</a>, which provides a scikit-learn style API and a number of configuration options:</p>
+<div class="section" id="run-gplearn">
+<h4>Run gplearn<a class="headerlink" href="#run-gplearn" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gplearn</span>
+<span class="kn">import</span> <span class="nn">gplearn.genetic</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gplearn_sr</span> <span class="o">=</span> <span class="n">gplearn</span><span class="o">.</span><span class="n">genetic</span><span class="o">.</span><span class="n">SymbolicRegressor</span><span class="p">(</span>
+    <span class="n">population_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+    <span class="n">generations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">p_crossover</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">p_subtree_mutation</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">p_hoist_mutation</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">p_point_mutation</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">max_samples</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">parsimony_coefficient</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">function_set</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;mul&quot;</span><span class="p">,</span> <span class="s2">&quot;sin&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">gplearn_sr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    |   Population Average    |             Best Individual              |
+---- ------------------------- ------------------------------------------ ----------
+ Gen   Length          Fitness   Length          Fitness      OOB Fitness  Time Left
+   0    18.54           3.5999        3         0.562071         0.812969      2.32m
+   1     7.22          1.08143       11         0.378559         0.334077      1.88m
+   2     5.96          1.00844       11         0.366462         0.442944      1.72m
+   3     3.72         0.888262       10         0.297279         0.282956      1.63m
+   4     5.65         0.920424       19         0.290364         0.341133      1.58m
+   5    10.18         0.941443       11         0.286792          0.36334      1.65m
+   6    11.04         0.934423       10         0.285399         0.377165      1.70m
+   7    10.13         0.935018       11         0.285542         0.374587      1.60m
+   8     9.17         0.927599       10         0.285219         0.391501      1.53m
+   9     8.98         0.897545        9         0.285466         0.386356      1.54m
+  10     9.04         0.883659        9         0.285565         0.385458      1.44m
+  11     9.04         0.872427        9          0.28675         0.374796      1.40m
+  12     8.99         0.877962        9         0.285636         0.384821      1.43m
+  13     8.94         0.885528       13        0.0778227        0.0800858      1.33m
+  14     9.05         0.883008       13        0.0766082        0.0910161      1.29m
+  15     8.97         0.888407       13        0.0754497         0.101443      1.29m
+  16     9.27         0.884739       13        0.0720049         0.132446      1.22m
+  17    10.10         0.874474       13        0.0711127         0.140476      1.20m
+  18    11.88         0.863439       13        0.0704156          0.14675      1.24m
+  19    12.75         0.830471       13        0.0690979         0.158609      1.17m
+  20    12.79         0.835437       15        0.0618728        0.0503473      1.12m
+  21    12.78         0.846235       13        0.0689467          0.15997      1.14m
+  22    12.90         0.842088       13        0.0692994         0.156796      1.06m
+  23    12.95         0.836317       13        0.0649406         0.140341      1.04m
+  24    12.83         0.845877       16        0.0613162        0.0774903     59.81s
+  25    12.83         0.834353       13        0.0626879         0.165909     59.56s
+  26    12.78         0.833362       13        0.0581094         0.113488     55.18s
+  27    12.85         0.848247       13        0.0587753         0.107495     52.06s
+  28    12.89         0.839895       13        0.0574441         0.119475     51.78s
+  29    12.82         0.830013       13        0.0561562         0.131066     46.99s
+  30    12.85         0.844327       13        0.0548786         0.142565     44.76s
+  31    12.82         0.848028       13        0.0562207         0.130486     44.86s
+  32    12.82         0.840192       13        0.0527277         0.138617     40.59s
+  33    12.97         0.851295       13        0.0556538         0.112281     38.34s
+  34    12.97          0.86142       13        0.0531052         0.135219     36.38s
+  35    12.86         0.866894       13        0.0524928         0.135214     32.68s
+  36    12.84         0.856227       13        0.0510358        0.0639735     30.44s
+  37    12.80         0.846347       13        0.0484465        0.0872769     29.34s
+  38    12.92         0.854388       13        0.0457628          0.11143     26.00s
+  39    12.72         0.836194       13         0.043155           0.1349     23.24s
+  40    12.85         0.847145       13        0.0435729          0.13114     22.39s
+  41    12.89         0.847804       13        0.0437096         0.129909     18.91s
+  42    12.98         0.838911       13        0.0420137         0.145172     16.45s
+  43    13.00         0.827133       13        0.0436237         0.130682     14.85s
+  44    12.84           0.8323       13        0.0412125         0.152383     11.68s
+  45    12.85         0.844415       13        0.0393847         0.168833      9.36s
+  46    12.87         0.845056       13        0.0426184          0.13973      7.28s
+  47    12.85         0.855447       13        0.0433907          0.13278      4.69s
+  48    12.88          0.84958       13        0.0436554         0.130397      2.34s
+  49    12.94         0.841532       13        0.0428445         0.137695      0.00s
+</pre></div>
+</div>
+<div class="output text_html"><style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>add(mul(mul(X1, X1), -0.506), mul(add(X0, mul(X1, 0.461)), X0))</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">SymbolicRegressor</label><div class="sk-toggleable__content"><pre>add(mul(mul(X1, X1), -0.506), mul(add(X0, mul(X1, 0.461)), X0))</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<div class="section" id="interpret-results">
+<h4>Interpret results<a class="headerlink" href="#interpret-results" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">gplearn_sr</span><span class="o">.</span><span class="n">_program</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>add(mul(mul(X1, X1), -0.506), mul(add(X0, mul(X1, 0.461)), X0))
+</pre></div>
+</div>
+</div>
+</div>
+<p>This looks very close to the right answer, though the constants are slightly off.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">const</span> <span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="n">gplearn_sr</span><span class="o">.</span><span class="n">_program</span><span class="o">.</span><span class="n">program</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">const</span><span class="p">,</span> <span class="nb">float</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.5058078007301896, 0.4613027313687532]
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is likely because gplearn mutations which add or update constants always pick values by drawing random uniform values (within pre-specified ranges, by default -1 to 1). In my limited experience so far, this is one of the major inefficiencies.</p>
+</div>
+</div>
+<div class="section" id="pysr">
+<span id="pysr-sec"></span><h3>PySR<a class="headerlink" href="#pysr" title="Permalink to this headline">#</a></h3>
+<p><a class="reference external" href="https://pysr.readthedocs.io/en/latest/">PySR</a> is a different library for symbolic regression which, though still based on genetic programming, includes simulated annealing and gradient-free optimization to set the values of constants as well as performance improvements (although accessible via a Python API, the main library is written in Julia for speed). This seems to make it a bit more reliable and precise.</p>
+<div class="section" id="run-pysr">
+<h4>Run PySR<a class="headerlink" href="#run-pysr" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pysr</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">equations</span> <span class="o">=</span> <span class="n">pysr</span><span class="o">.</span><span class="n">PySRRegressor</span><span class="p">(</span>
+    <span class="n">niterations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">binary_operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">],</span>  <span class="c1"># operators that can combine two terms</span>
+    <span class="n">unary_operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sin&quot;</span><span class="p">],</span>  <span class="c1"># operators that modify a single term</span>
+<span class="p">)</span>
+<span class="n">equations</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compiling Julia backend...
+Started!
+</pre></div>
+</div>
+<div class="output text_html"><style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>PySRRegressor.equations_ = [
+	    pick     score                                           equation  \
+	0         0.000000                                           0.511122   
+	1         0.462539                                          (x0 * x0)   
+	2         0.169500                            ((x0 * x0) + -0.532032)   
+	3         0.000511            (((x0 * 0.98028487) * x0) + -0.5124039)   
+	4         0.089764              (-0.53700924 + ((x0 + sin(x1)) * x0))   
+	5         1.367675            ((x0 * x0) + (-0.49720797 * (x1 * x1)))   
+	6         0.000006       ((x0 * x0) + (sin(-0.51979923) * (x1 * x1)))   
+	7         0.000074  ((x0 * x0) + ((-0.49688667 * (x1 + -0.00669477...   
+	8         0.780617  ((x0 * x0) + (-0.48037347 * (x1 * (x1 + (-0.59...   
+	9   &gt;&gt;&gt;&gt;  0.529575  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(-0...   
+	10        0.052464  ((-0.47585943 * (x1 * ((x1 + -0.011915542) + s...   
+	11        0.007343  ((-0.47585943 * (x1 * ((x1 + sin(0.013017963))...   
+	12        0.071407  (((sin(sin(sin(0.7067455)) * sin(x1)) + x0) * ...   
+	13        0.099036  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...   
+	14        0.000717  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...   
+	
+	        loss  complexity  
+	0   2.486360           1  
+	1   0.985843           3  
+	2   0.702396           5  
+	3   0.701678           7  
+	4   0.641437           8  
+	5   0.163373           9  
+	6   0.163372          10  
+	7   0.163360          11  
+	8   0.034285          13  
+	9   0.020189          14  
+	10  0.018178          16  
+	11  0.018045          17  
+	12  0.016802          18  
+	13  0.015217          19  
+	14  0.015206          20  
+]</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" checked><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">PySRRegressor</label><div class="sk-toggleable__content"><pre>PySRRegressor.equations_ = [
+	    pick     score                                           equation  \
+	0         0.000000                                           0.511122   
+	1         0.462539                                          (x0 * x0)   
+	2         0.169500                            ((x0 * x0) + -0.532032)   
+	3         0.000511            (((x0 * 0.98028487) * x0) + -0.5124039)   
+	4         0.089764              (-0.53700924 + ((x0 + sin(x1)) * x0))   
+	5         1.367675            ((x0 * x0) + (-0.49720797 * (x1 * x1)))   
+	6         0.000006       ((x0 * x0) + (sin(-0.51979923) * (x1 * x1)))   
+	7         0.000074  ((x0 * x0) + ((-0.49688667 * (x1 + -0.00669477...   
+	8         0.780617  ((x0 * x0) + (-0.48037347 * (x1 * (x1 + (-0.59...   
+	9   &gt;&gt;&gt;&gt;  0.529575  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(-0...   
+	10        0.052464  ((-0.47585943 * (x1 * ((x1 + -0.011915542) + s...   
+	11        0.007343  ((-0.47585943 * (x1 * ((x1 + sin(0.013017963))...   
+	12        0.071407  (((sin(sin(sin(0.7067455)) * sin(x1)) + x0) * ...   
+	13        0.099036  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...   
+	14        0.000717  ((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...   
+	
+	        loss  complexity  
+	0   2.486360           1  
+	1   0.985843           3  
+	2   0.702396           5  
+	3   0.701678           7  
+	4   0.641437           8  
+	5   0.163373           9  
+	6   0.163372          10  
+	7   0.163360          11  
+	8   0.034285          13  
+	9   0.020189          14  
+	10  0.018178          16  
+	11  0.018045          17  
+	12  0.016802          18  
+	13  0.015217          19  
+	14  0.015206          20  
+]</pre></div></div></div></div></div></div></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h4>Interpret results<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">round_expr</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">num_digits</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">expr</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">n</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">num_digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">atoms</span><span class="p">(</span><span class="n">Number</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">round_expr</span><span class="p">(</span><span class="n">equations</span><span class="o">.</span><span class="n">sympy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle x_{0}^{2} - 0.4972 x_{1} \left(x_{1} - \sin{\left(0.7474 x_{0} \right)}\right)\]</div>
+</div>
+</div>
+<p>It looks like PySR is able to not only discover the correct equation, but also format it for us nicely.</p>
+<p>In addition, it saves a Pareto frontier of possible expressions of varying complexities, which had the lowest error of any other equations of equal or lesser complexity (with a configurable trade-off rule):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">equations</span><span class="o">.</span><span class="n">equations_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>complexity</th>
+      <th>loss</th>
+      <th>score</th>
+      <th>equation</th>
+      <th>sympy_format</th>
+      <th>lambda_format</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2.486360</td>
+      <td>0.000000</td>
+      <td>0.511122</td>
+      <td>0.511122000000000</td>
+      <td>PySRFunction(X=&gt;0.511122000000000)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+      <td>0.985843</td>
+      <td>0.462539</td>
+      <td>(x0 * x0)</td>
+      <td>x0**2</td>
+      <td>PySRFunction(X=&gt;x0**2)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>0.702396</td>
+      <td>0.169500</td>
+      <td>((x0 * x0) + -0.532032)</td>
+      <td>x0**2 - 0.532032</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.532032)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7</td>
+      <td>0.701678</td>
+      <td>0.000511</td>
+      <td>(((x0 * 0.98028487) * x0) + -0.5124039)</td>
+      <td>0.98028487*x0**2 - 0.5124039</td>
+      <td>PySRFunction(X=&gt;0.98028487*x0**2 - 0.5124039)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>8</td>
+      <td>0.641437</td>
+      <td>0.089764</td>
+      <td>(-0.53700924 + ((x0 + sin(x1)) * x0))</td>
+      <td>x0*(x0 + sin(x1)) - 0.53700924</td>
+      <td>PySRFunction(X=&gt;x0*(x0 + sin(x1)) - 0.53700924)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>9</td>
+      <td>0.163373</td>
+      <td>1.367675</td>
+      <td>((x0 * x0) + (-0.49720797 * (x1 * x1)))</td>
+      <td>x0**2 - 0.49720797*x1**2</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49720797*x1**2)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10</td>
+      <td>0.163372</td>
+      <td>0.000006</td>
+      <td>((x0 * x0) + (sin(-0.51979923) * (x1 * x1)))</td>
+      <td>x0**2 - 0.496705895773934*x1**2</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.496705895773934*x1**2)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>11</td>
+      <td>0.163360</td>
+      <td>0.000074</td>
+      <td>((x0 * x0) + ((-0.49688667 * (x1 + -0.00669477...</td>
+      <td>x0**2 + x1*(0.00332654346237591 - 0.49688667*x1)</td>
+      <td>PySRFunction(X=&gt;x0**2 + x1*(0.0033265434623759...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>13</td>
+      <td>0.034285</td>
+      <td>0.780617</td>
+      <td>((x0 * x0) + (-0.48037347 * (x1 * (x1 + (-0.59...</td>
+      <td>x0**2 - 0.48037347*x1*(-0.5943813*x0 + x1)</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.48037347*x1*(-0.5943...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>14</td>
+      <td>0.020189</td>
+      <td>0.529575</td>
+      <td>((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(-0...</td>
+      <td>x0**2 - 0.49720797*x1*(x1 - sin(0.7474431*x0))</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49720797*x1*(x1 - si...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>16</td>
+      <td>0.018178</td>
+      <td>0.052464</td>
+      <td>((-0.47585943 * (x1 * ((x1 + -0.011915542) + s...</td>
+      <td>x0**2 - 0.47585943*x1*(x1 - sin(1.0167872*x0) ...</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.47585943*x1*(x1 - si...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>17</td>
+      <td>0.018045</td>
+      <td>0.007343</td>
+      <td>((-0.47585943 * (x1 * ((x1 + sin(0.013017963))...</td>
+      <td>x0**2 - 0.47585943*x1*(x1 - sin(1.0167872*x0) ...</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.47585943*x1*(x1 - si...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>18</td>
+      <td>0.016802</td>
+      <td>0.071407</td>
+      <td>(((sin(sin(sin(0.7067455)) * sin(x1)) + x0) * ...</td>
+      <td>x0*(x0 + sin(0.604678568005438*sin(x1))) - 0.5...</td>
+      <td>PySRFunction(X=&gt;x0*(x0 + sin(0.604678568005438...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>19</td>
+      <td>0.015217</td>
+      <td>0.099036</td>
+      <td>((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...</td>
+      <td>x0**2 - 0.49720797*x1*(x1 - sin(0.983159386215...</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49720797*x1*(x1 - si...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>20</td>
+      <td>0.015206</td>
+      <td>0.000717</td>
+      <td>((x0 * x0) + (-0.49720797 * (x1 * (x1 + sin(si...</td>
+      <td>x0**2 - 0.49720797*x1*(x1 - sin(0.975122088924...</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49720797*x1*(x1 - si...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="o">.</span><span class="n">loss</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     2.486360
+1     0.985843
+2     0.702396
+3     0.701678
+4     0.641437
+5     0.163373
+6     0.163372
+7     0.163360
+8     0.034285
+9     0.020189
+10    0.018178
+11    0.018045
+12    0.016802
+13    0.015217
+14    0.015206
+Name: loss, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="p">)),</span>
+    <span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="o">.</span><span class="n">loss</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Mean squared error&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span>
+    <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="p">)),</span>
+    <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">latex</span><span class="p">(</span><span class="n">round_expr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span><span class="si">}</span><span class="s2">$&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="o">.</span><span class="n">sympy_format</span><span class="p">],</span>
+    <span class="n">rotation</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;PySR Pareto frontier&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Expression (more complex $</span><span class="se">\\</span><span class="s2">to$)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">equations</span><span class="o">.</span><span class="n">equations_</span><span class="o">.</span><span class="n">score</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;PySR score&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8e83221895d3afe0e3fcf4a8169390f1bcfaefea295d6352d91609844ecba49b.png" src="../_images/8e83221895d3afe0e3fcf4a8169390f1bcfaefea295d6352d91609844ecba49b.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="manually-constructed-library-sparse-regression">
+<span id="sparse-regression-sec"></span><h2>Manually Constructed Library + Sparse Regression<a class="headerlink" href="#manually-constructed-library-sparse-regression" title="Permalink to this headline">#</a></h2>
+<p>Another approach to performing symbolic regression is to</p>
+<ul class="simple">
+<li><p>Hand-construct a library of basis functions (e.g. by recursively combining all terms with various operations)</p></li>
+<li><p>Run sparse linear regression to extract a small set of basis functions</p></li>
+</ul>
+<p>This approach works well for problems where any constants in the underlying formula can be extracted out to the outermost level (so they can be determined by linear regression). It also works well when we have domain knowledge about which terms could potentially appear in the final sum.</p>
+<p>It does not work well in cases where constants can’t be pulled outside certain operations (e.g. in this case, with the sine operator, though powers and derivatives are generally fine). This method can also struggle when basis function values are highly correlated, though it depends on the sparse regression method.</p>
+<p>Let’s create an augmentation function which takes an array of features and adds additional basis functions by combining them with binary multiplication and unary sine operations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">augment</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+    <span class="n">existing</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="n">new_feats</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">feats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sin(</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">:</span>
+            <span class="n">new_feats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">feats</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+            <span class="n">new_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">feats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;mul(</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">:</span>
+                <span class="n">new_feats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feats</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">feats</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="n">new_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">feats</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_feats</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="n">names</span> <span class="o">+</span> <span class="n">new_names</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">repeatedly_augment</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feats</span><span class="p">))]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+        <span class="n">feats</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">augment</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">feats</span><span class="p">,</span> <span class="n">names</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">repeatedly_augment</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Applying this twice brings us from 2 features up to 37:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feats</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000, 37)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that the complexity of this approach starts to blow up exponentially, though, as we increase the maximum depth of an expression:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">augment</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000, 742)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">augment</span><span class="p">(</span><span class="o">*</span><span class="n">augment</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">names</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000, 276397)
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we need arbitrary polynomials of up to 4th order, we end up with orders of magnitude more features than samples, which will cause problems.</p>
+<p>Note that since this method lacks the ability to apply operations with constants within other operations, <span class="math notranslate nohighlight">\(\sin(0.5 x_0 x_1)\)</span> isn’t present in any of these possible sets, though <span class="math notranslate nohighlight">\(\sin(x_0 x_1)\)</span> is.</p>
+<p>Let’s now see how different methods for (sparse) linear regression perform on this task:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">learned_expr</span><span class="p">(</span><span class="n">coef</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="n">coef_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coef</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cutoff</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">sort_order</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coef</span><span class="p">[</span><span class="n">coef_idx</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="s2">&quot; + &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coef</span><span class="p">[</span><span class="n">coef_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">*</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">coef_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sort_order</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="linear-regression">
+<span id="linear-regression-sec"></span><h3>Linear regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">#</a></h3>
+<p>We can start with completely unregularized linear regression, which will find the linear combination of basis terms that minimizes mean squared error (to high precision, due to the convexity of the problem and an analytic way of solving it).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">linreg</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-1.8248*x0 + 1.6391*sin(x0) + 1.0787*mul(x0, x0) + -0.8020*mul(sin(x0), sin(x1)) + 0.7903*mul(x1, sin(x0)) + 0.5941*mul(x0, sin(x1)) + -0.4800*mul(x1, x1) + -0.2216*x1 + 0.2047*sin(x1) + 0.1906*sin(sin(x0)) + 0.1890*mul(x0, mul(x0, x0)) + 0.1358*mul(sin(x0), mul(x0, x0)) + -0.1288*mul(x0, x1) + -0.0976*mul(x0, sin(x0)) + 0.0430*sin(mul(x0, x1)) + -0.0245*mul(mul(x0, x1), mul(x1, x1)) + 0.0235*mul(x1, mul(x1, x1)) + -0.0192*mul(x1, sin(x1)) + 0.0160*sin(sin(x1)) + 0.0153*mul(sin(x1), mul(x1, x1))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Unfortunately, this doesn’t seem to give us a very sparse solution in this case.</p>
+</div>
+<div class="section" id="l1-regularized-linear-regression-lasso">
+<span id="lasso-sec"></span><h3>L1-regularized linear regression (LASSO)<a class="headerlink" href="#l1-regularized-linear-regression-lasso" title="Permalink to this headline">#</a></h3>
+<p>A common way to make linear regression return more sparse solutions is to minimize a linear combination of the mean squared error and the sum of the magnitudes of the weights. This is called applying an “L1 penalty” since it is the L1-norm of the weight vector, and is also referred to as the “Least Absolute Shrinkage and Selection Operator”, or LASSO. From a Bayesian perspective, this corresponds to doing Bayesian linear regression with a Laplace or double-exponential prior on the weights.</p>
+<p>Note that although this penalty does tend to encourage sparsity, it’s also meant as a regularizer, which can help with the presence of noise.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.9752*mul(x0, x0) + -0.4679*mul(x1, x1) + 0.2758*mul(x1, sin(x0)) + 0.1817*mul(x0, sin(x1)) + 0.1126*mul(x0, x1) + 0.0159*sin(mul(x0, x1)) + -0.0140*mul(mul(x0, x1), mul(x1, x1))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, LASSO ends up doing a pretty good job finding the first two terms of the ground-truth model (<span class="math notranslate nohighlight">\(x_0^2 - 0.5x_1^2\)</span>), with an approximation of the remaining <span class="math notranslate nohighlight">\(\sin(0.5 x_0 x_1)\)</span> term as <span class="math notranslate nohighlight">\( 0.2(x_0\sin(x_1)+x_1\sin(x_0)) + 0.1(\sin(x_0 x_1) + x_0x_1)\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">sin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">),</span>
+    <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x1</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\sin(0.5 x_0 x_1)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s2">&quot;$0.2(x_0\sin(x_1)+x_1\sin(x_0))$&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;$+ 0.1(\sin(x_0 x_1) + x_0x_1)$&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/76849d7b6bf0daa2700252f4db6d69669cfbd57d71b77cc4ccab1b8408e97eb1.png" src="../_images/76849d7b6bf0daa2700252f4db6d69669cfbd57d71b77cc4ccab1b8408e97eb1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="relevance-vector-machines-rvm">
+<span id="rvm-sec"></span><h3>Relevance vector machines (RVM)<a class="headerlink" href="#relevance-vector-machines-rvm" title="Permalink to this headline">#</a></h3>
+<p>Relevance vector machines, used by <a class="reference external" href="https://laurezanna.github.io/files/Zanna-Bolton-2020.pdf">Zanna and Bolton 2020</a> for equation discovery, provide another way of learning sparse linear models in a Bayesian manner, though with a different prior that prioritizes sparsity over shrinkage when the data permits it. RVMs can also be used with a kernel trick to learn nonlinear decision boundaries which are sparse in a kernelized feature space, though in this case, we use a linear kernel on top of our manually computed library features.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rvm</span> <span class="o">=</span> <span class="n">RVR</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rvm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">rvm</span><span class="o">.</span><span class="n">m_</span><span class="p">,</span> <span class="n">rvm</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-1.7663*x0 + 1.5898*sin(x0) + 1.0676*mul(x0, x0) + -0.7992*mul(sin(x0), sin(x1)) + 0.7844*mul(x1, sin(x0)) + 0.5897*mul(x0, sin(x1)) + -0.4743*mul(x1, x1) + 0.1830*mul(x0, mul(x0, x0)) + 0.1811*sin(sin(x0)) + 0.1312*mul(sin(x0), mul(x0, x0)) + -0.1229*mul(x0, x1) + -0.0790*mul(x0, sin(x0)) + 0.0444*sin(mul(x0, x1)) + -0.0298*mul(x1, sin(x1)) + -0.0246*mul(mul(x0, x1), mul(x1, x1))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>RVM does discover the <span class="math notranslate nohighlight">\(x_0^2\)</span> and <span class="math notranslate nohighlight">\(-0.5x_1^2\)</span> terms almost exactly, but ends up with an even more complex approximate expression for the missing <span class="math notranslate nohighlight">\(\sin(0.5x_0x_1)\)</span> term.</p>
+</div>
+<div class="section" id="sequentially-thresholded-least-squares-stlsq-from-pysindy">
+<span id="stlsq-sec"></span><h3>Sequentially Thresholded Least Squares (STLSQ) from pysindy<a class="headerlink" href="#sequentially-thresholded-least-squares-stlsq-from-pysindy" title="Permalink to this headline">#</a></h3>
+<p>The PySINDy library provides a number of efficient Python implementations of sparse regression algorithms. Their default regression method is sequentially thresholded least squares (STLSQ), which (as its name might suggest) repeatedly runs L2-regularized linear regression with penalty strength <code class="docutils literal notranslate"><span class="pre">alpha</span></code> and prunes features with weight magnitudes below a given <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stlsq</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">stlsq</span><span class="o">.</span><span class="n">STLSQ</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">stlsq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">stlsq</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.9994*mul(x0, x0) + 0.7128*mul(x1, sin(x0)) + 0.7089*mul(x0, sin(x1)) + -0.5806*mul(sin(x0), sin(x1)) + -0.5008*mul(x1, x1) + -0.2928*mul(x0, x1)&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>This method ends up finding a sparser solution than Lasso, though I did tweak the parameters a bit to make that happen :)</p>
+<p>It’s worth checking out <a class="reference external" href="https://pysindy.readthedocs.io/en/latest/api/pysindy.optimizers.html">PySINDy’s full suite of sparse regression methods</a> for other approaches!</p>
+<p>Overall, all of these methods were able to find the <span class="math notranslate nohighlight">\(x_0^2\)</span> and <span class="math notranslate nohighlight">\(-0.5x_1^2\)</span> terms, but all of them also needed to find approximations for the remaining term because it wasn’t in the feature library. Meaning the expressions are both less accurate and more complex.</p>
+</div>
+<div class="section" id="tweaking-the-feature-library">
+<h3>Tweaking the Feature Library<a class="headerlink" href="#tweaking-the-feature-library" title="Permalink to this headline">#</a></h3>
+<p>Now, we can potentially resolve some of these issues by pre-multiplying <span class="math notranslate nohighlight">\(x_1\)</span> by 0.5 before the augmentation process (which we’ll call <span class="math notranslate nohighlight">\(x_{1h}\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feats2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">feats2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">feats2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="n">names2</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1h&quot;</span><span class="p">]</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="n">feats2</span><span class="p">,</span> <span class="n">names2</span> <span class="o">=</span> <span class="n">augment</span><span class="p">(</span><span class="n">feats2</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, the correct model should be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+y = x_0^2 - 2x_{1h}^2 + \sin(x_0 x_{1h})
+\]</div>
+<p>which is now a linear combination of our basis terms. Let’s see if these regression techniques can find it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">linreg</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-2.0000*mul(x1h, x1h) + 1.0000*sin(mul(x0, x1h)) + 1.0000*mul(x0, x0)&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-1.8190*mul(x1h, x1h) + 0.9809*mul(x0, x0) + 0.8863*sin(mul(x0, x1h)) + -0.0764*mul(mul(x1h, x1h), mul(x1h, x1h)) + 0.0365*mul(x0, x1h)&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rvm</span> <span class="o">=</span> <span class="n">RVR</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rvm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">rvm</span><span class="o">.</span><span class="n">m_</span><span class="p">,</span> <span class="n">rvm</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-2.0000*mul(x1h, x1h) + 1.0000*mul(x0, x0) + 1.0000*sin(mul(x0, x1h))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stlsq</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">stlsq</span><span class="o">.</span><span class="n">STLSQ</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">stlsq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">stlsq</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-2.0000*mul(x1h, x1h) + 1.0000*mul(x0, x0) + 1.0000*sin(mul(x0, x1h))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, every method except Lasso finds the true model exactly (which held true across many choices of regularization parameter).</p>
+</div>
+</div>
+<div class="section" id="handling-noise">
+<h2>Handling noise<a class="headerlink" href="#handling-noise" title="Permalink to this headline">#</a></h2>
+<p>What if we add noise to the data?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">feats2</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linreg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">linreg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span> <span class="o">+</span> <span class="n">noise</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">linreg</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.9392*sin(mul(x0, x1h)) + 0.8395*mul(x0, x0) + -0.5951*mul(x1h, x1h) + -0.5397*mul(x1h, sin(x1h)) + -0.5068*mul(sin(x1h), sin(x1h)) + -0.3344*sin(mul(x1h, x1h)) + -0.3108*mul(mul(x1h, x1h), mul(x1h, x1h)) + 0.2652*mul(x0, sin(x0)) + 0.1352*mul(x1h, sin(x0)) + -0.1194*mul(sin(x0), sin(x0)) + -0.1027*mul(sin(x0), sin(x1h)) + 0.0440*x1h + 0.0400*sin(sin(x0)) + -0.0391*sin(x0) + -0.0382*mul(mul(x0, x1h), mul(x0, x1h)) + 0.0373*mul(mul(x0, x0), mul(x1h, x1h)) + 0.0304*mul(x0, sin(x1h)) + -0.0235*mul(mul(x0, x1h), mul(x1h, x1h)) + -0.0224*sin(x1h) + -0.0221*mul(x1h, mul(x1h, x1h)) + -0.0207*sin(sin(x1h)) + 0.0184*mul(sin(x1h), mul(x1h, x1h)) + 0.0162*mul(mul(x0, x0), mul(x0, x0)) + 0.0122*mul(x1h, mul(x0, x0)) + -0.0115*mul(x0, mul(x0, x1h))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span> <span class="o">+</span> <span class="n">noise</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;-1.8166*mul(x1h, x1h) + 0.9795*mul(x0, x0) + 0.8785*sin(mul(x0, x1h)) + -0.0760*mul(mul(x1h, x1h), mul(x1h, x1h)) + 0.0436*mul(x0, x1h)&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rvm</span> <span class="o">=</span> <span class="n">RVR</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">rvm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span> <span class="o">+</span> <span class="n">noise</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">names2</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">rvm</span><span class="o">.</span><span class="n">m_</span><span class="p">,</span> <span class="n">rvm</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.9530*sin(mul(x0, x1h)) + 0.8677*mul(x0, x0) + -0.6018*mul(x1h, x1h) + -0.5391*mul(x1h, sin(x1h)) + -0.5109*mul(sin(x1h), sin(x1h)) + -0.3260*sin(mul(x1h, x1h)) + -0.3097*mul(mul(x1h, x1h), mul(x1h, x1h)) + 0.2138*mul(x0, sin(x0)) + 0.1171*mul(x1h, sin(x0)) + -0.0910*mul(sin(x0), sin(x0)) + -0.0622*mul(sin(x0), sin(x1h)) + -0.0207*mul(mul(x0, x1h), mul(x1h, x1h)) + 0.0134*mul(mul(x0, x0), mul(x0, x0)) + -0.0100*mul(sin(x0), mul(x0, x1h))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stlsq</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">stlsq</span><span class="o">.</span><span class="n">STLSQ</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">stlsq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feats2</span> <span class="o">+</span> <span class="n">noise</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">learned_expr</span><span class="p">(</span><span class="n">stlsq</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">names2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.9995*mul(x0, x0) + 0.9993*sin(mul(x0, x1h)) + -0.6037*mul(x1h, x1h) + -0.5361*mul(sin(x1h), sin(x1h)) + -0.5290*mul(x1h, sin(x1h)) + -0.3159*sin(mul(x1h, x1h)) + -0.3077*mul(mul(x1h, x1h), mul(x1h, x1h))&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this case, it actually becomes <em>Lasso</em> which gets closest to the true model (i.e. is the only regression technique whose first three leading terms match the ground-truth model). This reversal illustrates how noise can strongly impact the effectiveness of different methods for learning symbolic models.</p>
+<p>Let’s see how genetic programming-based techniques deal with noise.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noisy_equations</span> <span class="o">=</span> <span class="n">pysr</span><span class="o">.</span><span class="n">PySRRegressor</span><span class="p">(</span>
+    <span class="n">niterations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">binary_operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">],</span>  <span class="c1"># operators that can combine two terms</span>
+    <span class="n">unary_operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sin&quot;</span><span class="p">],</span>  <span class="c1"># operators that modify a single term</span>
+<span class="p">)</span>
+<span class="n">noisy_equations</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Started!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noisy_equations</span><span class="o">.</span><span class="n">equations_</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>complexity</th>
+      <th>loss</th>
+      <th>score</th>
+      <th>equation</th>
+      <th>sympy_format</th>
+      <th>lambda_format</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>3.393500</td>
+      <td>0.000000e+00</td>
+      <td>0.4694694</td>
+      <td>0.469469400000000</td>
+      <td>PySRFunction(X=&gt;0.469469400000000)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>3.393500</td>
+      <td>8.840431e-08</td>
+      <td>sin(0.48868868)</td>
+      <td>0.469468463143898</td>
+      <td>PySRFunction(X=&gt;0.469468463143898)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1.945801</td>
+      <td>5.561877e-01</td>
+      <td>(x0 * x0)</td>
+      <td>x0**2</td>
+      <td>PySRFunction(X=&gt;x0**2)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5</td>
+      <td>1.615817</td>
+      <td>9.291676e-02</td>
+      <td>((x0 * x0) + -0.574449)</td>
+      <td>x0**2 - 0.574449</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.574449)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>1.615361</td>
+      <td>1.410322e-04</td>
+      <td>(((x0 * x0) * 0.9930554) + -0.56877387)</td>
+      <td>0.9930554*x0**2 - 0.56877387</td>
+      <td>PySRFunction(X=&gt;0.9930554*x0**2 - 0.56877387)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>8</td>
+      <td>1.555220</td>
+      <td>3.794145e-02</td>
+      <td>(-0.58783674 + (x0 * (sin(x1) + x0)))</td>
+      <td>x0*(x0 + sin(x1)) - 0.58783674</td>
+      <td>PySRFunction(X=&gt;x0*(x0 + sin(x1)) - 0.58783674)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>9</td>
+      <td>1.091825</td>
+      <td>3.537663e-01</td>
+      <td>((x0 * x0) + (-0.49400964 * (x1 * x1)))</td>
+      <td>x0**2 - 0.49400964*x1**2</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49400964*x1**2)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>10</td>
+      <td>1.091322</td>
+      <td>4.610776e-04</td>
+      <td>((x0 * x0) + (sin(-0.530868) * (x1 * x1)))</td>
+      <td>x0**2 - 0.506282067207548*x1**2</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.506282067207548*x1**2)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>11</td>
+      <td>1.090412</td>
+      <td>8.343825e-04</td>
+      <td>((x0 * x0) + ((-0.49400964 * (x1 * x1)) + -0.0...</td>
+      <td>x0**2 - 0.49400964*x1**2 - 0.03762684</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.49400964*x1**2 - 0.0...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>13</td>
+      <td>1.002901</td>
+      <td>4.182902e-02</td>
+      <td>(((x0 + (0.24139164 * x1)) * x0) + (-0.4024612...</td>
+      <td>x0*(x0 + 0.24139164*x1) - 0.40246126*x1**2</td>
+      <td>PySRFunction(X=&gt;x0*(x0 + 0.24139164*x1) - 0.40...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>15</td>
+      <td>0.975344</td>
+      <td>1.393089e-02</td>
+      <td>((x0 * x0) + (-0.25612 * (((x1 + (-0.81097955 ...</td>
+      <td>x0**2 - 0.25612*x1*(-0.81097955*x0 + 2*x1)</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.25612*x1*(-0.8109795...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>17</td>
+      <td>0.974928</td>
+      <td>2.134881e-04</td>
+      <td>((x0 * x0) + (-0.25612 * ((((x1 + (-0.81097955...</td>
+      <td>x0**2 - 0.25612*x1*(-0.81778934528135*x0 + 2.0...</td>
+      <td>PySRFunction(X=&gt;x0**2 - 0.25612*x1*(-0.8177893...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>18</td>
+      <td>0.949613</td>
+      <td>2.630924e-02</td>
+      <td>((x0 * x0) + ((-0.24706334 * ((x1 + x1) * x1))...</td>
+      <td>x0**2 + 0.47329572*x0*sin(x1) - 0.49412668*x1**2</td>
+      <td>PySRFunction(X=&gt;x0**2 + 0.47329572*x0*sin(x1) ...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">round_expr</span><span class="p">(</span><span class="n">noisy_equations</span><span class="o">.</span><span class="n">sympy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle x_{0}^{2} - 0.494 x_{1}^{2}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noisy_equations</span><span class="o">.</span><span class="n">equations_</span><span class="o">.</span><span class="n">sympy_format</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle x_{0} \left(x_{0} + 0.24139164 x_{1}\right) - 0.40246126 x_{1}^{2}\]</div>
+</div>
+</div>
+<p>It looks like PySR was still able to discover the true expression as part of its Pareto frontier, though with the noise it’s only rated third-best for the default tradeoff between complexity and performance (with a sin-less version taking first).</p>
+</div>
+<div class="section" id="other-methods-for-symbolic-regression">
+<h2>Other Methods for Symbolic Regression<a class="headerlink" href="#other-methods-for-symbolic-regression" title="Permalink to this headline">#</a></h2>
+<p>To finish the notebook, here are a few other techniques for symbolic regression that don’t fit under either previously described methods (and all developed in the last several years):</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://arxiv.org/pdf/2102.08351.pdf">STreCH</a> (Julia implementation <a class="reference external" href="https://github.com/jongeunkim/STreCH">here</a>) formulates symbolic regression as a non-convex mixed-integer nonlinear programming (MINLP) technique, which it solves using a heuristic-guided cutting plane formulation.</p></li>
+<li><p><a class="reference external" href="http://proceedings.mlr.press/v80/sahoo18a/sahoo18a.pdf">EQL</a> (Python implementation <a class="reference external" href="https://github.com/martius-lab/EQL">here</a>) develops “equation layers” for neural networks which can be readily interpreted and also chained together, and are regularized with a thresholded L1 penalty to encourage sparsity.</p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/2006.10782">AI Feynman</a> (hybrid Python-Fortran implementation <a class="reference external" href="https://github.com/SJ001/AI-Feynman">here</a>) starts by training a neural network, then computes <em>input gradients</em> of the learned network, and then uses attributes of those gradients to decompose the symbolic regression problem into something more tractable using graph theory.</p></li>
+<li><p><a class="reference external" href="https://papers.nips.cc/paper/2019/hash/567b8f5f423af15818a068235807edc0-Abstract.html">Symbolic Metamodeling</a> (Python implementation <a class="reference external" href="https://github.com/ahmedmalaa/Symbolic-Metamodeling">here</a>) uses gradient descent to learn compositions of Meijer-G functions, a flexible family that can be programmatically projected back onto a wide set of analytic, closed-form, or even algebriac expressions.</p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Learning-DA-increments.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Learning Data Assimilation Increments</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sindy_L96_2scale.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Applying SINDy equation identification to L96</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data">Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#genetic-programming">Genetic Programming</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gplearn">gplearn</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-gplearn">Run gplearn</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpret-results">Interpret results</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pysr">PySR</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-pysr">Run PySR</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Interpret results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manually-constructed-library-sparse-regression">Manually Constructed Library + Sparse Regression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression">Linear regression</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#l1-regularized-linear-regression-lasso">L1-regularized linear regression (LASSO)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relevance-vector-machines-rvm">Relevance vector machines (RVM)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sequentially-thresholded-least-squares-stlsq-from-pysindy">Sequentially Thresholded Least Squares (STLSQ) from pysindy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tweaking-the-feature-library">Tweaking the Feature Library</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-noise">Handling noise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-methods-for-symbolic-regression">Other Methods for Symbolic Regression</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
