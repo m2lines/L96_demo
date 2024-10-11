@@ -5,7 +5,7 @@
 title: Learning Machine Learning with Lorenz-96
 author: The M<sup>2</sup>LInES Community
 logo: newlogo.png
-copyright: "MIT for code, CC-BY for text and figures"
+copyright: "2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures"
 
 exclude_patterns: ['env/*', '_build/*']
 only_build_toc_files: true
