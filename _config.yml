@@ -5,6 +5,7 @@
 title: Learning Machine Learning with Lorenz-96
 author: The M<sup>2</sup>LInES Community
 logo: newlogo.png
+copyright: "MIT for code, CC-BY for text and figures"
 
 exclude_patterns: ['env/*', '_build/*']
 only_build_toc_files: true
@@ -40,6 +41,7 @@ sphinx:
   config:
     bibtex_reference_style: author_year
     nb_merge_streams: true
+    html_show_copyright: true
     html_theme_options:
       # title of the notebook
       logo:
