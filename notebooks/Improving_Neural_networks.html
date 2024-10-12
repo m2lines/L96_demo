@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Improving Performance of Neural Networks &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"bc6f54e3f9504782a09399e47886ed7e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1034498b2bad4473b982ef79b84cf9f2": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "0a862f9db7e649c2bab356afd3070ea8": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "danger", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_bc6f54e3f9504782a09399e47886ed7e", "max": 200.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_1034498b2bad4473b982ef79b84cf9f2", "tabbable": null, "tooltip": null, "value": 162.0}}, "3acfc853c02041eb9be509907455194e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3c6f349cd1eb4f2a9c2b71e972af5638": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "26dc0d0782174c3fa6a418b6f84b9247": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_3acfc853c02041eb9be509907455194e", "placeholder": "\u200b", "style": "IPY_MODEL_3c6f349cd1eb4f2a9c2b71e972af5638", "tabbable": null, "tooltip": null, "value": "\u200781%"}}, "b16dc680f6f04aaf87e12ae2537b30b2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3bafd9e0f8264bdca51c8434f4604cc2": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "ae7a0c7797254164a9ab9eaa85fee607": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_b16dc680f6f04aaf87e12ae2537b30b2", "placeholder": "\u200b", "style": "IPY_MODEL_3bafd9e0f8264bdca51c8434f4604cc2", "tabbable": null, "tooltip": null, "value": "\u2007162/200\u2007[00:00&lt;00:00,\u2007200.77it/s]"}}, "20dbc5b8789a422e9e6b50c2b5312b94": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6cc4821dad4f43b190fcd2101f96f3b2": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_26dc0d0782174c3fa6a418b6f84b9247", "IPY_MODEL_0a862f9db7e649c2bab356afd3070ea8", "IPY_MODEL_ae7a0c7797254164a9ab9eaa85fee607"], "layout": "IPY_MODEL_20dbc5b8789a422e9e6b50c2b5312b94", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Improving_Neural_networks';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interpreting Neural Networks" href="Neural-Network-Interpretation.html" />
+    <link rel="prev" title="Using Neural Networks for L96 Parameterization: Online Training" href="L96_online_training_NN.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="L96-two-scale-description.html">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-parameterization-problem.html">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning-DA-increments.html">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="symbolic_methods_comparison.html">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GP_lorenz96.html">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/Improving_Neural_networks.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Improving Performance of Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-dataset-model-and-the-training-code">Setting up the Dataset, Model, and the Training Code</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-dataset">Create the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-neural-network">Create the Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train-and-evaluate-the-network">Train and Evaluate the Network</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-and-overfitting">Regularization and Overfitting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-intuition">Regularization Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-of-neural-networks">Regularization of Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#weight-decay-l2-norm">Weight decay (L2 norm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#using-weight-decay">Using Weight Decay</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dropout">Dropout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-learning-rate">Choosing the Learning Rate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finding-the-optimal-learning-rate">Finding the Optimal Learning Rate</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-reading">Recommended Reading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-normalization">Batch Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cyclic-learning-rate">Cyclic learning rate</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="improving-performance-of-neural-networks">
+<h1>Improving Performance of Neural Networks<a class="headerlink" href="#improving-performance-of-neural-networks" title="Permalink to this headline">#</a></h1>
+<p>In this notebook, we will briefly introduce several techniques that are generally used to improve the accuracy of neural networks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensuring reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">14</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="setting-up-the-dataset-model-and-the-training-code">
+<h2>Setting up the Dataset, Model, and the Training Code<a class="headerlink" href="#setting-up-the-dataset-model-and-the-training-code" title="Permalink to this headline">#</a></h2>
+<p>First, we setup all the necessary code that’s required to build the dataset, create our neural network and train the network on the dataset.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The dataset, the neural network, and the training and evaluation functions that we use in this notebook are same as the one defined in <a class="reference external" href="https://m2lines.github.io/L96_demo/notebooks/intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a> and <a class="reference external" href="https://m2lines.github.io/L96_demo/notebooks/L96_offline_NN.html">Using Neural Networks for L96 Parameterization</a>.</p>
+</div>
+<div class="section" id="create-the-dataset">
+<h3>Create the Dataset<a class="headerlink" href="#create-the-dataset" title="Permalink to this headline">#</a></h3>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generating the Ground Truth</span>
+<span class="c1"># ---------------------------</span>
+
+<span class="n">time_steps</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">forcing</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">time_steps</span>
+
+<span class="n">W</span> <span class="o">=</span> <span class="n">L96</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">forcing</span><span class="p">)</span>
+
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">xy_true</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_coupling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">xy_true</span> <span class="o">=</span> <span class="n">X_true</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">xy_true</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="c1"># Splitting the into Training and Test Dataset</span>
+<span class="c1"># --------------------------------------------</span>
+
+<span class="n">val_size</span> <span class="o">=</span> <span class="mi">400</span>
+
+<span class="c1"># Training Data</span>
+<span class="n">X_true_train</span> <span class="o">=</span> <span class="n">X_true</span><span class="p">[:</span><span class="o">-</span><span class="n">val_size</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">subgrid_tend_train</span> <span class="o">=</span> <span class="n">xy_true</span><span class="p">[:</span><span class="o">-</span><span class="n">val_size</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="c1"># Test Data</span>
+<span class="n">X_true_test</span> <span class="o">=</span> <span class="n">X_true</span><span class="p">[</span><span class="o">-</span><span class="n">val_size</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">subgrid_tend_test</span> <span class="o">=</span> <span class="n">xy_true</span><span class="p">[</span><span class="o">-</span><span class="n">val_size</span><span class="p">:,</span> <span class="p">:]</span>
+
+
+<span class="c1"># Building the Dataset and the Dataloaders</span>
+<span class="c1"># ----------------------------------------</span>
+
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="c1"># Training Data</span>
+<span class="n">nlocal_data</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_true_train</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">subgrid_tend_train</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">loader_train</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">nlocal_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1"># Test Data</span>
+<span class="n">nlocal_data_test</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_true_test</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">subgrid_tend_test</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">loader_test</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">nlocal_data_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="section" id="create-the-neural-network">
+<h3>Create the Neural Network<a class="headerlink" href="#create-the-neural-network" title="Permalink to this headline">#</a></h3>
+<p>We build a 3 layer neural network consisting of two hidden layers and an output layer. Each hidden layer is followed by the <code class="docutils literal notranslate"><span class="pre">ReLU</span></code> activation function.</p>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NetANN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 8 inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  <span class="c1"># 8 outputs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="section" id="train-and-evaluate-the-network">
+<h3>Train and Evaluate the Network<a class="headerlink" href="#train-and-evaluate-the-network" title="Permalink to this headline">#</a></h3>
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train the network for one epoch&quot;&quot;&quot;</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+    <span class="n">train_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+        <span class="c1"># Get predictions</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># This if block is needed to add a dummy dimension if our inputs are 1D</span>
+            <span class="c1"># (where each number is a different sample)</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">network</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">batch_x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
+
+        <span class="c1"># Compute the loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">)</span>
+        <span class="n">train_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="c1"># Clear the gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># Backpropagation to compute the gradients and update the weights</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">train_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">loader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the network&quot;&quot;&quot;</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># Evaluation mode (important when having dropout layers)</span>
+
+    <span class="n">test_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+            <span class="c1"># Get predictions</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># This if block is needed to add a dummy dimension if our inputs are 1D</span>
+                <span class="c1"># (where each number is a different sample)</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">network</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">batch_x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
+
+            <span class="c1"># Compute the loss</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">)</span>
+            <span class="n">test_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="c1"># Get an average loss for the entire dataset</span>
+        <span class="n">test_loss</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">test_loss</span>
+
+
+<span class="k">def</span> <span class="nf">fit_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train and validate the network&quot;&quot;&quot;</span>
+    <span class="n">train_losses</span><span class="p">,</span> <span class="n">val_losses</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">train_loss</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+        <span class="n">val_loss</span> <span class="o">=</span> <span class="n">test_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">)</span>
+        <span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+        <span class="n">val_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_loss</span><span class="p">)</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training completed in </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="p">)</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train_losses</span><span class="p">,</span> <span class="n">val_losses</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+<div class="section" id="regularization-and-overfitting">
+<h2>Regularization and Overfitting<a class="headerlink" href="#regularization-and-overfitting" title="Permalink to this headline">#</a></h2>
+<p>One of the most common issues that happen while training a neural network is when the model memorizes the training dataset. It causes the model to perform very accurately on the training set but shows very poor performance on the validation set. This phenomenon is termed overfitting. One of the ways to prevent overfitting is to add regularization to our model as described below.</p>
+<div class="figure align-default" id="overfitting-curve">
+<a class="reference internal image-reference" href="../_images/overfitting.png"><img alt="../_images/overfitting.png" src="../_images/overfitting.png" style="width: 700px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Curves showing different types of model fits. The image is taken from the Python Machine Learning book by Sebastian Raschka.</span><a class="headerlink" href="#overfitting-curve" title="Permalink to this image">#</a></p>
+</div>
+<p>The curve on the far right of the plot above predicts perfectly on the given set, yet it’s not the best choice. This is because if you were to gather some new data points, they most likely would not be on that curve. Instead, those new points would be closer to the curve in the middle graph since it generalizes better to the dataset.</p>
+<div class="section" id="regularization-intuition">
+<h3>Regularization Intuition<a class="headerlink" href="#regularization-intuition" title="Permalink to this headline">#</a></h3>
+<p>Regularization can be thought of as <strong>putting constraints on the model</strong> to obtain better generalizability i.e. <em>avoiding remembering</em> the training data.</p>
+<p>One of the ways to achieve this can be by adding a term to the loss function such that:</p>
+<blockquote>
+<div><p>Loss = Training Loss + Regularization</p>
+</div></blockquote>
+<p>This puts a penalty for making the model more complex.</p>
+<p>Very braodly speaking (just to gain intuition) - if we want to reduce the training loss (reduce bias) we should try using a more complex model (if we have enough data) and if we want to reduce overfitting (reduce variace) we should simplify or constraint the model (increase regularization).</p>
+</div>
+<div class="section" id="regularization-of-neural-networks">
+<h3>Regularization of Neural Networks<a class="headerlink" href="#regularization-of-neural-networks" title="Permalink to this headline">#</a></h3>
+<p>Some of the ways to add regularization in neural networks are:</p>
+<ul class="simple">
+<li><p>Dropout (added in the definition of the network).</p></li>
+<li><p>Early stopping</p></li>
+<li><p>Weight decay (added in the optimizer part - see <code class="docutils literal notranslate"><span class="pre">optim.Adam</span></code> in PyTorch)</p></li>
+<li><p>Data augmentation (usually for images)</p></li>
+</ul>
+<p>Below we show how some of these regularizations can be applied to the L96 parameterization problem. However, this particular problem is not very plagued by the issue of overfitting, and so the advantages of these processes are not clear in all their glory.</p>
+<div class="section" id="weight-decay-l2-norm">
+<h4>Weight decay (L2 norm)<a class="headerlink" href="#weight-decay-l2-norm" title="Permalink to this headline">#</a></h4>
+<p>Weight decay is usually defined as a term that’s added directly to the update rule.
+Namely, to update a certain weight <span class="math notranslate nohighlight">\(w\)</span> in the <span class="math notranslate nohighlight">\(i+1\)</span> iteration, we would use a modified rule:</p>
+<p><span class="math notranslate nohighlight">\(w_{i+1} = w_{i} - \gamma ( \frac{\partial L}{\partial w} + A w_{i})\)</span></p>
+<p>In practice, this is almost identical to L2 regularization, though there is some difference (e.g., see <a class="reference external" href="https://bbabenko.github.io/weight-decay/">here</a>)</p>
+<p>Weight decay is one of the parameters of the optimizer - see <code class="docutils literal notranslate"><span class="pre">torch.optim.SGD</span></code></p>
+<div class="section" id="using-weight-decay">
+<h5>Using Weight Decay<a class="headerlink" href="#using-weight-decay" title="Permalink to this headline">#</a></h5>
+<p>Now we try to train our <code class="docutils literal notranslate"><span class="pre">NetANN</span></code> model again but this time by adding a weight decay to it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nn_3l_decay</span> <span class="o">=</span> <span class="n">NetANN</span><span class="p">()</span>
+
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">optimizer_decay</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">nn_3l_decay</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.003</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_loss_decay</span><span class="p">,</span> <span class="n">val_loss_decay</span> <span class="o">=</span> <span class="n">fit_model</span><span class="p">(</span>
+    <span class="n">nn_3l_decay</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer_decay</span><span class="p">,</span> <span class="n">loader_train</span><span class="p">,</span> <span class="n">loader_test</span><span class="p">,</span> <span class="n">n_epochs</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training completed in 0 seconds.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting the training and validation loss curves</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_loss_decay</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training loss, with weight decay&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">val_loss_decay</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation loss, with weight decay&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bc0d6dfca4ec5cfcb32557a551a5eac5ad5158a5fad49440890b827eeb5564ce.png" src="../_images/bc0d6dfca4ec5cfcb32557a551a5eac5ad5158a5fad49440890b827eeb5564ce.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="dropout">
+<h4>Dropout<a class="headerlink" href="#dropout" title="Permalink to this headline">#</a></h4>
+<p>Dropout means randomly deactivating or temporarily removing some units from a layer of the network while training, along with all its incoming and outgoing connections. See more details <a class="reference external" href="http://jmlr.org/papers/v15/srivastava14a.html">here</a>.
+It is usually the most useful regularization that we can do in fully connected layers.</p>
+<p>In convolutional layers dropout makes less sense - see more discussion <a class="reference external" href="https://www.kdnuggets.com/2018/09/dropout-convolutional-networks.html">here</a></p>
+<div class="figure align-default" id="dropout-layer">
+<a class="reference internal image-reference" href="../_images/Dropout_layer.png"><img alt="../_images/Dropout_layer.png" src="../_images/Dropout_layer.png" style="width: 700px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Dropout Neural Net Model. Left: A standard neural net with 2 hidden layers. Right: An example of a thinned net produced by applying dropout to the network on the left. Crossed units have been dropped. Image taken from <a class="reference external" href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">here</a>.</span><a class="headerlink" href="#dropout-layer" title="Permalink to this image">#</a></p>
+</div>
+<p>In the network defined below, we add dropout to with a probability of 20% to each layer. This means that during each training step, random 20% of the units within each layer will be deactivated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NetANNDropout</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout_rate</span><span class="p">)</span>  <span class="c1"># Dropout regularization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Network with very high dropout</span>
+<span class="n">nn_3l_drop</span> <span class="o">=</span> <span class="n">NetANNDropout</span><span class="p">(</span><span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">optimizer_drop</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">nn_3l_drop</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.003</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_loss_drop</span><span class="p">,</span> <span class="n">val_loss_drop</span> <span class="o">=</span> <span class="n">fit_model</span><span class="p">(</span>
+    <span class="n">nn_3l_drop</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer_drop</span><span class="p">,</span> <span class="n">loader_train</span><span class="p">,</span> <span class="n">loader_test</span><span class="p">,</span> <span class="n">n_epochs</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training completed in 0 seconds.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting the training and validation loss curves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_loss_drop</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training loss, with dropout&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">val_loss_drop</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation loss, with dropout&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/88737b958659020b17697275e287862b1727d707c07594ba52af674142b1d1e7.png" src="../_images/88737b958659020b17697275e287862b1727d707c07594ba52af674142b1d1e7.png" />
+</div>
+</div>
+<p>In this particular problem drop out does not seem to provide much advantage. While the model with drop out never seems to reach a state of overfitting (validation loss&gt;training loss), it also does not perform as well as the model without any dropout.</p>
+</div>
+</div>
+</div>
+<div class="section" id="choosing-the-learning-rate">
+<h2>Choosing the Learning Rate<a class="headerlink" href="#choosing-the-learning-rate" title="Permalink to this headline">#</a></h2>
+<p>While training a neural network <strong>selecting a good learning rate (LR) is essential for both fast convergence and a lower error</strong>. A high learning rate can cause the training loss to never converge while a too small learning rate will cause the model to converge extremely slowly.</p>
+<div class="section" id="finding-the-optimal-learning-rate">
+<h3>Finding the Optimal Learning Rate<a class="headerlink" href="#finding-the-optimal-learning-rate" title="Permalink to this headline">#</a></h3>
+<p>To choose the optimal learning rate for our network, we can use an LR finding algorithm. The objective of a LR Finder is to find the highest LR which still minimises the loss and does not make the loss diverge/explode. This is done by first starting with an extremely small LR and then increasing the LR after each batch until the corresponding loss starts to explode. To read more about learning rate finders, read <a class="reference external" href="https://towardsdatascience.com/speeding-up-neural-net-training-with-lr-finder-c3b401a116d0">this blog</a>.</p>
+<p>For our use case, we use the LR finder from the <code class="docutils literal notranslate"><span class="pre">torch-lr-finder</span></code> package to find the best learning rate for our neural network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_lr_finder</span> <span class="kn">import</span> <span class="n">LRFinder</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/L96M2lines/lib/python3.9/site-packages/torch_lr_finder/lr_finder.py:5: TqdmExperimentalWarning: Using `tqdm.autonotebook.tqdm` in notebook mode. Use `tqdm.tqdm` instead to force console mode (e.g. in jupyter console)
+  from tqdm.autonotebook import tqdm
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define the model and the optimizer. The optimizer is <strong>initialized with a very small learning rate</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nn_3l_lr</span> <span class="o">=</span> <span class="n">NetANN</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">nn_3l_lr</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we setup the LR finder and make it run for 200 iterations during which the learning rate varies from 1e-7 to 100.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lr_finder</span> <span class="o">=</span> <span class="n">LRFinder</span><span class="p">(</span><span class="n">nn_3l_lr</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">criterion</span><span class="p">)</span>
+<span class="n">lr_finder</span><span class="o">.</span><span class="n">range_test</span><span class="p">(</span><span class="n">loader_train</span><span class="p">,</span> <span class="n">end_lr</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_iter</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "6cc4821dad4f43b190fcd2101f96f3b2"}</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stopping early, the loss has diverged
+Learning rate search finished. See the graph with {finder_name}.plot()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we plot the LR vs the loss curve to find the best learning rate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the lr vs the loss curve</span>
+<span class="n">lr_finder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+<span class="c1"># Reset the model and optimizer to their initial state</span>
+<span class="n">lr_finder</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LR suggestion: steepest gradient
+Suggested LR: 3.29E-02
+</pre></div>
+</div>
+<img alt="../_images/db04845ee402a409b80c7962908e50196407f4f39d6a1513d6bff21616f7b3b2.png" src="../_images/db04845ee402a409b80c7962908e50196407f4f39d6a1513d6bff21616f7b3b2.png" />
+</div>
+</div>
+<p>From the curve, we see that at the learning of approximately 0.01 we get the steepest gradient. So we choose 0.01 as the learning rate for our neural network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">nn_3l_lr</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">train_loss</span><span class="p">,</span> <span class="n">val_loss</span> <span class="o">=</span> <span class="n">fit_model</span><span class="p">(</span>
+    <span class="n">nn_3l_lr</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">loader_train</span><span class="p">,</span> <span class="n">loader_test</span><span class="p">,</span> <span class="n">n_epochs</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training completed in 0 seconds.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting the training and validation loss curves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_loss</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">val_loss</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/88910c75b2b3080c6db0a73cfb377a524387fcd6a82156466659e50d3240fb75.png" src="../_images/88910c75b2b3080c6db0a73cfb377a524387fcd6a82156466659e50d3240fb75.png" />
+</div>
+</div>
+<p>From the loss curves we can see that <strong>the loss has converged much faster</strong> than before.</p>
+</div>
+</div>
+<div class="section" id="recommended-reading">
+<h2>Recommended Reading<a class="headerlink" href="#recommended-reading" title="Permalink to this headline">#</a></h2>
+<div class="section" id="batch-normalization">
+<h3>Batch Normalization<a class="headerlink" href="#batch-normalization" title="Permalink to this headline">#</a></h3>
+<p>Normalize the activation values such that the hidden representation don’t vary drastically and also helps to get improvement in the training speed.</p>
+</div>
+<div class="section" id="cyclic-learning-rate">
+<h3>Cyclic learning rate<a class="headerlink" href="#cyclic-learning-rate" title="Permalink to this headline">#</a></h3>
+<p>The cyclic learning rate policy, introduced in <a class="reference external" href="https://arxiv.org/abs/1506.01186">Cyclical Learning Rates for Training Neural Networks</a>, cycles the learning rate between two boundaries with a constant frequency in a triangular fashion. To read more about the cyclic learning rates and the one cycle policy, read <a class="reference external" href="https://sgugger.github.io/the-1cycle-policy.html">here</a>.</p>
+<p>In PyTorch, cyclic learning rate can be used from <code class="docutils literal notranslate"><span class="pre">optim.lr_scheduler.CyclicLR</span></code>.</p>
+<div class="figure align-default" id="cyclic-lr">
+<a class="reference internal image-reference" href="../_images/cyclic_lr.png"><img alt="../_images/cyclic_lr.png" src="../_images/cyclic_lr.png" style="width: 500px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Cyclical learning rates oscillate back and forth between two bounds when training, slowly increasing the learning rate after every batch update. Image taken from <a class="reference external" href="https://pyimagesearch.com/2019/07/29/cyclical-learning-rates-with-keras-and-deep-learning/">here</a>.</span><a class="headerlink" href="#cyclic-lr" title="Permalink to this image">#</a></p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="L96_online_training_NN.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Using Neural Networks for L96 Parameterization: Online Training</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Neural-Network-Interpretation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Interpreting Neural Networks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-dataset-model-and-the-training-code">Setting up the Dataset, Model, and the Training Code</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-dataset">Create the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-neural-network">Create the Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train-and-evaluate-the-network">Train and Evaluate the Network</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-and-overfitting">Regularization and Overfitting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-intuition">Regularization Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regularization-of-neural-networks">Regularization of Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#weight-decay-l2-norm">Weight decay (L2 norm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#using-weight-decay">Using Weight Decay</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dropout">Dropout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-learning-rate">Choosing the Learning Rate</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finding-the-optimal-learning-rate">Finding the Optimal Learning Rate</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-reading">Recommended Reading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-normalization">Batch Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cyclic-learning-rate">Cyclic learning rate</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

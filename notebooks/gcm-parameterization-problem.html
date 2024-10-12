@@ -1,0 +1,1213 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GCM parameterizations, skill metrics, and other sources of uncertainity &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/gcm-parameterization-problem';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tuning GCM Parameterizations" href="estimating-gcm-parameters.html" />
+    <link rel="prev" title="The Lorenz-96 and its GCM Analog" href="gcm-analogue.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="L96-two-scale-description.html">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Improving_Neural_networks.html">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning-DA-increments.html">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="symbolic_methods_comparison.html">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GP_lorenz96.html">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/gcm-parameterization-problem.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>GCM parameterizations, skill metrics, and other sources of uncertainity</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-need-for-gcm-parameterizations">The need for GCM parameterizations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-parameterizations-be-deterministic-or-stochastic">Should parameterizations  be deterministic or stochastic ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-measure-parameterization-skill">How to measure parameterization skill ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-model-error">Sources of model error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="gcm-parameterizations-skill-metrics-and-other-sources-of-uncertainity">
+<h1>GCM parameterizations, skill metrics, and other sources of uncertainity<a class="headerlink" href="#gcm-parameterizations-skill-metrics-and-other-sources-of-uncertainity" title="Permalink to this headline">#</a></h1>
+<p>In the last notebook we provided a very quick overview of the problem we run into when trying to simulate a real system (e.g. the atmosphere) on a computer using a General Circulation Model (GCM), even when the exact equations to be solved are known in principle. The problem of limited computational resources translates into an inability to resolve all scales of motion in a GCM, and the unresolved scales need to be parameterized.</p>
+<p>The objective of this notebook is to introduce some more of the key aspects of parameterizations in GCMs, illustrating the deterministic vs stochastic approaches, the interplay with numerical errors, and how to measure the skill of a parameterization. We also provide a comprehensive discussion of the different sources of errors that are present in GCMs.</p>
+<div class="section" id="the-need-for-gcm-parameterizations">
+<h2>The need for GCM parameterizations<a class="headerlink" href="#the-need-for-gcm-parameterizations" title="Permalink to this headline">#</a></h2>
+<p>Let’s first quickly review some concepts from the last notebook, using a slightly modified framing that might benefit some readers.
+We will assume from now on that the readers are familiar  with the <span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="E.N. Lorenz. Predictability: a problem partly solved. Seminar on Predictability, 1:1-18, 1995. URL: https://www.ecmwf.int/node/10829.">Lorenz, 1995</a>]</span> two-time scale model and its numerical implementation in the <code class="docutils literal notranslate"><span class="pre">L96_model</span></code> module, which was discussed in <a class="reference internal" href="L96-two-scale-description.html"><span class="doc">The Lorenz-96 Two-Timescale System</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96</span><span class="p">,</span> <span class="n">RK2</span><span class="p">,</span> <span class="n">RK4</span><span class="p">,</span> <span class="n">EulerFwd</span><span class="p">,</span> <span class="n">L96_eq1_xdot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">L96</span></code> serves as the <strong>“real world”</strong> or two time-scale model, whereas <code class="docutils literal notranslate"><span class="pre">L96_eq1_xdot</span></code> represents the <strong>beginning of rhs of X tendency</strong> or the tendency in the single time-scale model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setting the seed gives us reproducible results</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+
+<span class="c1"># Create a &quot;real world&quot; with K = 8 and J = 32</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">L96</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since we start the model with a random initial condition, there is no reason to expect that these initial conditions are an actual solution to the model. These arbitrary states can result in initial shocks to the system, which will are unrealistic features but get dissipated after some time.
+So we <em>run the “real world” for 3 days in order to forget the initial conditons</em>, and settle into a state that is an actual solution to the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># `store=True` saves the final state as an initial condition for the next run.</span>
+<span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From here on we can use <code class="docutils literal notranslate"><span class="pre">W.X</span></code> as perfect initial conditions for a model and sample the “real world” using <code class="docutils literal notranslate"><span class="pre">W.run(dt,</span> <span class="pre">T)</span></code>.</p>
+<p><strong>How to think about the real world vs models:</strong></p>
+<p>Let’s call <span class="math notranslate nohighlight">\(Z(t)\)</span> the trajectory of the full complexity physical system (say planet earth). Because in practice, for computational or observational reasons, we cannot afford describing and predicting <span class="math notranslate nohighlight">\(Z(t)\)</span>, we will only focus on a projection of <span class="math notranslate nohighlight">\(Z(t)\)</span> in some lower dimension space. Let’s call this reduced dimension state <span class="math notranslate nohighlight">\(X(t)\)</span>.</p>
+<p>In our L96 toy model (analog to the real world),  <span class="math notranslate nohighlight">\(Z(t)=(X(t),Y(t))\)</span> is the full complexity physical system, while <span class="math notranslate nohighlight">\(X(t)\)</span> is the lower dimension reduction (single time-scale models is analog to the GCM). In real world situations or more complex models (e.g. actual atmosphere or ocean models), the lower dimension representation of the real system may be thought of as a coarse-grained or a subsampled description of the full-scale system.</p>
+<p>Now, a GCM is simply a numerical machine which intends to predict the trajectory <span class="math notranslate nohighlight">\(X(t)\)</span> from knowledge of <span class="math notranslate nohighlight">\(X(t=0)\)</span> only. A GCM is generally built from first principle physical laws, by discretizing partial differential equations.</p>
+<p>In what follows, we therefore assume that we know a fraction of the terms that govern the evolution of <span class="math notranslate nohighlight">\(X\)</span>. We also assume that we do not know what governs the evolution of <span class="math notranslate nohighlight">\(Y\)</span> nor how <span class="math notranslate nohighlight">\(Y\)</span> may affect <span class="math notranslate nohighlight">\(X\)</span>.</p>
+<p><strong>GCM without parameterization</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">GCM_no_parameterization</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GCM without parameterization</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X0: initial conditions</span>
+<span class="sd">        dt: time increment</span>
+<span class="sd">        nt: number of forward steps to take</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">))</span>
+        <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This GCM is unstable due to Euler forward time stepping scheme, so we don’t integrate it for too long and compare it to the real world with the same time interval as <code class="docutils literal notranslate"><span class="pre">dt</span></code> used by the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">3.0</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">GCM_no_parameterization</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with the real world</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_true</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth (L96)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model (GCM)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_4(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2a53176adb69bff5f76f533f664689079b4038a966b1e9136561c5fd07c79d6e.png" src="../_images/2a53176adb69bff5f76f533f664689079b4038a966b1e9136561c5fd07c79d6e.png" />
+</div>
+</div>
+<p>There are several reasons why the above model (i.e. single time-scale model) differs from truth (i.e. L96 two time-scale model), which will be discussed below in <a class="reference internal" href="#other-sources-affect-gcm"><span class="std std-ref">Sources of model error</span></a>. One of these reasons is missing physics.</p>
+<p>One way, discussed in the previous notebook, to reduce the differences between the Model and the Truth, is to add a <em>parameterization</em>: an extra term to the rhs of the Model evolution operator in order to reduce the Model error as compared to the Truth. It may account for missing processes that are present in the truth, but are not included in the reduced model. The missing processed may be a result of unresolved scales (sub-grid processes) or due to physical processes that could not be encoded into the full equations.
+<em>Parameterizations</em> are also commonly refered to as <em>closures</em>, in particular when they encode explicit physical assumptions on how non-represented variables (e.g. <span class="math notranslate nohighlight">\(Y\)</span>) impact represented variables (e.g. <span class="math notranslate nohighlight">\(X\)</span>).</p>
+<p>Parameterizations usually involve free parameters that need to be adjusted. The form of the parameterization may be dictated by physical laws, but generally it is unknown as well.</p>
+<p><strong>GCM with parameterization</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we introduce a class to solve for the one time-scale problem,</span>
+<span class="c1"># which can take arbitrary parameterizations and time-stepping schemes as input.</span>
+<span class="k">class</span> <span class="nc">GCM</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GCM with parameterization in rhs of equation for tendency&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">parameterization</span><span class="p">,</span> <span class="n">time_stepping</span><span class="o">=</span><span class="n">EulerFwd</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span> <span class="o">=</span> <span class="n">parameterization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span> <span class="o">=</span> <span class="n">time_stepping</span>
+
+    <span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            X0: initial conditions</span>
+<span class="sd">            dt: time increment</span>
+<span class="sd">            nt: number of forward steps to take</span>
+<span class="sd">            param: parameters of our closure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+            <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As a first step, we illustrate introducing a polynomial parameterization to GCM and then compare the model to the true trajectories obtained from the real world with the same time interval as <code class="docutils literal notranslate"><span class="pre">dt</span></code> used by the model. This is the same as what was done in the previous notebook, but is shown again for completeness.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">naive_parameterization</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">5.0</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mf">0.85439536</span><span class="p">,</span> <span class="mf">0.75218026</span><span class="p">])</span>
+<span class="c1"># we use the parameters for the linear polynomial parameterization that were learnt in the last notebook.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with the real world</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_true</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_4(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c3c3bb667a65afa1f323ab5220a0dd100ae43389d6df40b0431cd81153458afd.png" src="../_images/c3c3bb667a65afa1f323ab5220a0dd100ae43389d6df40b0431cd81153458afd.png" />
+</div>
+</div>
+<p>While the GCM with parameterization is better than the GCM without parameterization, it is still not very good at reproducing the true evolution of the full system. It also remains to find the most appropriate coefficients of the polynomial parameterization to make the Model as close as possible to the Truth.</p>
+<p>In summary, the parameterization problem boils down to defining the functional form and finding the best parameters in order to minimize the distance between the true trajectory and the model trajectory.
+<strong>With M2LINES, we are approaching this problem as a Machine Learning problem. We want to learn parameterizations from objective measures of their skills through an optimization procedure.</strong>
+But we are not only interested in learning the parameters of existing functional forms. More generally, we would like to learn the functional forms too.</p>
+</div>
+<div class="section" id="should-parameterizations-be-deterministic-or-stochastic">
+<h2>Should parameterizations  be deterministic or stochastic ?<a class="headerlink" href="#should-parameterizations-be-deterministic-or-stochastic" title="Permalink to this headline">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">naive_parameterization</span></code> above has no particular physical nor mathematical justification. Most importantly, it relies on a very strong assumption, that the time rate of change of <span class="math notranslate nohighlight">\(X\)</span> at time <span class="math notranslate nohighlight">\(t\)</span> is a function of <span class="math notranslate nohighlight">\(X(t)\)</span>. This assumption implies that the future evolution of the reduced dimension system <span class="math notranslate nohighlight">\(X(t)\)</span> is <em>deterministically</em> related to the initial reduced dimension state <span class="math notranslate nohighlight">\(X(0)\)</span>.</p>
+<p>But this is not a good assumption because the two identical reduced dimension states (<span class="math notranslate nohighlight">\(X\)</span>, macro-state) can be associated with very different fine scale states (<span class="math notranslate nohighlight">\(Y\)</span>, micro-state). This can also be seen visually by considering the <a class="reference internal" href="gcm-analogue.html#sub-grid-hist-label"><span class="std std-ref">plot</span></a> in the previous notebook, which shows that the for each value of <span class="math notranslate nohighlight">\(X\)</span> there is a range of possible values for the sub-grid effects.
+Given the non-linearity of the evolution equation for <span class="math notranslate nohighlight">\(Z\)</span>, the two large scale trajectories will diverge at some point due to these small differences in the un-observed states. Let’s illustrate that with L96 alone.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Randomising the initial Ys</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+
+<span class="c1"># Duplicating L96 to create perturbed versions that include random perturbations in Y</span>
+<span class="n">Wp1</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">Yp1</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Wp1</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">Wp1</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">Yp1</span><span class="p">)</span>
+
+<span class="n">Wp2</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">Yp2</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">Y</span> <span class="o">+</span> <span class="mf">0.0001</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Wp2</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">Wp2</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">Yp2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L96: K=8 J=32 F=18 h=1 b=10 c=10 dt=0.001
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running L96 and perturbed versions to compare results</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">X_pert1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Wp1</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">X_pert2</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Wp2</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_true</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_pert1</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Perturbed 1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_pert2</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Perturbed 2&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_4(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/08e1e31ba58751e82d182d48ce994e9989cf3ec336fd6bdd7bbee8f7823bf355.png" src="../_images/08e1e31ba58751e82d182d48ce994e9989cf3ec336fd6bdd7bbee8f7823bf355.png" />
+</div>
+</div>
+<p>So even very small uncertainties in the micro-state (<span class="math notranslate nohighlight">\(Y\)</span>) of L96 can lead to large scale changes (i.e. of the variable <span class="math notranslate nohighlight">\(X\)</span>) over short time.</p>
+<p>In a Model that does not know anything about micro-state <span class="math notranslate nohighlight">\(Y\)</span>, it is possible to introduce this uncertainty through a stochastic form in the parameterization.</p>
+<p>In addition, with this illustration, we also highlight that there is a horizon after which pointwise comparisons of the model with the truth are meaningless, hence there is some needed discussion on how to measure the skill of a parameterization.</p>
+</div>
+<div class="section" id="how-to-measure-parameterization-skill">
+<h2>How to measure parameterization skill ?<a class="headerlink" href="#how-to-measure-parameterization-skill" title="Permalink to this headline">#</a></h2>
+<p>We would like to build our closures by systematically measuring their skills, so that we can compare different fomulations using these “skill scores”.</p>
+<p>Since we are interested in matching the evolution of the “real world” using a GCM, we define skill scores that measure the distance between the evolution of the true state <span class="math notranslate nohighlight">\(X_{true}\)</span> and the simulated state <span class="math notranslate nohighlight">\(X_{gcm}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining our GCM</span>
+<span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">1000.0</span>
+<span class="c1"># Use Runge-Kutta time stepping scheme because forward Euler would lead to instabilities</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">,</span> <span class="n">time_stepping</span><span class="o">=</span><span class="n">RK4</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the GCMs</span>
+<span class="n">X_gcm</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mf">0.85439536</span><span class="p">,</span> <span class="mf">0.75218026</span><span class="p">])</span>
+<span class="n">X_gcm_no_param</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Evaluate the true state</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting the results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span> <span class="n">X_true</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span> <span class="n">X_gcm_no_param</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span> <span class="n">X_gcm</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_4(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span>
+    <span class="p">(</span><span class="n">X_true</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_gcm_no_param</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="mi">500</span><span class="p">],</span>
+    <span class="p">(</span><span class="n">X_true</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_gcm</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_4^</span><span class="si">{true}</span><span class="s2">(t) - X_4^</span><span class="si">{gcm}</span><span class="s2">(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8e4c6a663e7a3a3cc04be93fd9c822691ce775c9edaa4ec2efba3de1740d8f0e.png" src="../_images/8e4c6a663e7a3a3cc04be93fd9c822691ce775c9edaa4ec2efba3de1740d8f0e.png" />
+</div>
+</div>
+<p><strong>Error metric based on model evolution</strong>:</p>
+<p>Clearly, the absolute error between the true and gcm trajectory grows with time, and we would like measure how the error cumulates over time.
+A simple error metric is the point-wise root mean square error, which is averaged over time:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f092b357-9ac8-4a8d-be6a-2a2eee02b5fc">
+<span class="eqno">(5)<a class="headerlink" href="#equation-f092b357-9ac8-4a8d-be6a-2a2eee02b5fc" title="Permalink to this equation">#</a></span>\[\begin{equation}
+E (t) = \frac{1}{t} \int_0^t |X_{true}(t) - X_{gcm}(t)| dt
+\end{equation}\]</div>
+<p>This can be computed for each <span class="math notranslate nohighlight">\(X_k\)</span> separately, or averaged over all <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">error_model_evolution</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model evolution error computed over some window t &lt; L.&quot;&quot;&quot;</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X1</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">X2</span><span class="p">[:</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="p">:])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">D</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">error_model_evolution</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_gcm</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">dist_no_param</span> <span class="o">=</span> <span class="n">error_model_evolution</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_gcm_no_param</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting how this distance grows with the length of the window</span>
+<span class="c1"># for all the components of X</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dist_no_param</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span>
+<span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$||X_</span><span class="si">{true}</span><span class="s2">-X_</span><span class="si">{gcm}</span><span class="s2">||$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/698819cf269a9dcd2f431b2e63e4f79e55591e0efd7d7a648d804c5de33401f6.png" src="../_images/698819cf269a9dcd2f431b2e63e4f79e55591e0efd7d7a648d804c5de33401f6.png" />
+</div>
+</div>
+<p>The error grows with time, but saturates to some a constant after the truth and GCM have gotten completely decorrelated. This constant is equal to the sum of the variance of the truth and GCM states. Also, as expected, the error grows much more rapidly without a parameterization, showing that adding the parameterization has resulted in a quantitative improvement in the solution.</p>
+<p><strong>Climatology based error metric:</strong></p>
+<p>Knowing from the above discussion that the system is not predictable after some time, we may as well have decided to measure how well the model captures the mean state. With this we expect to measure the “climate” of the system instead of the “weather”.</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f99ac9af-b890-413e-a463-30f3d04cf4fb">
+<span class="eqno">(6)<a class="headerlink" href="#equation-f99ac9af-b890-413e-a463-30f3d04cf4fb" title="Permalink to this equation">#</a></span>\[\begin{equation}
+E_{clim}  = | \overline{X_{true}}  - \overline{X_{gcm}}|
+\end{equation}\]</div>
+<p>where the <span class="math notranslate nohighlight">\(\overline{(.)}\)</span> is some suitably defined average that may be variable in time (like a seasonal climatology).</p>
+<p>This metric will likely converge to some non-trivial values which are indicative of how well our model captures the “climate” of the system, and the difference indicating the bias in the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_gcm_no_param</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_gcm</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$\overline{X_</span><span class="si">{k}</span><span class="s2">}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_gcm_no_param</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_gcm</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$E_</span><span class="si">{clim}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ceca613f6a0425b2c46fe9d2da7a3379a8def72999cb8e94f2be87367c9792ac.png" src="../_images/ceca613f6a0425b2c46fe9d2da7a3379a8def72999cb8e94f2be87367c9792ac.png" />
+</div>
+</div>
+<p>As seen in the first figure, the long term mean state of the true solution is different from the two GCM solutions. Surprisingly, the GCM without parameterization has a climatology that is slightly closer to the true climatology than the climatology of the GCM with parameterization. In other words, the error <span class="math notranslate nohighlight">\(E_{clim}\)</span> is larger for the GCM with parameterization. This is shown in the second figure.</p>
+<p>The above result is counter-intuitive, and suggests that <span class="math notranslate nohighlight">\(E_{clim}\)</span> is not a very powerful metric. This metric takes into account only the means of the underlying probability distributions. Let’s look at the full probability distributions next!</p>
+<p><strong>Distribution based error metric</strong>:</p>
+<p>We want to measure differences between the empirical distributions of the true solution vs. GCM solution. There are several options how to define distributional differences, but here we consider the earth mover’s distance or Wasserstein distance:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-d10fe7c1-7f84-4d9f-a4e3-878349eb62db">
+<span class="eqno">(7)<a class="headerlink" href="#equation-d10fe7c1-7f84-4d9f-a4e3-878349eb62db" title="Permalink to this equation">#</a></span>\[\begin{align}
+E_{distr}  &amp; = \int_{-\infty}^\infty |P(X^{true}\leq x) - P(X^{GCM}\leq x) \, | dx, \\
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(X\leq x)\)</span> is the cumulative distribution function of <span class="math notranslate nohighlight">\(X\)</span>.</p>
+<p>Before we compute the differences between the distribution <span class="math notranslate nohighlight">\(E_{distr}\)</span>, let’s first look at the empirical distributions themselves. For simplicity, we show the probability density functions (rather than the cumulative distribution functions, where the latter are used in the computation of <span class="math notranslate nohighlight">\(E_{distr}\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">X_true</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">X_true</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;_none&quot;</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span>
+    <span class="n">X_gcm_no_param</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">X_gcm_no_param</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;_none&quot;</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">X_gcm</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">X_gcm</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;_none&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$X$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f9030f1b8b0&gt;
+</pre></div>
+</div>
+<img alt="../_images/14a5ff0814487e1fcfc9b95a3741eeeb429ad913299b436f859ad570e7b5879d.png" src="../_images/14a5ff0814487e1fcfc9b95a3741eeeb429ad913299b436f859ad570e7b5879d.png" />
+</div>
+</div>
+<p>The vertical lines in the figure above indicate the means of the respective empirical distributions. As we saw earlier, the mean of the GCM without parameterization is slightly closer to the real mean than the mean of the GCM with parameterization. However, if we take into account the entire distribution, the GCM with parameterization seems to be a closer match to the true distribution. Our eyeball estimate is quantitatively confirmed by the next figure, which computes the distributional error, <span class="math notranslate nohighlight">\(E_{distr}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">wasserstein_distance</span>
+
+
+<span class="k">def</span> <span class="nf">error_distribution</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Distribution error measured by the Wasserstein distance.&quot;&quot;&quot;</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">wasserstein_distance</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">diff</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">E_distr_no_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">error_distribution</span><span class="p">(</span><span class="n">X_true</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">X_gcm_no_param</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">W</span><span class="o">.</span><span class="n">k</span><span class="p">]</span>
+<span class="n">E_distr_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">error_distribution</span><span class="p">(</span><span class="n">X_true</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">X_gcm</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">W</span><span class="o">.</span><span class="n">k</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">E_distr_no_param</span><span class="p">,</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">E_distr_param</span><span class="p">,</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with param&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$E_</span><span class="si">{distr}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f8ff69a56d0&gt;
+</pre></div>
+</div>
+<img alt="../_images/0df982713de18b7004700e7913fdb51d768a90e5ba6ccb01fd8b979693a4e31d.png" src="../_images/0df982713de18b7004700e7913fdb51d768a90e5ba6ccb01fd8b979693a4e31d.png" />
+</div>
+</div>
+<p><strong>Tendency based error metric</strong>:</p>
+<p>It is also very common to formulate closures based on databases of initial tendencies.  In the Large Eddy Simulation  community, this is sometimes refered to as <em>a priori</em> skill, because you don’t need to run the full model to compute it.</p>
+<p>This is the sort of game that several of us have been playing, trying for instance to estimate subgrid fluxes from knowledge of the large scale quantities  $<span class="math notranslate nohighlight">\( \nabla\cdot \mathbf{s} =   \nabla\cdot\big(\overline{\mathbf{u}\,\Phi} - \overline{\mathbf{u}}\,\overline{\Phi}\big) \simeq f(\overline{\mathbf{u}},\overline{\Phi})\)</span>$</p>
+<p><em>Note that this is not exactly the same problem as the <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">priori</span></code> LES problem, because of the interplay with time-discretization. Let’s neglect that for the moment.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">norm_initial_tendency</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">):</span>
+    <span class="n">T1</span> <span class="o">=</span> <span class="n">X1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">X1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">X2</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">X2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">T1</span> <span class="o">-</span> <span class="n">T2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Because this metric is cheap to evaluate, as we do not need to integrate the GCM more than 1 time-step, we can start a sensitivity analysis in order to identify good optimal parameters for the specific formulation <code class="docutils literal notranslate"><span class="pre">naive_parameterization</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="p">,</span> <span class="n">dt</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.01</span>
+
+<span class="c1"># Let&#39;s define again the true state</span>
+<span class="c1"># But only run for 1 time step</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="c1"># and an ensemble of trajectories</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">_p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">_p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">xp1</span><span class="p">,</span> <span class="n">yp2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">_p1</span><span class="p">,</span> <span class="n">_p2</span><span class="p">)</span>
+
+<span class="n">score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_p1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_p2</span><span class="p">):</span>
+        <span class="n">X_gcm</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">])</span>  <span class="c1"># run gcm for 1 time step</span>
+        <span class="n">score</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm_initial_tendency</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_gcm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xp1</span><span class="p">,</span> <span class="n">yp2</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$p_2$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$p_1$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Score&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/df24707e7e69056417cb8386bc8462baca171a35a924364689a7ccd5178b3022.png" src="../_images/df24707e7e69056417cb8386bc8462baca171a35a924364689a7ccd5178b3022.png" />
+</div>
+</div>
+<p>From this analysis, we see that the optimisation problem is probably well posed as the cost function appears pretty smooth. One can also see that the parameter <span class="math notranslate nohighlight">\(p_1\)</span> is more important than <span class="math notranslate nohighlight">\(p_2\)</span>.</p>
+</div>
+<div class="section" id="sources-of-model-error">
+<span id="other-sources-affect-gcm"></span><h2>Sources of model error<a class="headerlink" href="#sources-of-model-error" title="Permalink to this headline">#</a></h2>
+<p>Missing physics is not the only source of error in GCMs, and many other factors can contribute to the GCM state diverging from the real world.
+Here, we consider the following five sources of error:</p>
+<ol class="arabic">
+<li><p>Missing physics: which is modeled with a GCM without parameterization that corresponds to the one time-scale Lorenz-96 system without any the coupling term.</p></li>
+<li><p>Poorly parameterized unresolved physics: which is studied by considering a first-order and third-order polynomial approximations of the coupling terms:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+    P_4 \rightarrow P_1
+    \end{equation*}\]</div>
+</li>
+<li><p>Unknown forcing: which is modeled by adding an error to the forcing term:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+    F \rightarrow F + error
+    \end{equation*}\]</div>
+</li>
+<li><p>Numerical approximation: which is studied by increasing the time-step:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+    \Delta t \rightarrow 10 \Delta t
+    \end{equation*}\]</div>
+</li>
+<li><p>Initialization error: which is modeled by adding an error to the initial condition:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+    X(t=0) \rightarrow X(t=0) + error
+    \end{equation*}\]</div>
+</li>
+</ol>
+<p>The first two sources have already been discussed in some detail previously, and included here to contrast against other error sources.</p>
+<p>The next code estimates these sources of error and the figure shows their relative contributions. For reference, we also plot the error of the GCM using <span id="id2">[<a class="reference internal" href="../bibliography.html#id4" title="Daniel S. Wilks. Effects of stochastic parametrizations in the lorenz \textquotesingle 96 system. Quarterly Journal of the Royal Meteorological Society, 131(606):389–407, 2005. URL: https://doi.org/10.1256/qj.04.03, doi:10.1256/qj.04.03.">Wilks, 2005</a>]</span> polynomial coupling term and without any of the sources of error listed above. All errors are evaluated by comparing the GCMs to the “truth” model goverened by the full two time-scale Lorenz-96 system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generic GCM parameters</span>
+<span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">40.0</span>
+<span class="n">X0</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">X</span>
+
+<span class="c1"># Remember the optimized parameters from previous notebook</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.85439536</span><span class="p">,</span> <span class="mf">0.75218026</span><span class="p">]</span>
+<span class="n">p4</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="mf">0.000707</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">0.0130</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">0.0190</span><span class="p">,</span>
+    <span class="mf">1.59</span><span class="p">,</span>
+    <span class="mf">0.275</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># Sampling real world over a longer period of time</span>
+<span class="n">X_true</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="c1"># GCM with different parameterizations</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">)</span>
+<span class="n">X_no_param</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Missing physics</span>
+<span class="n">X_p1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="n">p1</span><span class="p">)</span>  <span class="c1"># Simpler but poorer parameterization</span>
+<span class="n">X_p4</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="n">p4</span><span class="p">)</span>  <span class="c1"># More complex parameterization</span>
+
+<span class="c1"># GCM with perturbed forcing</span>
+<span class="n">gcm_pert_F</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">F</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">)</span>
+<span class="n">X_frc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gcm_pert_F</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="n">p4</span><span class="p">)</span>  <span class="c1"># Perturbed forcing</span>
+
+<span class="c1"># GCM with perturbed IC</span>
+<span class="n">X_IC</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="n">p4</span><span class="p">)</span>  <span class="c1"># Perturbed IC</span>
+
+<span class="c1"># GCM with changed dt</span>
+<span class="n">X_dt</span><span class="p">,</span> <span class="n">t_dt</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)),</span> <span class="n">param</span><span class="o">=</span><span class="n">p4</span><span class="p">)</span>  <span class="c1"># Larged dt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_true</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_no_param</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_p1</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with linear param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_p4</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with 4th order param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_frc</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with perturbed forcing&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X_IC</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with pertured IC&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_dt</span><span class="p">,</span> <span class="n">X_dt</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with increased dt&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X_</span><span class="si">{4}</span><span class="s2">(t)$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3de102cded80cc8765838dbaf843d5c91c3d2e57ebbac3987ccf4ae292cdc273.png" src="../_images/3de102cded80cc8765838dbaf843d5c91c3d2e57ebbac3987ccf4ae292cdc273.png" />
+</div>
+</div>
+<p>Clearly perturbing the gcm in different ways results in different solutions. Below we quantify these effects using the <code class="docutils literal notranslate"><span class="pre">error_model_evolution</span> <span class="pre">metric</span></code> that was defined earlier. We present the results as an average over all k.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">error_model_evolution</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_no_param</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_no_param</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">dist_p1</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_p1</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">dist_p4</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_p4</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">dist_frc</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_frc</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">dist_IC</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">,</span> <span class="n">X_IC</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">dist_dt</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">X_true</span><span class="p">[::</span><span class="mi">5</span><span class="p">],</span> <span class="n">X_dt</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_no_param</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM without param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_p1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with linear param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_p4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with 4th order param&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_frc</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with perturbed forcing&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_IC</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with pertured IC&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_dt</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dist_dt</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GCM with increased dt&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$E(t)$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f02d520723e155426ad3f5582b5c3f764ca738f52843aa02c386200f57e43644.png" src="../_images/f02d520723e155426ad3f5582b5c3f764ca738f52843aa02c386200f57e43644.png" />
+</div>
+</div>
+<p>Under the perturbations considered above, the lack of missing physics contributes the most error to the GCM.<br />
+This can be fixed by adding parameterizations, which have different contributions to error at different times. Specifically, the error grows more rapidly for the higher order parameterization relative to the linear parameterization, but saturates to smaller error at longer time. This might partly be because we optimized the parameters for the linear parameterization, but used parameter estimates for the higher order parameterization from the literature.<br />
+The second largest error source is the numerical approximation (or changed dt), suggesting that we need to be careful about the design and choice of the numerical schemes.
+The errors due to the forcing and initial condition reult in smaller errors, but will likely grow as the perturbations to these change.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h2>
+<p>In this chapter:</p>
+<ul class="simple">
+<li><p>We first reintroduced the GCM parameterization problem, discussing it in terms of limited observability of GCMs.</p></li>
+<li><p>Then we discussed the need for stochastic parameterizations, which arises because of the possible differences in the unresolved or hidden states.</p></li>
+<li><p>Then we discussed how skill can be measured, and defined four different metrics.</p></li>
+<li><p>Finally we discussed the different sources of error that may be presend in numerical GCMs.</p></li>
+</ul>
+<p>This chapter has made it clear that even models with some degree of tuning will diverge from the true solution, as there are multiple sources of errors. In the next chapter we discuss if and how GCMs and their parameterizations can be further tuned to enhance their range of predictability (which is known to not be in finite).</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gcm-analogue.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Lorenz-96 and its GCM Analog</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="estimating-gcm-parameters.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tuning GCM Parameterizations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-need-for-gcm-parameterizations">The need for GCM parameterizations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-parameterizations-be-deterministic-or-stochastic">Should parameterizations  be deterministic or stochastic ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-measure-parameterization-skill">How to measure parameterization skill ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-model-error">Sources of model error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

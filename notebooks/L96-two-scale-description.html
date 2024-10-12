@@ -1,0 +1,1026 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Lorenz-96 Two-Timescale System &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/L96-two-scale-description';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Lorenz-96 and its GCM Analog" href="gcm-analogue.html" />
+    <link rel="prev" title="Introduction" href="../intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-parameterization-problem.html">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Improving_Neural_networks.html">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning-DA-increments.html">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="symbolic_methods_comparison.html">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GP_lorenz96.html">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/L96-two-scale-description.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Lorenz-96 Two-Timescale System</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-to-numerically-integrate-the-two-time-scale-l96-model">Code to numerically integrate the two time-scale L96 model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-class-for-numerical-integration-of-the-two-time-scale-l96">A class for numerical integration of the two time-scale L96</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="the-lorenz-96-two-timescale-system">
+<h1>The Lorenz-96 Two-Timescale System<a class="headerlink" href="#the-lorenz-96-two-timescale-system" title="Permalink to this headline">#</a></h1>
+<p>In 1996, Lorenz proposed a two-time scale dynamical system, referred to as the Lorenz-96 model (L96), whose behavior mimics the non-linear dynamics of the extratropical atmosphere with simplified representation of multiscale interactions and nonlinear advection <span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="E.N. Lorenz. Predictability: a problem partly solved. Seminar on Predictability, 1:1-18, 1995. URL: https://www.ecmwf.int/node/10829.">Lorenz, 1995</a>]</span>. The L96 model consists of two sets of equations coupling two sets of variables (<span class="math notranslate nohighlight">\(X_k\)</span> and <span class="math notranslate nohighlight">\(Y_{j,k}\)</span>), which evolve over two (slow and fast) timescales and are arranged around a latitude circle as shown in Fig. 1. The equations comprising L96 are:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-b0d72642-617b-4337-8504-d26853664006">
+<span class="eqno">(1)<a class="headerlink" href="#equation-b0d72642-617b-4337-8504-d26853664006" title="Permalink to this equation">#</a></span>\[\begin{align}
+\frac{d}{dt} X_k
+&amp;= - X_{k-1} \left( X_{k-2} - X_{k+1} \right) - X_k + F - \left( \frac{hc}{b} \right) \sum_{j=0}^{J-1} Y_{j,k},
+\\
+\frac{d}{dt} Y_{j,k}
+&amp;= - cbY_{j+1,k} \left( Y_{j+2,k} - Y_{j-1,k} \right) - c Y_{j,k} + \frac{hc}{b} X_k
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(X_k\)</span>, <span class="math notranslate nohighlight">\(k=1,\ldots,K\)</span>, denotes <span class="math notranslate nohighlight">\(K\)</span> slow (or low-frequency) variables, and <span class="math notranslate nohighlight">\(Y_{j,k}\)</span> , <span class="math notranslate nohighlight">\(j=1,\ldots,J\)</span> denotes <span class="math notranslate nohighlight">\(J*K\)</span> fast (or high-frequency) variables.
+The slow equations are coupled to the fast equations via a coupling term, <span class="math notranslate nohighlight">\(\sum_{j=0}^{J-1} Y_{j,k}\)</span>, which sums over the <span class="math notranslate nohighlight">\(J\)</span> fast variables corresponding to a particular <span class="math notranslate nohighlight">\(k\)</span>. On the other hand, each fast equation is forced by a coupling term, <span class="math notranslate nohighlight">\(\frac{hc}{b} X_k\)</span>, that depends on the slow variable corresponding to that particular <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<p>The evolution of this two-time scale system depend on three key parameters: <span class="math notranslate nohighlight">\(b\)</span>, <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(h\)</span>. Here <span class="math notranslate nohighlight">\(b\)</span> determines the magnitude of the nonlinear interactions among the fast variables, <span class="math notranslate nohighlight">\(c\)</span> controls how rapidly the fast variables fluctuate compared to the slow variables and, <span class="math notranslate nohighlight">\(h\)</span> governs the strength of the coupling between the slow and fast variables. Moreover, the slow time-scale equation is forced by the parameter <span class="math notranslate nohighlight">\(F\)</span>, whose value determines the chaotic behaviour of the system. E.g. <span id="id2">[<a class="reference internal" href="../bibliography.html#id4" title="Daniel S. Wilks. Effects of stochastic parametrizations in the lorenz \textquotesingle 96 system. Quarterly Journal of the Royal Meteorological Society, 131(606):389–407, 2005. URL: https://doi.org/10.1256/qj.04.03, doi:10.1256/qj.04.03.">Wilks, 2005</a>]</span>.</p>
+<p>The chaotic dynamical system L96 is very useful for testing different numerical methods in atmospheric modeling thanks to its transparency, low computational cost and simplicity compared to Global Climate Models (GCM). The interaction between variables of different scales makes the L96 model of particular interest when evaluating new parameterization methodologies. As such, it was used in assessing different techniques that were later incorporated into GCMs (<span id="id3">[<a class="reference internal" href="../bibliography.html#id9" title="Daan Crommelin and Eric Vanden-Eijnden. Subgrid-scale parameterization with conditional markov chains. Journal of the Atmospheric Sciences, 65(8):2661–2675, August 2008. URL: https://doi.org/10.1175/2008jas2566.1, doi:10.1175/2008jas2566.1.">Crommelin and Vanden-Eijnden, 2008</a>]</span>, <span id="id4">[<a class="reference internal" href="../bibliography.html#id10" title="J. Dorrestijn, D. T. Crommelin, J. A. Biello, and S. J. Böing. A data-driven multi-cloud model for stochastic parametrization of deep convection. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, 371(1991):20120374, May 2013. URL: https://doi.org/10.1098/rsta.2012.0374, doi:10.1098/rsta.2012.0374.">Dorrestijn <em>et al.</em>, 2013</a>]</span>).</p>
+<p>The L96 model has been extensively used as a test bed in various studies including data assimilation approaches (<span id="id5">[<a class="reference internal" href="../bibliography.html#id11" title="K.J.H. Law, D. Sanz-Alonso, A. Shukla, and A.M. Stuart. Filter accuracy for the lorenz 96 model: fixed versus adaptive observation operators. Physica D: Nonlinear Phenomena, 325:1–13, June 2016. URL: https://doi.org/10.1016/j.physd.2015.12.008, doi:10.1016/j.physd.2015.12.008.">Law <em>et al.</em>, 2016</a>]</span>, <span id="id6">[<a class="reference internal" href="../bibliography.html#id12" title="Sam Hatfield, Aneesh Subramanian, Tim Palmer, and Peter Düben. Improving weather forecast skill through reduced-precision data assimilation. Monthly Weather Review, 146(1):49–62, December 2017. URL: https://doi.org/10.1175/mwr-d-17-0132.1, doi:10.1175/mwr-d-17-0132.1.">Hatfield <em>et al.</em>, 2017</a>]</span>), stochastic parameterization schemes (<span id="id7">[<a class="reference internal" href="../bibliography.html#id13" title="Frank Kwasniok. Data-based stochastic subgrid-scale parametrization: an approach using cluster-weighted modelling. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, 370(1962):1061–1086, March 2012. URL: https://doi.org/10.1098/rsta.2011.0384, doi:10.1098/rsta.2011.0384.">Kwasniok, 2012</a>]</span>, <span id="id8">[<a class="reference internal" href="../bibliography.html#id5" title="H. M. Arnold, I. M. Moroz, and T. N. Palmer. Stochastic parametrizations and model uncertainty in the lorenz '96 system. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, 371(1991):20110479, 2013. URL: https://doi.org/10.1098/rsta.2011.0479, doi:10.1098/rsta.2011.0479.">Arnold <em>et al.</em>, 2013</a>]</span>, <span id="id9">[<a class="reference internal" href="../bibliography.html#id14" title="Alexandre J. Chorin and Fei Lu. Discrete approach to stochastic parametrization and dimension reduction in nonlinear dynamics. Proceedings of the National Academy of Sciences, 112(32):9804–9809, July 2015. URL: https://doi.org/10.1073/pnas.1512080112, doi:10.1073/pnas.1512080112.">Chorin and Lu, 2015</a>]</span>)  and Machine Learning-based parameterization methodologies (<span id="id10">[<a class="reference internal" href="../bibliography.html#id7" title="Tapio Schneider, Shiwei Lan, Andrew Stuart, and João Teixeira. Earth system modeling 2.0: a blueprint for models that learn from observations and targeted high-resolution simulations. Geophysical Research Letters, December 2017. URL: https://doi.org/10.1002/2017gl076101, doi:10.1002/2017gl076101.">Schneider <em>et al.</em>, 2017</a>]</span>, <span id="id11">[<a class="reference internal" href="../bibliography.html#id15" title="Peter D. Dueben and Peter Bauer. Challenges and design choices for global weather and climate models based on machine learning. Geoscientific Model Development, 11(10):3999–4009, October 2018. URL: https://doi.org/10.5194/gmd-11-3999-2018, doi:10.5194/gmd-11-3999-2018.">Dueben and Bauer, 2018</a>]</span> , <span id="id12">[<a class="reference internal" href="../bibliography.html#id16" title="David John Gagne, Hannah M. Christensen, Aneesh C. Subramanian, and Adam H. Monahan. Machine learning for stochastic parameterization: generative adversarial networks in the lorenz \textquotesingle 96 model. Journal of Advances in Modeling Earth Systems, March 2020. URL: https://doi.org/10.1029/2019ms001896, doi:10.1029/2019ms001896.">Gagne <em>et al.</em>, 2020</a>]</span>).</p>
+<div class="figure align-default" id="l96-equation-figure">
+<a class="reference internal image-reference" href="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png"><img alt="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png" src="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text"><em>Visualisation of a two-scale Lorenz ‘96 system with J = 8 and K = 6. Global-scale variables (<span class="math notranslate nohighlight">\(X_k\)</span>) are updated based on neighbouring variables and on the local-scale variables (<span class="math notranslate nohighlight">\(Y_{j,k}\)</span>) associated with the corresponding global-scale variable. Local-scale variabless are updated based on neighbouring variables and the associated global-scale variable. The neighbourhood topology of both local and global-scale variables is circular. Image from <a class="reference external" href="https://www.researchgate.net/figure/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values_fig1_319201436">Exploiting the chaotic behaviour of atmospheric models with reconfigurable architectures - Scientific Figure on ResearchGate.</a></em>.</span><a class="headerlink" href="#l96-equation-figure" title="Permalink to this image">#</a></p>
+</div>
+<div class="section" id="code-to-numerically-integrate-the-two-time-scale-l96-model">
+<h2>Code to numerically integrate the two time-scale L96 model<a class="headerlink" href="#code-to-numerically-integrate-the-two-time-scale-l96-model" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">display_source</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">L96_model</span></code> module we provide the function <code class="docutils literal notranslate"><span class="pre">L96_2t_xdot_ydot</span></code> (shown next) that returns the tendencies (sum of the RHS) for the X and Y equations, as well as the tendency corresponding to the coupling in the X equation, <span class="math notranslate nohighlight">\(-hc/b \sum_{j=0}^{J-1} Y_{j,k}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96_2t_xdot_ydot</span>
+
+<span class="n">display_source</span><span class="p">(</span><span class="n">L96_2t_xdot_ydot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style><div class="highlight"><pre><span></span><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">L96_2t_xdot_ydot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the time rate of change for the X and Y variables for the Lorenz &#39;96, two time-scale</span>
+<span class="sd">    model, equations 2 and 3:</span>
+<span class="sd">        d/dt X[k] =     -X[k-1] ( X[k-2] - X[k+1] )   - X[k] + F - h.c/b sum_j Y[j,k]</span>
+<span class="sd">        d/dt Y[j] = -b c Y[j+1] ( Y[j+2] - Y[j-1] ) - c Y[j]     + h.c/b X[k]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X : Values of X variables at the current time step</span>
+<span class="sd">        Y : Values of Y variables at the current time step</span>
+<span class="sd">        F : Forcing term</span>
+<span class="sd">        h : coupling coefficient</span>
+<span class="sd">        b : ratio of amplitudes</span>
+<span class="sd">        c : time-scale ratio</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dXdt, dYdt, C : Arrays of X and Y time tendencies, and the coupling term -hc/b*sum(Y,j)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">JK</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">JK</span> <span class="o">//</span> <span class="n">K</span>
+    <span class="k">assert</span> <span class="n">JK</span> <span class="o">==</span> <span class="n">J</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="s2">&quot;X and Y have incompatible shapes&quot;</span>
+    <span class="n">Xdot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="n">hcb</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span>
+
+    <span class="n">Ysummed</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">J</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">Xdot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">-</span> <span class="n">X</span> <span class="o">+</span> <span class="n">F</span> <span class="o">-</span> <span class="n">hcb</span> <span class="o">*</span> <span class="n">Ysummed</span>
+    <span class="n">Ydot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">-</span><span class="n">c</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="o">-</span> <span class="n">c</span> <span class="o">*</span> <span class="n">Y</span>
+        <span class="o">+</span> <span class="n">hcb</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Xdot</span><span class="p">,</span> <span class="n">Ydot</span><span class="p">,</span> <span class="o">-</span><span class="n">hcb</span> <span class="o">*</span> <span class="n">Ysummed</span>
+</pre></div>
+</div></div>
+</div>
+<p>These tendencies describe the continuous evolution of the L96 model at a particular time. However, to obtain a discrete solution we must integrate numerically in time. In the <code class="docutils literal notranslate"><span class="pre">L96_model</span></code> module, we provide the function <code class="docutils literal notranslate"><span class="pre">integrate_L96_2t</span></code> (shown next) that uses fourth-order Runge-Kutta integration. Starting from the initial conditions <code class="docutils literal notranslate"><span class="pre">X0,Y0</span></code>, the function returns the trajectories of <code class="docutils literal notranslate"><span class="pre">X,Y</span></code> sampled at an interval <code class="docutils literal notranslate"><span class="pre">si</span></code>. There is a related function, <code class="docutils literal notranslate"><span class="pre">integrate_L96_2t_with_coupling</span></code>, that in addition to the trajectories, also returns the coupling term, <span class="math notranslate nohighlight">\(-hc/b \sum_{j=0}^{J-1} Y_{j,k}\)</span> at each point in the trajectory.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">integrate_L96_2t</span>
+
+<span class="n">display_source</span><span class="p">(</span><span class="n">integrate_L96_2t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">integrate_L96_2t</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">Y0</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integrates forward-in-time the two time-scale Lorenz 1996 model, using the RK4 integration method.</span>
+<span class="sd">    Returns the full history with nt+1 values starting with initial conditions, X[:,0]=X0 and Y[:,0]=Y0,</span>
+<span class="sd">    and ending with the final state, X[:,nt+1] and Y[:,nt+1] at time t0+nt*si.</span>
+
+<span class="sd">    Note the model is intergrated</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X0 : Values of X variables at the current time</span>
+<span class="sd">        Y0 : Values of Y variables at the current time</span>
+<span class="sd">        si : Sampling time interval</span>
+<span class="sd">        nt : Number of sample segments (results in nt+1 samples incl. initial state)</span>
+<span class="sd">        F  : Forcing term</span>
+<span class="sd">        h  : coupling coefficient</span>
+<span class="sd">        b  : ratio of amplitudes</span>
+<span class="sd">        c  : time-scale ratio</span>
+<span class="sd">        t0 : Initial time (defaults to 0)</span>
+<span class="sd">        dt : The actual time step. If dt&lt;si, then si is used. Otherwise si/dt must be a whole number. Default 0.001.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        X[:,:], Y[:,:], time[:] : the full history X[n,k] and Y[n,k] at times t[n]</span>
+
+<span class="sd">    Example usage:</span>
+<span class="sd">        X,Y,t = integrate_L96_2t(5+5*np.random.rand(8), np.random.rand(8*4), 0.01, 500, 18, 1, 10, 10)</span>
+<span class="sd">        plt.plot( t, X);</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">xhist</span><span class="p">,</span> <span class="n">yhist</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">integrate_L96_2t_with_coupling</span><span class="p">(</span>
+        <span class="n">X0</span><span class="p">,</span> <span class="n">Y0</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">xhist</span><span class="p">,</span> <span class="n">yhist</span><span class="p">,</span> <span class="n">time</span>
+</pre></div>
+</div></div>
+</div>
+<p>An example of how to use <code class="docutils literal notranslate"><span class="pre">integrate_L96_2t</span></code> is shown below. Here we choose <span class="math notranslate nohighlight">\(K=36\)</span> and <span class="math notranslate nohighlight">\(J=10\)</span> (i.e. 36 values of <span class="math notranslate nohighlight">\(X\)</span> and 10 values of <span class="math notranslate nohighlight">\(Y\)</span> per value of <span class="math notranslate nohighlight">\(X\)</span>). Also, in accordance with previous studies, we set <span class="math notranslate nohighlight">\(h=1\)</span>, <span class="math notranslate nohighlight">\(c=10\)</span>, and <span class="math notranslate nohighlight">\(b=10\)</span>. The initial condition for <span class="math notranslate nohighlight">\(X\)</span> is setup as <span class="math notranslate nohighlight">\(X(s)=s(s-1)(s+1)\)</span>, for <span class="math notranslate nohighlight">\(s=-1\ldots 1\)</span>, and the <span class="math notranslate nohighlight">\(Y\)</span> is initialized with zeros. The value of <span class="math notranslate nohighlight">\(F\)</span> is set to <span class="math notranslate nohighlight">\(10\)</span>, which is sufficient to obtain chaotic behavior.</p>
+<p><em>Note: if you increase <span class="math notranslate nohighlight">\(F\)</span>, you may need to reduce <span class="math notranslate nohighlight">\(dt\)</span> for numerical stability.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="mi">36</span>  <span class="c1"># Number of globa-scale variables X</span>
+<span class="n">J</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Number of local-scale Y variables per single global-scale X variable</span>
+<span class="n">nt</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Number of time steps</span>
+<span class="n">si</span> <span class="o">=</span> <span class="mf">0.005</span>  <span class="c1"># Sampling time interval</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.005</span>  <span class="c1"># Time step</span>
+<span class="n">F</span> <span class="o">=</span> <span class="mf">10.0</span>  <span class="c1"># Focring</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Coupling coefficient</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">10.0</span>  <span class="c1"># ratio of amplitudes</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mf">10.0</span>  <span class="c1"># time-scale ratio</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">s</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A non-dimension coordinate from -1..+1 corresponding to k=0..K&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">K</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>  <span class="c1"># For coordinate in plots</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">J</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>  <span class="c1"># For coordinate in plots</span>
+
+<span class="c1"># Initial conditions</span>
+<span class="n">X_init</span> <span class="o">=</span> <span class="n">s</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Y_init</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">s</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">J</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">J</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">J</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># &quot;Run&quot; model</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">integrate_L96_2t</span><span class="p">(</span><span class="n">X_init</span><span class="p">,</span> <span class="n">Y_init</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After running the model, we plot the results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+
+<span class="c1"># Snapshot of X[k]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$X_k(t=n_t dt)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="n">J</span><span class="p">,</span> <span class="n">Y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$Y_{j,k}(t=n_t dt)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">X_init</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$X_k(t=0)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="n">J</span><span class="p">,</span> <span class="n">Y_init</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$Y_{j,k}(t=0)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;k, k + j/J&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$X_k, Y_{j,k}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+
+<span class="c1"># Sample time-series X[0](t), Y[0](t)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$X_0(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$Y_{0,0}(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+
+<span class="c1"># Full model history of X</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$X_k(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+
+<span class="c1"># Full model history of Y</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="n">J</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;k + j/J&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$Y_{j,k}(t)$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e10ecaf0247573745362e20554abe003f66cbb1b36b34c4a24808899880ff865.png" src="../_images/e10ecaf0247573745362e20554abe003f66cbb1b36b34c4a24808899880ff865.png" />
+</div>
+</div>
+</div>
+<div class="section" id="a-class-for-numerical-integration-of-the-two-time-scale-l96">
+<h2>A class for numerical integration of the two time-scale L96<a class="headerlink" href="#a-class-for-numerical-integration-of-the-two-time-scale-l96" title="Permalink to this headline">#</a></h2>
+<p>For convenience, we also provide a class named <code class="docutils literal notranslate"><span class="pre">L96</span></code> in <code class="docutils literal notranslate"><span class="pre">L96_model.py</span></code> which helps to reduce the amount of code when using the <code class="docutils literal notranslate"><span class="pre">L96_2t_xdot_ydot</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96</span>
+
+<span class="n">help</span><span class="p">(</span><span class="n">L96</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on class L96 in module L96_model:
+
+class L96(builtins.object)
+ |  L96(K, J, F=18, h=1, b=10, c=10, t=0, dt=0.001)
+ |  
+ |  Class for two time-scale Lorenz 1996 model
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, K, J, F=18, h=1, b=10, c=10, t=0, dt=0.001)
+ |      Construct a two time-scale model with parameters:
+ |      K  : Number of X values
+ |      J  : Number of Y values per X value
+ |      F  : Forcing term (default 18.)
+ |      h  : coupling coefficient (default 1.)
+ |      b  : ratio of amplitudes (default 10.)
+ |      c  : time-scale ratio (default 10.)
+ |      t  : Initial time (default 0.)
+ |      dt : Time step (default 0.001)
+ |  
+ |  __repr__(self)
+ |      Return repr(self).
+ |  
+ |  __str__(self)
+ |      Return str(self).
+ |  
+ |  copy(self)
+ |  
+ |  print(self)
+ |  
+ |  randomize_IC(self)
+ |      Randomize the initial conditions (or current state)
+ |  
+ |  run(self, si, T, store=False, return_coupling=False)
+ |      Run model for a total time of T, sampling at intervals of si.
+ |      If store=Ture, then stores the final state as the initial conditions for the next segment.
+ |      If return_coupling=True, returns C in addition to X,Y,t.
+ |      Returns sampled history: X[:,:],Y[:,:],t[:],C[:,:].
+ |  
+ |  set_param(self, dt=None, F=None, h=None, b=None, c=None, t=None)
+ |      Set a model parameter, e.g. .set_param(si=0.01, dt=0.002)
+ |  
+ |  set_state(self, X, Y, t=None)
+ |      Set initial conditions (or current state), e.g. .set_state(X,Y)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  F = &#39;Forcing&#39;
+ |  
+ |  X = &#39;Current X state or initial conditions&#39;
+ |  
+ |  Y = &#39;Current Y state or initial conditions&#39;
+ |  
+ |  b = &#39;Ratio of timescales&#39;
+ |  
+ |  c = &#39;Ratio of amplitudes&#39;
+ |  
+ |  dt = &#39;Time step&#39;
+ |  
+ |  h = &#39;Coupling coefficient&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>For example, to setup the same model as above with <span class="math notranslate nohighlight">\(K=36\)</span>, <span class="math notranslate nohighlight">\(J=10\)</span> and <span class="math notranslate nohighlight">\(F=10\)</span>, use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an instance of the L96 model, default parameters except those given</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">L96</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+<span class="n">M</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L96: K=36 J=10 F=10 h=1 b=10 c=10 dt=0.005
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that parameters <span class="math notranslate nohighlight">\(F\)</span>, <span class="math notranslate nohighlight">\(h\)</span>, <span class="math notranslate nohighlight">\(b\)</span>, <span class="math notranslate nohighlight">\(c\)</span> have defaults since in many of the applications in later notebooks these will not change. The initial conditions are automatically randomized to <span class="math notranslate nohighlight">\(X = b {\cal N}\)</span>, <span class="math notranslate nohighlight">\(Y = {\cal N}\)</span> where <span class="math notranslate nohighlight">\({\cal N}\)</span> is a random number drawn from a Guassian distribution. To set the same initial condition as used above, use</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the initial conditions (here X is the same cubic as above, Y=0)</span>
+<span class="n">M</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">M</span><span class="o">.</span><span class="n">j</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L96: K=36 J=10 F=10 h=1 b=10 c=10 dt=0.005
+ X=[ 0.05326217  0.14641204  0.22258659  0.28281464  0.328125    0.35954647
+  0.37810785  0.38483796  0.3807656   0.36691958  0.3443287   0.31402178
+  0.27702761  0.234375    0.18709276  0.13620971  0.08275463  0.02775634
+ -0.02775634 -0.08275463 -0.13620971 -0.18709276 -0.234375   -0.27702761
+ -0.31402178 -0.3443287  -0.36691958 -0.3807656  -0.38483796 -0.37810785
+ -0.35954647 -0.328125   -0.28281464 -0.22258659 -0.14641204 -0.05326217]
+ Y=[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ t=0
+</pre></div>
+</div>
+</div>
+</div>
+<p>To sample the same tracjectories as above use the <code class="docutils literal notranslate"><span class="pre">.run()</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the model for 1000 sample intervals, or for time 1000*0.005 = 5</span>
+<span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean absolute difference =&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X2</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Y2</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean absolute difference = 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Re-running the above cell gives the same answer each time because the same initial conditions are used for each invocation or <code class="docutils literal notranslate"><span class="pre">.run()</span></code>. To allow sequences of run, using the end state of one as the starting point for the next, add the parameter <code class="docutils literal notranslate"><span class="pre">store=True</span></code> which updates the initial condition stored in the object (<code class="docutils literal notranslate"><span class="pre">M</span></code>) with the final state of the run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the model as above but use the end state as an initial condition for the next run.</span>
+<span class="c1"># (Re-running this cell will give different answers after the first run)</span>
+<span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">&quot;Mean absolute difference 1st run=&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X2</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Y2</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">X2</span><span class="p">,</span> <span class="n">Y2</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="s2">&quot;Mean absolute difference 2nd run=&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X2</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Y2</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean absolute difference 1st run= 0.0
+Mean absolute difference 2nd run= 4.761055522025149
+</pre></div>
+</div>
+</div>
+</div>
+<p>The entire model creation and execution process demonstrated above can also be implemented in a one-liner version as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X3</span><span class="p">,</span> <span class="n">Y3</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">L96</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">K</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">M</span><span class="o">.</span><span class="n">j</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gcm-analogue.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Lorenz-96 and its GCM Analog</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-to-numerically-integrate-the-two-time-scale-l96-model">Code to numerically integrate the two time-scale L96 model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-class-for-numerical-integration-of-the-two-time-scale-l96">A class for numerical integration of the two time-scale L96</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

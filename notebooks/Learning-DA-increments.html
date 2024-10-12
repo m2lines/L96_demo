@@ -1,0 +1,1649 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Data Assimilation Increments &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Learning-DA-increments';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction to Equation Discovery - Comparing Symbolic Regression Methods" href="symbolic_methods_comparison.html" />
+    <link rel="prev" title="Data Assimilation demo in the Lorenz 96 (L96) two time-scale model" href="DA_demo_L96.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="L96-two-scale-description.html">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-parameterization-problem.html">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Improving_Neural_networks.html">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="symbolic_methods_comparison.html">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GP_lorenz96.html">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/Learning-DA-increments.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Learning Data Assimilation Increments</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-model-its-parameters-and-other-utility-functions">Defining the Model, its Parameters, and Other Utility Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-general-circulation-model-gcm">Defining the General Circulation Model (GCM)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-utility-functions">Defining the Utility Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-lorenz-1996-model-parameters">Initializing the Lorenz 1996 Model Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#suggestions-for-modifying-the-l96-model-paramters">Suggestions for Modifying the L96 Model Paramters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-truth-run-from-two-time-scale-l96-model">Generate <code class="docutils literal notranslate"><span class="pre">Truth</span></code> Run from Two Time-Scale L96 Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-synthetic-observations">Generate Synthetic Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-localization-to-the-background-model-covariance">Apply Localization to the Background Model Covariance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-data-assimilation">Run Data Assimilation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing-and-visualization">Post Processing and Visualization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examining-the-relationship-between-the-members-and-their-increments">Examining the Relationship between the Members and their Increments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-ensemble-members">Individual Ensemble Members</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-over-ensemble-members">Mean over Ensemble Members</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-the-da-increments">Learning the DA Increments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#observing-the-dataset">Observing the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-dataset-split">Creating the Dataset Split</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-dataset">Building the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-model">Define the Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-training-and-test-functions">Define the Training and Test Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train-the-network">Train the Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-results">Visualizing the Results</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="learning-data-assimilation-increments">
+<h1>Learning Data Assimilation Increments<a class="headerlink" href="#learning-data-assimilation-increments" title="Permalink to this headline">#</a></h1>
+<p>This notebook is derived from the previous notebooks: <span class="xref std std-doc">Neural_network_for_Lorenz96</span> and <a class="reference internal" href="DA_demo_L96.html"><span class="doc">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</span></a>.</p>
+<p>We’ve restricted it to only using the 3-layer network (not the linear regression model)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">TensorDataset</span>
+
+<span class="kn">import</span> <span class="nn">DA_methods</span>
+<span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96</span><span class="p">,</span> <span class="n">L96_eq1_xdot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensuring reproducibility</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="defining-the-model-its-parameters-and-other-utility-functions">
+<h2>Defining the Model, its Parameters, and Other Utility Functions<a class="headerlink" href="#defining-the-model-its-parameters-and-other-utility-functions" title="Permalink to this headline">#</a></h2>
+<div class="section" id="defining-the-general-circulation-model-gcm">
+<h3>Defining the General Circulation Model (GCM)<a class="headerlink" href="#defining-the-general-circulation-model-gcm" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">GCM</span><span class="p">(</span><span class="n">X_init</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A toy `General Circulation Model` (GCM) that uses the single</span>
+<span class="sd">    time-scale Lorenz 1996 model with a parameterised coupling term</span>
+<span class="sd">    to represent the interaction between the observed coarse scale</span>
+<span class="sd">    processes `X` and unobserved fine scale processes `Y` of the two</span>
+<span class="sd">    time-scale model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X_init: Initial conditions of X</span>
+<span class="sd">        F: Forcing term</span>
+<span class="sd">        dt: Sampling frequency of the model</span>
+<span class="sd">        nt: Number of timesteps for which to run the model</span>
+<span class="sd">        param: Weights to give to the coupling term</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Model output for all variables of X at each timestep along with</span>
+<span class="sd">        the corresponding time units</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_init</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+        <span class="n">X_init</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">F</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>
+        <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="defining-the-utility-functions">
+<h3>Defining the Utility Functions<a class="headerlink" href="#defining-the-utility-functions" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">s</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A non-dimension coordinate from -1..+1 corresponding to k=0..K&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">K</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_dist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the absolute distance between two element indices</span>
+<span class="sd">    within a square matrix of size (K x K)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        i: the ith row index</span>
+<span class="sd">        j: the jth column index</span>
+<span class="sd">        K: shape of square array</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Distance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">K</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">K</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">observation_operator</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">i_t</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Observation operator to map between model and observation space,</span>
+<span class="sd">    assuming linearity and model space observations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        K: spatial dimension of the model</span>
+<span class="sd">        l_obs: spatial positions of observations on model grid</span>
+<span class="sd">        t_obs: time positions of observations</span>
+<span class="sd">        i_t: the timestep of the current DA cycle</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Operator matrix (K * observation_density, K)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">l_obs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">K</span><span class="p">))</span>
+    <span class="n">H</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">l_obs</span><span class="p">[</span><span class="n">t_obs</span> <span class="o">==</span> <span class="n">i_t</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">H</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gaspari_cohn</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the appropriate distance dependent weighting of a</span>
+<span class="sd">    covariance matrix, after Gaspari &amp; Cohn, 1999 (https://doi.org/10.1002/qj.49712555417)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        distance: the distance between array elements</span>
+<span class="sd">        radius: localization radius for DA</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        distance dependent weight of the (i,j) index of a covariance matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">distance</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">radius</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">radius</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="n">ratio</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="o">-</span><span class="p">(</span><span class="n">ratio</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+                    <span class="o">+</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">8</span>
+                    <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span>
+                    <span class="o">+</span> <span class="mi">1</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ratio</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">ratio</span><span class="o">**</span><span class="mi">5</span> <span class="o">/</span> <span class="mi">12</span>
+                    <span class="o">-</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="mi">8</span>
+                    <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">ratio</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span>
+                    <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">ratio</span>
+                    <span class="o">+</span> <span class="mi">4</span>
+                    <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">/</span> <span class="n">ratio</span>
+                <span class="p">)</span>
+    <span class="k">return</span> <span class="n">weight</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">localize_covariance</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Localize the model climatology covariance matrix, based on</span>
+<span class="sd">    the Gaspari-Cohn function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        B: Covariance matrix over a long model run &#39;M_truth&#39; (K, K)</span>
+<span class="sd">        loc: spatial localization radius for DA</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Covariance matrix scaled to zero outside distance &#39;loc&#39; from diagonal and</span>
+<span class="sd">        the matrix of weights which are used to scale covariance matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">get_dist</span><span class="p">)(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">gaspari_cohn</span><span class="p">)(</span><span class="n">dist</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">B</span> <span class="o">*</span> <span class="n">W</span><span class="p">,</span> <span class="n">W</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">running_average</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute running mean over a user-specified window.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X: Input vector of arbitrary length &#39;n&#39;</span>
+<span class="sd">        N: Size of window over which to compute mean</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        X averaged over window N</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span> <span class="o">=</span> <span class="o">-</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">X_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">):</span>
+        <span class="n">X_sum</span> <span class="o">=</span> <span class="n">X_sum</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_sum</span> <span class="o">/</span> <span class="n">N</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_obs</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">,</span> <span class="n">period</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NOTE: This function is for plotting purposes only.&quot;&quot;&quot;</span>
+    <span class="n">t_period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">t_obs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">period</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">t_obs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">period</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">obs_period</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t_period</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">obs_period</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs_period</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">l_obs</span><span class="p">[</span><span class="n">t_period</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">loc</span><span class="p">):</span>
+            <span class="n">obs_period</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[</span><span class="n">t_period</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]][</span><span class="n">l_obs</span><span class="p">[</span><span class="n">t_period</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="n">loc</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">obs_period</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="initializing-the-lorenz-1996-model-parameters">
+<h3>Initializing the Lorenz 1996 Model Parameters<a class="headerlink" href="#initializing-the-lorenz-1996-model-parameters" title="Permalink to this headline">#</a></h3>
+<p>Let’s define the parameters of the Lorenz 1996 model that match those of Wilks, 2005; K=8, J=32, F=18.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="c1"># fmt: off</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="mi">8</span>                               <span class="c1"># Dimension of L96 `X` variables</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="mi">32</span>                              <span class="c1"># Dimension of L96 `Y` variables</span>
+    <span class="n">obs_freq</span> <span class="o">=</span> <span class="mi">10</span>                       <span class="c1"># Observation frequency (number of sampling intervals (si) per observation)</span>
+    <span class="n">F_truth</span> <span class="o">=</span> <span class="mi">18</span>                        <span class="c1"># F for truth signal</span>
+    <span class="n">F_fcst</span> <span class="o">=</span> <span class="mi">18</span>                         <span class="c1"># F for forecast (DA) model</span>
+    <span class="n">GCM_param</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># Polynomial coefficicents for GCM parameterization</span>
+    <span class="n">ns_da</span> <span class="o">=</span> <span class="mi">4000</span>                        <span class="c1"># Number of time samples for DA</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="mi">4000</span>                           <span class="c1"># Number of time samples for truth signal</span>
+    <span class="n">ns_spinup</span> <span class="o">=</span> <span class="mi">200</span>                     <span class="c1"># Number of time samples for spin up</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.005</span>                          <span class="c1"># Model timestep</span>
+    <span class="n">si</span> <span class="o">=</span> <span class="mf">0.005</span>                          <span class="c1"># Truth sampling interval</span>
+    <span class="n">B_loc</span> <span class="o">=</span> <span class="mf">0.0</span>                         <span class="c1"># Spatial localization radius for DA</span>
+    <span class="n">DA</span> <span class="o">=</span> <span class="s2">&quot;EnKF&quot;</span>                         <span class="c1"># DA method</span>
+    <span class="n">nens</span> <span class="o">=</span> <span class="mi">50</span>                           <span class="c1"># Number of ensemble members for DA</span>
+    <span class="n">inflate_opt</span> <span class="o">=</span> <span class="s2">&quot;relaxation&quot;</span>          <span class="c1"># Method for DA model covariance inflation</span>
+    <span class="n">inflate_factor</span> <span class="o">=</span> <span class="mf">0.86</span>               <span class="c1"># Inflation factor</span>
+    <span class="n">obs_density</span> <span class="o">=</span> <span class="mf">1.0</span>                   <span class="c1"># Fraction of spatial gridpoints where observations are collected</span>
+    <span class="n">DA_freq</span> <span class="o">=</span> <span class="mi">10</span>                        <span class="c1"># Assimilation frequency (number of sampling intervals (si) per assimilation step)</span>
+    <span class="n">obs_sigma</span> <span class="o">=</span> <span class="mf">0.1</span>                     <span class="c1"># Observational error standard deviation</span>
+    <span class="n">initial_spread</span> <span class="o">=</span> <span class="mf">0.1</span>                <span class="c1"># Initial spread added to initial conditions</span>
+    <span class="c1"># fmt: on</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="suggestions-for-modifying-the-l96-model-paramters">
+<h4>Suggestions for Modifying the L96 Model Paramters<a class="headerlink" href="#suggestions-for-modifying-the-l96-model-paramters" title="Permalink to this headline">#</a></h4>
+<p>If you want to modify the default model parameters given above, you can use the suggestions below for alternate values depending upon the desired behaviour.</p>
+<p><strong>Less certain observations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_sigma</span></code>: 1.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_spread</span></code>: 1.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.5</p></li>
+</ul>
+<p><strong>Less frequent observations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_freq</span></code>: 50</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DA_freq</span></code>: 50</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.4</p></li>
+</ul>
+<p><strong>Very infrequent observations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_freq</span></code>: 200</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DA_freq</span></code>: 200</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.5</p></li>
+</ul>
+<p><strong>More frequent observations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_freq</span></code>: 5</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DA_freq</span></code>: 5</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.9</p></li>
+</ul>
+<p><strong>Very frequent observations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_freq</span></code>: 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DA_freq</span></code>: 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.98</p></li>
+</ul>
+<p><strong>Very frequent observations but less accurate</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_freq</span></code>: 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DA_freq</span></code>: 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obs_sigma</span></code>: 1.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initial_spread</span></code>: 1.0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inflate_factor</span></code>: 0.9</p></li>
+</ul>
+<p><strong>Different time-scale</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">F_fcst</span></code>: 16</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="generate-truth-run-from-two-time-scale-l96-model">
+<h2>Generate <code class="docutils literal notranslate"><span class="pre">Truth</span></code> Run from Two Time-Scale L96 Model<a class="headerlink" href="#generate-truth-run-from-two-time-scale-l96-model" title="Permalink to this headline">#</a></h2>
+<p>The L96 two time-scale model acts as the <strong>real world</strong> using which we obtain the unobserved <code class="docutils literal notranslate"><span class="pre">truth</span></code> field from which our observations will be derived.</p>
+<p>We begin by spinning-up a state and then record a series of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> at time <span class="math notranslate nohighlight">\(t\)</span> in arrays <code class="docutils literal notranslate"><span class="pre">X_truth</span></code>, <code class="docutils literal notranslate"><span class="pre">Y_truth</span></code> and <code class="docutils literal notranslate"><span class="pre">t_truth</span></code> respectively. The initial state <span class="math notranslate nohighlight">\(X(t=0\)</span> is recorded in <code class="docutils literal notranslate"><span class="pre">X_init</span></code> (and equal to <code class="docutils literal notranslate"><span class="pre">X_truth[0]</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up the &quot;truth&quot; 2-scale L96 model</span>
+<span class="n">M_truth</span> <span class="o">=</span> <span class="n">L96</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">J</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">F_truth</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+<span class="n">M_truth</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">)),</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">M_truth</span><span class="o">.</span><span class="n">j</span><span class="p">)</span>
+
+<span class="c1"># The model runs for `ns_spinup` timesteps to spin-up</span>
+<span class="n">X_spinup</span><span class="p">,</span> <span class="n">Y_spinup</span><span class="p">,</span> <span class="n">t_spinup</span> <span class="o">=</span> <span class="n">M_truth</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">si</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">si</span> <span class="o">*</span> <span class="n">Config</span><span class="o">.</span><span class="n">ns_spinup</span><span class="p">)</span>
+
+<span class="c1"># Generate the initial conditions of X and Y</span>
+<span class="n">X_init</span> <span class="o">=</span> <span class="n">X_spinup</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">Y_init</span> <span class="o">=</span> <span class="n">Y_spinup</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="c1"># Using the initial conditions, generate the truth</span>
+<span class="n">M_truth</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">X_init</span><span class="p">,</span> <span class="n">Y_init</span><span class="p">)</span>
+<span class="n">X_truth</span><span class="p">,</span> <span class="n">Y_truth</span><span class="p">,</span> <span class="n">t_truth</span> <span class="o">=</span> <span class="n">M_truth</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">si</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">si</span> <span class="o">*</span> <span class="n">Config</span><span class="o">.</span><span class="n">ns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="generate-synthetic-observations">
+<h2>Generate Synthetic Observations<a class="headerlink" href="#generate-synthetic-observations" title="Permalink to this headline">#</a></h2>
+<p>Now we create some <strong>observations</strong> of the <strong>real world</strong> by sampling at <code class="docutils literal notranslate"><span class="pre">obs_freq</span></code> intervals and adding some noise (observational error).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample the &quot;truth&quot; to generate observations at certain times (t_obs) and locations (l_obs)</span>
+<span class="n">t_obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">obs_freq</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_freq</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_freq</span><span class="p">),</span>
+    <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span> <span class="o">*</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_density</span><span class="p">),</span> <span class="mi">1</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="n">l_obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t_obs</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l_obs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">l_obs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span> <span class="o">*</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_density</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+<span class="n">X_obs</span> <span class="o">=</span> <span class="n">X_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">]</span> <span class="o">+</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_sigma</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">l_obs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculated observation covariance matrix, assuming independent observations</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span> <span class="o">*</span> <span class="n">Config</span><span class="o">.</span><span class="n">obs_density</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">[:],</span> <span class="n">X_truth</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]],</span>
+    <span class="n">find_obs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X_obs</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">,</span> <span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">t_obs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;obs&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;X(t)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Observations at k=0&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7bf76b17a7eb4d6a8c765e1b8565917a3a47cccffe3aa070da420a50c8966f41.png" src="../_images/7bf76b17a7eb4d6a8c765e1b8565917a3a47cccffe3aa070da420a50c8966f41.png" />
+</div>
+</div>
+</div>
+<div class="section" id="apply-localization-to-the-background-model-covariance">
+<h2>Apply Localization to the Background Model Covariance<a class="headerlink" href="#apply-localization-to-the-background-model-covariance" title="Permalink to this headline">#</a></h2>
+<p>We run the model in forward mode for 5000 steps to calculate the background covariance. The model is the <strong>GCM</strong> function defined above which integrates forward.</p>
+<div class="amsmath math notranslate nohighlight" id="equation-67f53fad-f2b5-4145-92f9-165691a7e3ec">
+<span class="eqno">(19)<a class="headerlink" href="#equation-67f53fad-f2b5-4145-92f9-165691a7e3ec" title="Permalink to this equation">#</a></span>\[\begin{align}
+\frac{d}{dt} X_k
+&amp;= - X_{k-1} \left( X_{k-2} - X_{k+1} \right) - X_k + F
+\end{align}\]</div>
+<p>The absence of the coupling term to the <span class="math notranslate nohighlight">\(Y\)</span> equations makes this a model with <strong>missing physics</strong> that we hope the Ensemble Kalman Filter will correct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate climatological background covariance for 1-scale L96 model</span>
+<span class="n">X1_clim</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">X_init</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">F_fcst</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+<span class="n">B_clim1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X1_clim</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load pre-calculated climatological background covariance matrix from a long simulation</span>
+<span class="n">B_loc</span><span class="p">,</span> <span class="n">W_clim</span> <span class="o">=</span> <span class="n">localize_covariance</span><span class="p">(</span><span class="n">B_clim1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">B_loc</span><span class="p">)</span>
+
+<span class="n">B_corr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">B_clim1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B_clim1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B_clim1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">B_corr1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">B_clim1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">B_clim1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">B_clim1</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">B_corr1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;bwr&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Background correlation matrix: 1-scale L96&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">B_loc</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;B_loc&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">W_clim</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;W_clim&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/970a665bf95b56128119c521533f868a79d90a644e07a54a8b885d830eec2f3e.png" src="../_images/970a665bf95b56128119c521533f868a79d90a644e07a54a8b885d830eec2f3e.png" />
+</div>
+</div>
+</div>
+<div class="section" id="run-data-assimilation">
+<h2>Run Data Assimilation<a class="headerlink" href="#run-data-assimilation" title="Permalink to this headline">#</a></h2>
+<p>The algorithms steps through segments of time (<strong>DA cycles</strong>), launching an ensemble of short forecasts from the posterior estimate of the preceding segment, each perturbed by noise in their initial condition (inflation).</p>
+<p>Each ensemble trajectory is stored in <code class="docutils literal notranslate"><span class="pre">ensX</span></code>. The increment added to correct the prior is in <code class="docutils literal notranslate"><span class="pre">X_inc</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up array to store DA increments</span>
+<span class="n">X_inc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">),</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">nens</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA</span> <span class="o">==</span> <span class="s2">&quot;3DVar&quot;</span><span class="p">:</span>
+    <span class="n">X_inc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">X_inc</span><span class="p">)</span>
+<span class="n">t_DA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize ensemble with perturbations</span>
+<span class="n">i_t</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ensX</span> <span class="o">=</span> <span class="n">X_init</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">nens</span><span class="p">))</span>
+<span class="n">X_post</span> <span class="o">=</span> <span class="n">ensX</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">W</span> <span class="o">=</span> <span class="n">W_clim</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">cycle</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">):</span>
+    <span class="c1"># Set up array to store model forecast for each DA cycle</span>
+    <span class="n">ensX_fcst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">nens</span><span class="p">))</span>
+
+    <span class="c1"># Model forecast for next DA cycle</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">nens</span><span class="p">):</span>
+        <span class="n">ensX_fcst</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span>
+            <span class="n">X_post</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">n</span><span class="p">],</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">F_fcst</span><span class="p">,</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">,</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">GCM_param</span><span class="p">,</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">i_t</span> <span class="o">=</span> <span class="n">i_t</span> <span class="o">+</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span>
+
+    <span class="c1"># Get prior/background from the forecast</span>
+    <span class="n">X_prior</span> <span class="o">=</span> <span class="n">ensX_fcst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="c1"># Call DA</span>
+    <span class="n">t_DA</span><span class="p">[</span><span class="n">cycle</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_truth</span><span class="p">[</span><span class="n">i_t</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA</span> <span class="o">==</span> <span class="s2">&quot;EnKF&quot;</span><span class="p">:</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">observation_operator</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">i_t</span><span class="p">)</span>
+
+        <span class="c1"># Augment state vector with parameters when doing parameter estimation</span>
+        <span class="n">B_ens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X_prior</span><span class="p">)</span>
+        <span class="n">B_ens_loc</span> <span class="o">=</span> <span class="n">B_ens</span> <span class="o">*</span> <span class="n">W</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">]</span>
+        <span class="n">X_post</span> <span class="o">=</span> <span class="n">DA_methods</span><span class="o">.</span><span class="n">EnKF</span><span class="p">(</span><span class="n">X_prior</span><span class="p">,</span> <span class="n">X_obs</span><span class="p">[</span><span class="n">t_obs</span> <span class="o">==</span> <span class="n">i_t</span><span class="p">],</span> <span class="n">H</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">B_ens_loc</span><span class="p">)</span>
+        <span class="n">X_post</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">DA_methods</span><span class="o">.</span><span class="n">ens_inflate</span><span class="p">(</span>
+            <span class="n">X_post</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">X_prior</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">inflate_opt</span><span class="p">,</span>
+            <span class="n">Config</span><span class="o">.</span><span class="n">inflate_factor</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="n">X_post</span> <span class="o">=</span> <span class="n">X_prior</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="c1"># Get current increments</span>
+        <span class="n">X_inc</span><span class="p">[</span><span class="n">cycle</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">X_post</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-</span> <span class="n">X_prior</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Reset initial conditions for next DA cycle</span>
+    <span class="n">ensX_fcst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">X_post</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">ensX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">ensX</span><span class="p">,</span> <span class="n">ensX_fcst</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="post-processing-and-visualization">
+<h2>Post Processing and Visualization<a class="headerlink" href="#post-processing-and-visualization" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">meanX</span></code> is the ensemble mean forecast, averaging over all the ensemble members. It has discontinuities due to the increment addition between each DA segment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meanX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ensX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">clim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">meanX</span> <span class="o">-</span> <span class="n">X_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span>
+    <span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="n">meanX</span> <span class="o">-</span> <span class="n">X_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:],</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;bwr&quot;</span><span class="p">,</span>
+    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">6.5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;X - X_truth&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">meanX</span> <span class="o">-</span> <span class="n">X_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ensX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Spread&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="n">Config</span><span class="o">.</span><span class="n">obs_sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Obs error&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RMSE (X - X_truth)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">meanX</span> <span class="o">-</span> <span class="n">X_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;RMSE&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">X_inc_ave</span> <span class="o">=</span> <span class="n">X_inc</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">si</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">X_inc_ave</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Inc&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">running_average</span><span class="p">(</span><span class="n">X_inc_ave</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="mi">7</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Inc Ave&quot;</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">F_fcst</span> <span class="o">-</span> <span class="n">Config</span><span class="o">.</span><span class="n">F_truth</span><span class="p">),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;F_bias&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M_truth</span><span class="o">.</span><span class="n">k</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">X_inc</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">si</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+    <span class="s2">&quot;k:&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ave Inc&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Increments&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+
+<span class="n">plot_start</span><span class="p">,</span> <span class="n">plot_end</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">800</span>
+<span class="n">plot_start_DA</span><span class="p">,</span> <span class="n">plot_end_DA</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">plot_start</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span>
+    <span class="n">plot_end</span> <span class="o">/</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span>
+<span class="p">)</span>
+<span class="n">plot_x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="n">plot_start</span><span class="p">:</span><span class="n">plot_end</span><span class="p">],</span> <span class="n">X_truth</span><span class="p">[</span><span class="n">plot_start</span><span class="p">:</span><span class="n">plot_end</span><span class="p">,</span> <span class="n">plot_x</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;truth&quot;</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="n">plot_start</span><span class="p">:</span><span class="n">plot_end</span><span class="p">],</span> <span class="n">meanX</span><span class="p">[</span><span class="n">plot_start</span><span class="p">:</span><span class="n">plot_end</span><span class="p">,</span> <span class="n">plot_x</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;forecast&quot;</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">t_DA</span><span class="p">[</span><span class="n">plot_start_DA</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">plot_end_DA</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">find_obs</span><span class="p">(</span><span class="n">plot_x</span><span class="p">,</span> <span class="n">X_obs</span><span class="p">,</span> <span class="n">t_obs</span><span class="p">,</span> <span class="n">l_obs</span><span class="p">,</span> <span class="p">[</span><span class="n">plot_start</span><span class="p">,</span> <span class="n">plot_end</span><span class="p">]),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;obs&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;k=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">plot_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; truth and forecast&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+    <span class="mf">0.1</span><span class="p">,</span>
+    <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s2">&quot;RMSE=</span><span class="si">{:3f}</span><span class="se">\n</span><span class="s2">Spread=</span><span class="si">{:3f}</span><span class="se">\n</span><span class="s2">GCM param=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">DA=</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="se">\n</span><span class="s2">DA_freq=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">B_loc=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">inflation=</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="se">\n</span><span class="s2">obs_density=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">obs_sigma=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">obs_freq=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">meanX</span> <span class="o">-</span> <span class="n">X_truth</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">ns_da</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ensX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">DA</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">GCM_param</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">nens</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">B_loc</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">inflate_opt</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">inflate_factor</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">obs_density</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">obs_sigma</span><span class="p">,</span>
+        <span class="n">Config</span><span class="o">.</span><span class="n">obs_freq</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ca102132f335dddd7be9c7fe21361bf5a5834c2830c0475e20415334e83588d8.png" src="../_images/ca102132f335dddd7be9c7fe21361bf5a5834c2830c0475e20415334e83588d8.png" />
+</div>
+</div>
+</div>
+<div class="section" id="examining-the-relationship-between-the-members-and-their-increments">
+<h2>Examining the Relationship between the Members and their Increments<a class="headerlink" href="#examining-the-relationship-between-the-members-and-their-increments" title="Permalink to this headline">#</a></h2>
+<p>Converting the increment <code class="docutils literal notranslate"><span class="pre">X_inc</span></code> into a tendency, we can examine the relationship between <span class="math notranslate nohighlight">\(\dot{X}\)</span> (due to the missing physics) and the state of the model at the beginning of each DA segment.</p>
+<p>If we are properly correcting the absence of the coupling term then this structure should look like the parameterization of the coupling term, as done in Wilks, 2005.</p>
+<div class="section" id="individual-ensemble-members">
+<h3>Individual Ensemble Members<a class="headerlink" href="#individual-ensemble-members" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X_inc_ave</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1e-7</span>
+
+<span class="c1"># The offset by DA_freq looks at the previous posterior</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="n">ensX</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">]</span>
+
+<span class="c1"># Mid-point of trajectory</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_input</span> <span class="o">+</span> <span class="n">ensX</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">])</span>
+
+<span class="n">xinc_output</span> <span class="o">=</span> <span class="n">X_inc_ave</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">]</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">p18</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.000707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0130</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0190</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.275</span><span class="p">]</span>  <span class="c1"># Polynomial from Wilks, 2005</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;All time, all individial k, and all ensemble members&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="s2">&quot;k.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member $X_i(k,t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member increment $\dot</span><span class="si">{X}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+    <span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member $X_i(k,t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member increment $\dot</span><span class="si">{X}</span><span class="s2">$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fb819358a72a087e3a1d5da5c2eeb0a0837d62e32c6931bc747d6fa52a7ac332.png" src="../_images/fb819358a72a087e3a1d5da5c2eeb0a0837d62e32c6931bc747d6fa52a7ac332.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xl</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mi">19</span>
+<span class="n">si</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span>
+
+<span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="n">l_obs</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Ensemble member </span><span class="si">%i</span><span class="s2"> , k = </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">,</span> <span class="n">X_truth</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">,</span> <span class="n">ensX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="n">e</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble member forecast&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+    <span class="n">ensX</span><span class="p">[</span><span class="n">si</span><span class="p">::</span><span class="n">si</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">e</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_inc</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">e</span><span class="p">][</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span>
+    <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble member prior&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">ensX</span><span class="p">[</span><span class="n">si</span><span class="p">::</span><span class="n">si</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">e</span><span class="p">][</span><span class="n">l</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble member post&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time, t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/187dd89bfb14cb0c0de825a2a4aa1ef68ab8d7160772ebe20369b1d3ff9635c3.png" src="../_images/187dd89bfb14cb0c0de825a2a4aa1ef68ab8d7160772ebe20369b1d3ff9635c3.png" />
+</div>
+</div>
+</div>
+<div class="section" id="mean-over-ensemble-members">
+<h3>Mean over Ensemble Members<a class="headerlink" href="#mean-over-ensemble-members" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X_inc_ave</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1e-7</span>
+
+<span class="c1"># The offset by DA_freq looks at the previous posterior</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="n">meanX</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">]</span>
+
+<span class="c1"># Mid-point of trajectory</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_input</span> <span class="o">+</span> <span class="n">meanX</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span> <span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">])</span>
+
+<span class="n">xinc_output</span> <span class="o">=</span> <span class="n">X_inc_ave</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">jj</span><span class="p">]</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">p18</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.000707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0130</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0190</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.275</span><span class="p">]</span>  <span class="c1"># Polynomial from Wilks, 2005</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;All time, all individial k, mean over ensemble members&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="s2">&quot;k.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member $X_i(k,t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member increment $\dot</span><span class="si">{X}</span><span class="s2">$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+    <span class="n">x_input</span><span class="p">,</span> <span class="n">xinc_output</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member $X_i(k,t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Ensemble member increment $\dot</span><span class="si">{X}</span><span class="s2">$&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/35891f9601aed03abb4796870d3915044209848b7e2acc1d2869a12d8f50e220.png" src="../_images/35891f9601aed03abb4796870d3915044209848b7e2acc1d2869a12d8f50e220.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xl</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">si</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DA_freq</span>
+
+<span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="n">l_obs</span> <span class="o">==</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Ensemble mean, k = </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">,</span> <span class="n">X_truth</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Truth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">,</span>
+    <span class="n">meanX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">ensX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">meanX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">ensX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble spread&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">,</span> <span class="n">meanX</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble mean forecast&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+    <span class="n">meanX</span><span class="p">[</span><span class="n">si</span><span class="p">::</span><span class="n">si</span><span class="p">,</span> <span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">-</span> <span class="n">X_inc</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span>
+    <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble mean prior&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_truth</span><span class="p">[</span><span class="n">t_obs</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">meanX</span><span class="p">[</span><span class="n">si</span><span class="p">::</span><span class="n">si</span><span class="p">,</span> <span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Ensemble mean post&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xl</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time, t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$X(t)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4d416cb072df7b4411da7e9c6a7828f50b421f88bbe5f1caa3dcfca1b109f3c5.png" src="../_images/4d416cb072df7b4411da7e9c6a7828f50b421f88bbe5f1caa3dcfca1b109f3c5.png" />
+</div>
+</div>
+<p>With this, we have successfully <strong>created the DA increments</strong>.</p>
+</div>
+</div>
+<div class="section" id="learning-the-da-increments">
+<h2>Learning the DA Increments<a class="headerlink" href="#learning-the-da-increments" title="Permalink to this headline">#</a></h2>
+<p>With the dataset for DA Increments created above, we now build a neural network which will try to model that dataset so that we can use it for unseen observations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t_inc</span> <span class="o">=</span> <span class="n">t_truth</span><span class="p">[</span>
+    <span class="n">t_obs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="p">]</span>  <span class="c1"># These are the times in the &quot;real world&quot; when observations were made</span>
+<span class="n">dt_inc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t_inc</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Time interval between increments</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">t_truth</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Time-step of &quot;real world&quot; model</span>
+<span class="n">da_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt_inc</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span>
+
+<span class="c1"># Data from DA system (increments for individual ensemble members)</span>
+<span class="n">x_input</span> <span class="o">=</span> <span class="n">ensX</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">da_interval</span><span class="p">]</span>
+<span class="n">X_tend</span> <span class="o">=</span> <span class="n">X_inc</span> <span class="o">/</span> <span class="n">dt_inc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="observing-the-dataset">
+<h3>Observing the Dataset<a class="headerlink" href="#observing-the-dataset" title="Permalink to this headline">#</a></h3>
+<p>As a sanity check, we look at the data for obvious structure. A polyfit to the data will compare well to Wilks 2005, if the data is similar in distribution. We show Wilks 2005 and the 4th order polyfit for reference but neither are used or needed for training the neural network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A simple scatter plot of x_tend against x_input</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">p18</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.000707</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0130</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0190</span><span class="p">,</span> <span class="mf">1.59</span><span class="p">,</span> <span class="mf">0.275</span><span class="p">]</span>  <span class="c1"># Polynomial from Wilks, 2005</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="s2">&quot;k.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d2ba58d0f3ec2ab4849fa849a5f855ab1d3202422071d7c120dca33da91207e4.png" src="../_images/d2ba58d0f3ec2ab4849fa849a5f855ab1d3202422071d7c120dca33da91207e4.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A PDf of x_tend against x_input</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+    <span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+    <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+    <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">)),</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ lin. regr.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X$_k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Missing X$_k$ tendency&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Conventional linear regression&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a201f87990336e912509fd672ffc411b9733c850c3d5ecdf2120313382d708d2.png" src="../_images/a201f87990336e912509fd672ffc411b9733c850c3d5ecdf2120313382d708d2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="creating-the-dataset-split">
+<h3>Creating the Dataset Split<a class="headerlink" href="#creating-the-dataset-split" title="Permalink to this headline">#</a></h3>
+<p>We partition the dataset into <strong>training</strong> (seen by the network during optimization of the weights) and <strong>validation</strong> (used for evaluation) sets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_size</span> <span class="o">=</span> <span class="n">x_input</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+<span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">x_input</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training set size =&quot;</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="s2">&quot;out of&quot;</span><span class="p">,</span> <span class="n">x_input</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># Convert the data to type float32</span>
+<span class="n">x_input</span><span class="p">,</span> <span class="n">X_tend</span> <span class="o">=</span> <span class="n">x_input</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">X_tend</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[:</span><span class="n">train_size</span><span class="p">]</span>
+<span class="n">Y_train</span> <span class="o">=</span> <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[:</span><span class="n">train_size</span><span class="p">]</span>
+<span class="n">X_val</span> <span class="o">=</span> <span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">train_size</span><span class="p">:]</span>
+<span class="n">Y_val</span> <span class="o">=</span> <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">train_size</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training set size = 112000 out of 160000
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="building-the-dataset">
+<h3>Building the Dataset<a class="headerlink" href="#building-the-dataset" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="c1"># Training Dataset</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_train</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">Y_train</span><span class="p">))</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Validation Dataset</span>
+<span class="n">val_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_val</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">Y_val</span><span class="p">))</span>
+<span class="n">val_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="define-the-model">
+<h3>Define the Model<a class="headerlink" href="#define-the-model" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NetANN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="define-the-training-and-test-functions">
+<h3>Define the Training and Test Functions<a class="headerlink" href="#define-the-training-and-test-functions" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train the network for one epoch&quot;&quot;&quot;</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+    <span class="n">train_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+        <span class="c1"># Get predictions</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># This if block is needed to add a dummy dimension if our inputs are 1D</span>
+            <span class="c1"># (where each number is a different sample)</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">network</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">batch_x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
+
+        <span class="c1"># Compute the loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">)</span>
+        <span class="n">train_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="c1"># Clear the gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># Backpropagation to compute the gradients and update the weights</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">train_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">loader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the network&quot;&quot;&quot;</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># Evaluation mode (important when having dropout layers)</span>
+
+    <span class="n">test_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+            <span class="c1"># Get predictions</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># This if block is needed to add a dummy dimension if our inputs are 1D</span>
+                <span class="c1"># (where each number is a different sample)</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">network</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">batch_x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
+
+            <span class="c1"># Compute the loss</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">)</span>
+            <span class="n">test_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="c1"># Get an average loss for the entire dataset</span>
+        <span class="n">test_loss</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">test_loss</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train and validate the network&quot;&quot;&quot;</span>
+    <span class="n">train_losses</span><span class="p">,</span> <span class="n">val_losses</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">train_loss</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+        <span class="n">val_loss</span> <span class="o">=</span> <span class="n">test_model</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">)</span>
+        <span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+        <span class="n">val_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_loss</span><span class="p">)</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training completed in </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="p">)</span><span class="si">}</span><span class="s2"> seconds.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train_losses</span><span class="p">,</span> <span class="n">val_losses</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="train-the-network">
+<h3>Train the Network<a class="headerlink" href="#train-the-network" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the network</span>
+<span class="n">nn_3l</span> <span class="o">=</span> <span class="n">NetANN</span><span class="p">(</span><span class="n">W</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># MSE loss function</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+<span class="c1"># Adam optimizer</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">nn_3l</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.003</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">train_loss</span><span class="p">,</span> <span class="n">val_loss</span> <span class="o">=</span> <span class="n">fit_model</span><span class="p">(</span>
+    <span class="n">nn_3l</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">n_epochs</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training completed in 21 seconds.
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="visualizing-the-results">
+<h3>Visualizing the Results<a class="headerlink" href="#visualizing-the-results" title="Permalink to this headline">#</a></h3>
+<p>Comparing the training and validation loss curves</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_loss</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">val_loss</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Validation loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2d60ae3d9434785e4e0b6c9751201d1d314b1cbf2cba10bca7361cf4af952f64.png" src="../_images/2d60ae3d9434785e4e0b6c9751201d1d314b1cbf2cba10bca7361cf4af952f64.png" />
+</div>
+</div>
+<p>Since the NN has one input and one output, we can plot it as a function <span class="math notranslate nohighlight">\(nn(X)\)</span> (orange), and compare it to the polyfit (blue) and Wilks 2005 polynomial (black dashed).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+    <span class="n">x_input</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+    <span class="n">X_tend</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+    <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">)),</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Greys</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p18</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ - Wilks, 2005&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$P_4(X_k)$ lin. regr.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">nn_3l</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;NN-3L&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;X$_k$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Missing X$_k$ tendency&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NN fit&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a39d33b610e1b7da244798e50c20f211cfdf0e67696a34c2f49ec1dc302d588e.png" src="../_images/a39d33b610e1b7da244798e50c20f211cfdf0e67696a34c2f49ec1dc302d588e.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="DA_demo_L96.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="symbolic_methods_comparison.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-model-its-parameters-and-other-utility-functions">Defining the Model, its Parameters, and Other Utility Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-general-circulation-model-gcm">Defining the General Circulation Model (GCM)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-the-utility-functions">Defining the Utility Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-lorenz-1996-model-parameters">Initializing the Lorenz 1996 Model Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#suggestions-for-modifying-the-l96-model-paramters">Suggestions for Modifying the L96 Model Paramters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-truth-run-from-two-time-scale-l96-model">Generate <code class="docutils literal notranslate"><span class="pre">Truth</span></code> Run from Two Time-Scale L96 Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-synthetic-observations">Generate Synthetic Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-localization-to-the-background-model-covariance">Apply Localization to the Background Model Covariance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-data-assimilation">Run Data Assimilation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing-and-visualization">Post Processing and Visualization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examining-the-relationship-between-the-members-and-their-increments">Examining the Relationship between the Members and their Increments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-ensemble-members">Individual Ensemble Members</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-over-ensemble-members">Mean over Ensemble Members</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-the-da-increments">Learning the DA Increments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#observing-the-dataset">Observing the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-dataset-split">Creating the Dataset Split</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-dataset">Building the Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-model">Define the Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-training-and-test-functions">Define the Training and Test Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train-the-network">Train the Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-results">Visualizing the Results</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

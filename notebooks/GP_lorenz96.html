@@ -1,0 +1,1365 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gaussian Processes &#8212; Learning Machine Learning with Lorenz-96</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/GP_lorenz96';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CNNs and Polynomial Maps" href="local_map_L96_and_Burgers.html" />
+    <link rel="prev" title="Random Forest" href="random_forest_parameterization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/newlogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/newlogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Learning Machine Learning with Lorenz-96</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lorenz-96 and General Circulation Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="L96-two-scale-description.html">The Lorenz-96 Two-Timescale System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-analogue.html">The Lorenz-96 and its GCM Analog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gcm-parameterization-problem.html">GCM parameterizations, skill metrics, and other sources of uncertainity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="estimating-gcm-parameters.html">Tuning GCM Parameterizations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_ML_and_NNs.html">Introduction to Machine Learning and Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_offline_training_NN.html">Using Neural Networks for L96 Parameterization: Offline Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_implement_NN.html">Using Neural Networks for L96 Parameterization: Online Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L96_online_training_NN.html">Using Neural Networks for L96 Parameterization: Online Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Improving_Neural_networks.html">Improving Performance of Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Neural-Network-Interpretation.html">Interpreting Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constraints.html">Adding constraints to Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Assimilation with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="DA_demo_L96.html">Data Assimilation demo in the Lorenz 96 (L96) two time-scale model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning-DA-increments.html">Learning Data Assimilation Increments</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Equation Discovery with Lorenz-96</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="symbolic_methods_comparison.html">Introduction to Equation Discovery - Comparing Symbolic Regression Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sindy_L96_2scale.html">Applying SINDy equation identification to L96</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="symbolic_vs_nn_multiscale_L96.html">Symbolic Regression vs. Neural Networks on Multiscale L96</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other ML approaches for Lorenz-96</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="random_forest_parameterization.html">Random Forest</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Gaussian Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_map_L96_and_Burgers.html">CNNs and Polynomial Maps</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="L96_ResNet_RNN.html">ResNet and Recurrent Neural Networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End Matter</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="closing_remarks.html">Outlook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing this book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/GP_lorenz96.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Gaussian Processes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-lorenz-96">Recap: Lorenz 96</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-gaussian-processes-gps">Recap: Gaussian Processes (GPs)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-inference">Exact inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-inference">Variational inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-gps">Sparse GPs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learn-the-sub-grid-tendencies-offline">Learn the sub-grid tendencies offline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-mappings-with-a-linear-kernel">Local mappings with a linear kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-mappings-with-a-non-linear-kernel">Local mappings with a non-linear kernel</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implement-the-linear-gp-parameterisation-in-an-online-setting">Implement the linear GP parameterisation in an online setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-multi-task-gps-to-exploit-non-local-features">Use multi-task GPs to exploit non-local features</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="tex2jax_ignore mathjax_ignore section" id="gaussian-processes">
+<h1>Gaussian Processes<a class="headerlink" href="#gaussian-processes" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">gpflow</span>
+<span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">L96</span><span class="p">,</span> <span class="n">L96_eq1_xdot</span><span class="p">,</span> <span class="n">integrate_L96_2t</span>
+<span class="kn">from</span> <span class="nn">L96_model</span> <span class="kn">import</span> <span class="n">EulerFwd</span><span class="p">,</span> <span class="n">RK2</span><span class="p">,</span> <span class="n">RK4</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TF_USE_LEGACY_KERAS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
+
+<span class="n">time_method</span> <span class="o">=</span> <span class="n">RK4</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-10-12 17:40:58.043939: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2024-10-12 17:40:58.047042: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2024-10-12 17:40:58.055942: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-10-12 17:40:58.070076: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-10-12 17:40:58.074200: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-10-12 17:40:58.085434: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-10-12 17:40:58.838296: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="recap-lorenz-96">
+<h2>Recap: Lorenz 96<a class="headerlink" href="#recap-lorenz-96" title="Permalink to this headline">#</a></h2>
+<div class="figure align-default" id="l96-equation-figure">
+<a class="reference internal image-reference" href="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png"><img alt="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png" src="https://www.researchgate.net/publication/319201436/figure/fig1/AS:869115023589376&#64;1584224577926/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text"><em>Visualisation of a two-scale Lorenz ‘96 system with J = 8 and K = 6. Global-scale variables (<span class="math notranslate nohighlight">\(X_k\)</span>) are updated based on neighbouring variables and on the local-scale variables (<span class="math notranslate nohighlight">\(Y_{j,k}\)</span>) associated with the corresponding global-scale variable. Local-scale variabless are updated based on neighbouring variables and the associated global-scale variable. The neighbourhood topology of both local and global-scale variables is circular. Image from <a class="reference external" href="https://www.researchgate.net/figure/Visualisation-of-a-two-scale-Lorenz-96-system-with-J-8-and-K-6-Global-scale-values_fig1_319201436">Exploiting the chaotic behaviour of atmospheric models with reconfigurable architectures - Scientific Figure on ResearchGate.</a></em>.</span><a class="headerlink" href="#l96-equation-figure" title="Permalink to this image">#</a></p>
+</div>
+<p><span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="E.N. Lorenz. Predictability: a problem partly solved. Seminar on Predictability, 1:1-18, 1995. URL: https://www.ecmwf.int/node/10829.">Lorenz, 1995</a>]</span> describes a “two time-scale” model in two equations (2 and 3) which are:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-ff63476e-ce09-461f-8e22-8e7b392e47b4">
+<span class="eqno">(21)<a class="headerlink" href="#equation-ff63476e-ce09-461f-8e22-8e7b392e47b4" title="Permalink to this equation">#</a></span>\[\begin{align}
+\frac{d}{dt} X_k
+&amp;= - X_{k-1} \left( X_{k-2} - X_{k+1} \right) - X_k + F - \left( \frac{hc}{b} \right) \sum_{j=0}^{J-1} Y_{j,k}
+\\
+\frac{d}{dt} Y_{j,k}
+&amp;= - cbY_{j+1,k} \left( Y_{j+2,k} - X_{j-1,k} \right) - c Y_{j,k} + \frac{hc}{b} X_k
+\end{align}\]</div>
+</div>
+<div class="section" id="recap-gaussian-processes-gps">
+<h2>Recap: Gaussian Processes (GPs)<a class="headerlink" href="#recap-gaussian-processes-gps" title="Permalink to this headline">#</a></h2>
+<div class="section" id="exact-inference">
+<h3>Exact inference<a class="headerlink" href="#exact-inference" title="Permalink to this headline">#</a></h3>
+<p>Consider the following case where we have a dataset <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> comprising <span class="math notranslate nohighlight">\(n\)</span> pairs of observations <span class="math notranslate nohighlight">\(\mathcal{D} = \{(x_1,y_1),(x_2,y_2),...,(x_n,y_n)\}\)</span>, where <span class="math notranslate nohighlight">\(x_i\)</span> could e.g., be the coarse-grid term at time <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(y_i\)</span> the corresponding sub-grid term. In the standard supervised learning problem, we wish to recover the function <span class="math notranslate nohighlight">\(f\)</span> which maps a given input <span class="math notranslate nohighlight">\(x_i\)</span> to a given output <span class="math notranslate nohighlight">\(y_i\)</span>, where we assume that the outputs have been corrupted by some random noise <span class="math notranslate nohighlight">\(\varepsilon_i\)</span>:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-af4dac2e-a122-4f2b-83ce-141921750bcf">
+<span class="eqno">(22)<a class="headerlink" href="#equation-af4dac2e-a122-4f2b-83ce-141921750bcf" title="Permalink to this equation">#</a></span>\[\begin{equation}
+y_i = f(x_i) + \varepsilon_i,
+\end{equation}\]</div>
+<p>or in vector format:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-52c1d0d1-fb89-4aa2-8eaa-e89371eeb037">
+<span class="eqno">(23)<a class="headerlink" href="#equation-52c1d0d1-fb89-4aa2-8eaa-e89371eeb037" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\textbf{y} = f(\textbf{x}) + \pmb{\varepsilon}. 
+\end{equation}\]</div>
+<p>Then after learning the function <span class="math notranslate nohighlight">\(f\)</span>, we wish to make reliable predictions at un-observed test input locations <span class="math notranslate nohighlight">\(\textbf{x}_* \in \mathbb{R}^{n_*}\)</span>, such that:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-70ef2112-2542-4876-a1d9-8bb28a6d5001">
+<span class="eqno">(24)<a class="headerlink" href="#equation-70ef2112-2542-4876-a1d9-8bb28a6d5001" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\textbf{f}_* = f(\textbf{x}_*). 
+\end{equation}\]</div>
+<p>In the GP framework, we assume that the noise term <span class="math notranslate nohighlight">\(\pmb{\varepsilon}\)</span> represents independent and identically distributed zero-mean Gaussian noise, with variance <span class="math notranslate nohighlight">\(\sigma^2\)</span>, such that <span class="math notranslate nohighlight">\(\varepsilon_i \sim \mathcal{N}(0,\sigma^2)\)</span>, and that the function <span class="math notranslate nohighlight">\(f\)</span> itself is a GP:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c5cca7fe-8018-4070-8b42-34a08f9eb81f">
+<span class="eqno">(25)<a class="headerlink" href="#equation-c5cca7fe-8018-4070-8b42-34a08f9eb81f" title="Permalink to this equation">#</a></span>\[\begin{equation}
+f(\pmb{\phi}) \sim \mathcal{GP}(m(\pmb{\phi}),k(\pmb{\phi},\pmb{\phi})),
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(m(\pmb{\phi})\)</span> and <span class="math notranslate nohighlight">\(k(\pmb{\phi},\pmb{\phi})\)</span> are the mean and covariance (or kernel) of the GP respectively, and <span class="math notranslate nohighlight">\(\pmb{\phi}\)</span> represents arbitrary function inputs - either  <span class="math notranslate nohighlight">\(\textbf{x}\)</span> or <span class="math notranslate nohighlight">\(\textbf{x}_*\)</span>. Through the assumption that <span class="math notranslate nohighlight">\(f\)</span> is a GP, we effectively place prior probabilities over all conceviable functions <span class="math notranslate nohighlight">\(f_i\)</span>, where <span class="math notranslate nohighlight">\(i = \{1,2,...,\infty\}\)</span>, but assign higher probabilities to specific types of functions (e.g., linear, periodic, anisotropic, non-stationary etc) through our choice of <span class="math notranslate nohighlight">\(m(\pmb{\phi})\)</span> and <span class="math notranslate nohighlight">\(k(\pmb{\phi},\pmb{\phi})\)</span>. After which, we use the observations <span class="math notranslate nohighlight">\(\textbf{y}\)</span> to update these prior probabilities in the form of a posterior distribution over functions. Let’s see how we do this in practice:</p>
+<p>Continuing with the notation that <span class="math notranslate nohighlight">\(\textbf{x} = \{x_1,x_2,...,x_n\}\)</span> represents the set of training inputs, and <span class="math notranslate nohighlight">\(\textbf{x}_* = \{x_{*_1},x_{*_2},...,x_{*_{n_*}}\}\)</span> the set of test inputs, we wish to train a model which is able to make accurate predictions at the test locations: <span class="math notranslate nohighlight">\(\textbf{f}_* = \{f(x_{*_1}),f(x_{*_2}),...,f(x_{*_{n_*}})\}\)</span>. We start by defining a series of covariance functions associated with the training and test inputs:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-651d0647-bdd5-462e-aabe-91a175423a35">
+<span class="eqno">(26)<a class="headerlink" href="#equation-651d0647-bdd5-462e-aabe-91a175423a35" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{aligned}
+\textbf{K} &amp;= k(\textbf{x},\textbf{x}) + \sigma^2\pmb{I} \\
+\textbf{k}_{*} &amp;= k(\textbf{x},\textbf{x}_*) \\
+\pmb{k}_* &amp;= k(\textbf{x}_*,\textbf{x}_*).
+\end{aligned}
+\end{equation}\]</div>
+<p>The covariance function of the GP prior is a particularly important concept, as this is what allows us to model the different kinds of functions described above, so consideration should go into choosing the most appropriate function (there are data driven ways to make this choice. We could e.g., use cross-validation, or more commonly in Bayesian statistics; compare models via the <em>log marginal likelihood</em> - GPflow is setup to do the latter). Now, because a GP can ultimately be described as a collection of random Gaussian variables, under our GP prior (defined by <span class="math notranslate nohighlight">\(m(\pmb{\phi})\)</span> and <span class="math notranslate nohighlight">\(k(\pmb{\phi},\pmb{\phi})\)</span>), the function values <span class="math notranslate nohighlight">\(\textbf{f}_*\)</span> and the training observations <span class="math notranslate nohighlight">\(\textbf{y}\)</span> are considered to form a joint Gaussian distribution:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-721f5c2e-69c6-4d2d-9b57-5a7dff7750be">
+<span class="eqno">(27)<a class="headerlink" href="#equation-721f5c2e-69c6-4d2d-9b57-5a7dff7750be" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{bmatrix}
+\textbf{f}_* \\
+\textbf{y}
+\end{bmatrix} \sim \mathcal{N}\Bigg(
+\begin{bmatrix}
+m(\textbf{x}_*) \\
+m(\textbf{x})
+\end{bmatrix},
+\begin{bmatrix}
+\pmb{k}_* &amp; \textbf{k}_*^\text{T} \\
+\textbf{k}_* &amp; \textbf{K}
+\end{bmatrix} \Bigg),
+\end{equation}\]</div>
+<p>where we see that the marginal distributions (under the prior) of both <span class="math notranslate nohighlight">\(\textbf{f}_*\)</span> and <span class="math notranslate nohighlight">\(\textbf{y}\)</span> are given by:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-ebcd7220-cd03-4e8e-a897-6b11c0b182e9">
+<span class="eqno">(28)<a class="headerlink" href="#equation-ebcd7220-cd03-4e8e-a897-6b11c0b182e9" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\textbf{f}_* \sim \mathcal{N}\big(m(\textbf{x}_*),\pmb{k}_*\big) \quad , \quad \textbf{y} \sim \mathcal{N}\big(m(\textbf{x}),\textbf{K}\big).
+\label{marginalsGP}
+\end{equation}\]</div>
+<p>In reality however, we are interested in the conditional distribution of the function values, given the training data - <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{y},\textbf{x},\textbf{x}_*)\)</span>, which is also Gaussian such that <span class="math notranslate nohighlight">\(\textbf{f}_* | \textbf{y},\textbf{x},\textbf{x}_* \sim \mathcal{N}(\bar{\textbf{f}}_*,\sigma^2_{\textbf{f}_*})\)</span>. The mean and covariance of this distribution then tells us everything we need about the posterior distribution of the function values, and can be derived analytically through a bit of linear algebra (see <span id="id2">[<a class="reference internal" href="../bibliography.html#id22" title="Carl Edward Rasmussen and Christopher K. I. Williams. Gaussian Processes for Machine Learning. The MIT Press, 2005. URL: http://dx.doi.org/10.7551/mitpress/3206.001.0001, doi:10.7551/mitpress/3206.001.0001.">Rasmussen and Williams, 2005</a>]</span> or <span id="id3">[<a class="reference internal" href="../bibliography.html#id23" title="Christopher M. Bishop. Pattern Recognition and Machine Learning (Information Science and Statistics). Springer-Verlag, Berlin, Heidelberg, 2006. ISBN 0387310738.">Bishop, 2006</a>]</span> for details). Here is the final solution:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c093c97f-76fa-4ced-bed9-42c2b683fd8b">
+<span class="eqno">(29)<a class="headerlink" href="#equation-c093c97f-76fa-4ced-bed9-42c2b683fd8b" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{aligned}
+\bar{\textbf{f}}_* &amp;= m(\textbf{x}_*) + \textbf{k}_*^\text{T}\textbf{K}^{-1}\big(\textbf{y} - m(\textbf{x})\big) \\
+\sigma^2_{\textbf{f}_*} &amp;= \pmb{k}_* - \textbf{k}_*^\text{T}\textbf{K}^{-1}\textbf{k}_*.
+\end{aligned}
+\end{equation}\]</div>
+</div>
+<div class="section" id="variational-inference">
+<h3>Variational inference<a class="headerlink" href="#variational-inference" title="Permalink to this headline">#</a></h3>
+<p>The analytical solution in the above description relies on the assumption that the data are Gaussian distributed, which makes the maths straightfoward because the product of 2 Gaussians (the prior and likelihood) results in another Gaussian (the posterior). In the case where the data are not Gaussian distributed, the resultant posterior will no longer have a closed-form solution, so instead we need to approximate the posterior as a multivarite Gaussian (or other) using variational techniques. To do this, GPflow implements the approach outlined in <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/c.archambeau/publ/neco_mo09_web.pdf">Opper and Archambeau, (2009)</a>, and we give a brief summary here to follow on from the section above.</p>
+<p>Recall the posterior predictive distribution from before: <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{y})\)</span>, where we have removed the dependence on the inputs <span class="math notranslate nohighlight">\(\textbf{x}\)</span> and <span class="math notranslate nohighlight">\(\textbf{x}_*\)</span> to keep the notation uncluttered. In the following discussion we assume that this distribution is no longer Gaussian, because e.g., the observations <span class="math notranslate nohighlight">\(\textbf{y}\)</span> are no longer Gaussian, and hence we no longer have a Gaussian likelihood. Therefore instead, we wish to approximate <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{y})\)</span> by a multivariate Gaussian <span class="math notranslate nohighlight">\(q(\textbf{f}_*) \sim \mathcal{N}(\textbf{m},\textbf{S})\)</span>. This is achieved by choosing the values of <span class="math notranslate nohighlight">\(\textbf{m}\)</span> and <span class="math notranslate nohighlight">\(\textbf{S}\)</span> which minimise the <em>variational free energy</em> cost function:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-3cb3ec7d-849d-41c8-9526-67e14c7d8382">
+<span class="eqno">(30)<a class="headerlink" href="#equation-3cb3ec7d-849d-41c8-9526-67e14c7d8382" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\mathcal{J}\big(q(\textbf{f}_*)\big) = - \ln p(\textbf{y}) + \mathcal{K}\mathcal{L}[q(\textbf{f}_*) \vert\vert p(\textbf{f}_* | \textbf{y})], 
+\end{equation}\]</div>
+<p>where</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c6744db8-6d71-4a5e-910b-c3c14eb23a85">
+<span class="eqno">(31)<a class="headerlink" href="#equation-c6744db8-6d71-4a5e-910b-c3c14eb23a85" title="Permalink to this equation">#</a></span>\[\begin{equation}
+p(\textbf{y}) = \int p(\textbf{y} | \textbf{f}_*)p(\textbf{f}_*) \ \ d\textbf{f}_*
+\end{equation}\]</div>
+<p>is the marginal likelihood (the probability of the observations under the model prior; commonly referred to as the <em>evidence</em>), and</p>
+<div class="amsmath math notranslate nohighlight" id="equation-929a9224-1ed5-4109-be46-6af6ba239213">
+<span class="eqno">(32)<a class="headerlink" href="#equation-929a9224-1ed5-4109-be46-6af6ba239213" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\mathcal{K}\mathcal{L}[q(\textbf{f}_*) \vert\vert p(\textbf{f}_* | \textbf{y})] = \int q(\textbf{f}_*)\ln \dfrac{q(\textbf{f}_*)}{p(\textbf{f}_* | \textbf{y})} \ \ d\textbf{f}_*
+\end{equation}\]</div>
+<p>is the Kullback-Leibler divergence which compares the similarity of two probability distributions (in this case, <span class="math notranslate nohighlight">\(q(\textbf{f}_*)\)</span> and <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{y}\)</span>)).</p>
+<p>The variational free energy <span class="math notranslate nohighlight">\(\mathcal{J}\big(q(\textbf{f}_*)\big)\)</span> represents an upper bound on the negative (log) evidence <span class="math notranslate nohighlight">\(-\ln p(\textbf{y})\)</span>, and is the quantity that GPflow minimises in the variational setting. It is however common practice to track the maximisation of the negative variational free energy, which then represents a lower bound on the (log) evidence, known as the <em>Evidence Lower BOund</em> (ELBO):</p>
+<div class="amsmath math notranslate nohighlight" id="equation-43b26120-b9d3-4ba4-83f1-0a9db5a23605">
+<span class="eqno">(33)<a class="headerlink" href="#equation-43b26120-b9d3-4ba4-83f1-0a9db5a23605" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\ln p(\textbf{y}) = \text{ELBO} - \mathcal{K}\mathcal{L}[q(\textbf{f}_*) \vert\vert p(\textbf{f}_* | \textbf{y})] \geq \text{ELBO}.
+\end{equation}\]</div>
+<p>Once the values of <span class="math notranslate nohighlight">\(\textbf{m}\)</span> and <span class="math notranslate nohighlight">\(\textbf{S}\)</span> have been optimised, the Gaussian approximation for the mean and covariance of the posterior can be computed as:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-b84f5245-4d1a-4c8e-a3bb-aae6f91ca99a">
+<span class="eqno">(34)<a class="headerlink" href="#equation-b84f5245-4d1a-4c8e-a3bb-aae6f91ca99a" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{aligned}
+\bar{\textbf{f}}_* &amp;= m(\textbf{x}_*) + \textbf{k}_*^\text{T}\textbf{K}^{-1}\big(\textbf{m} - m(\textbf{x})\big) \\
+\sigma^2_{\textbf{f}_*} &amp;= \pmb{k}_* + \textbf{k}_*^\text{T}\textbf{K}^{-1}\big(\textbf{S} - \textbf{K}\big)\textbf{K}^{-1}\textbf{k}_*.
+\end{aligned}
+\end{equation}\]</div>
+<p>Note that in practice there is a fair bit of maths involved in computing <span class="math notranslate nohighlight">\(\mathcal{J}\big(q(\textbf{f}_*)\big)\)</span> which we do not show here, however the reader is referred to the <a class="reference external" href="https://gpflow.github.io/GPflow/2.4.0/notebooks/theory/vgp_notes.html">GPflow docs</a> and the <a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/c.archambeau/publ/neco_mo09_web.pdf">Opper and Archambeau, (2009)</a> paper for more information. See also this nice <a class="reference external" href="https://github.com/sotakao/moap-bml-workshop/blob/main/2_sparse_gp.ipynb">Jupyter notebook</a> workthrough by So Takao from the University College London Centre for AI, which includes the derivations of the KL divergence term in the Appendix.</p>
+</div>
+<div class="section" id="sparse-gps">
+<h3>Sparse GPs<a class="headerlink" href="#sparse-gps" title="Permalink to this headline">#</a></h3>
+<p>Due to the need to invert the kernel matrix <span class="math notranslate nohighlight">\(\textbf{K}\)</span> (which has size <span class="math notranslate nohighlight">\(n \times n\)</span>) in both the exact and variational settings, GP problems scale with complexity <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>. Therefore for data sets with more than a few thousand training points, the standard GP implementations above become problematic. A solution to this is to consider sparse GPs which rely on a set of <em>inducing variables</em> to learn the function <span class="math notranslate nohighlight">\(f\)</span>, as outlined in <a class="reference external" href="https://proceedings.mlr.press/v5/titsias09a/titsias09a.pdf">Titsias, (2009)</a>. Note that GPflow has 2 commonly used classes for implementation of the inducing points method, namely ‘SGPR’ and ‘SVGP’. Although at first it perhaps may seem that ‘SVGP’ is for variational inference and ‘SGPR’ is for exact inference, this is not actually the case. Sparse learning requires variational inference in either case, it is just that ‘SVGP’ is used for non-Gaussian data (as described above), while ‘SGPR’ is used for Gaussian data. Let’s introduce the inducing points method now:</p>
+<p>Consider the set of points <span class="math notranslate nohighlight">\(\textbf{z} = \{z_1,z_2,...,z_m\}\)</span> where <span class="math notranslate nohighlight">\(m &lt;&lt; n\)</span>, which could perhaps correspond to a subset of the training inputs, or a hold-out set etc, however the important point is that they exist in the same space as the inputs. These points are known as the <em>inducing points</em>, and subsequently their corresponding latent function values <span class="math notranslate nohighlight">\(\textbf{u} = \{f(z_1),f(z_2),...,f(z_m)\}\)</span> are known as the <em>inducing variables</em>. If we then assume that the posterior predictive function values at the input locations <span class="math notranslate nohighlight">\(\textbf{x}\)</span> and <span class="math notranslate nohighlight">\(\textbf{x}_*\)</span> (given by <span class="math notranslate nohighlight">\(\textbf{f}\)</span> and <span class="math notranslate nohighlight">\(\textbf{f}_*\)</span> respectively) are conditionally independent given <span class="math notranslate nohighlight">\(\textbf{u}\)</span>, we can describe the posterior <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{y})\)</span> as a function of <span class="math notranslate nohighlight">\(\textbf{u}\)</span> as follows:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-63b6ed41-0cfb-4832-8f30-ead10cd1255b">
+<span class="eqno">(35)<a class="headerlink" href="#equation-63b6ed41-0cfb-4832-8f30-ead10cd1255b" title="Permalink to this equation">#</a></span>\[\begin{equation}
+p(\textbf{f}_* | \textbf{y}) = \int p(\textbf{f}_* | \textbf{u})p(\textbf{u} | \textbf{y}) \ \ d\textbf{u}.
+\end{equation}\]</div>
+<p>We can subsequently derive an analytical solution for <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{u})\)</span> above by recalling in the first section on exact inference how <span class="math notranslate nohighlight">\(\textbf{y}\)</span> and <span class="math notranslate nohighlight">\(\textbf{f}_*\)</span> formed a joint Gaussian under the GP prior. The same principles apply here to <span class="math notranslate nohighlight">\(\textbf{u}\)</span> and <span class="math notranslate nohighlight">\(\textbf{f}_*\)</span>, hence the mean and covariance of <span class="math notranslate nohighlight">\(p(\textbf{f}_* | \textbf{u})\)</span> follows the same form as those defined by <span class="math notranslate nohighlight">\(\bar{\textbf{f}}_*\)</span> and <span class="math notranslate nohighlight">\(\sigma_{\textbf{f}_*}\)</span> previously, except this time we replace all occurrences of <span class="math notranslate nohighlight">\(\textbf{x}\)</span> with <span class="math notranslate nohighlight">\(\textbf{z}\)</span>, as well as re-defining the covariance matrices:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a429fc65-c329-4b97-88ba-f0825a4c6d75">
+<span class="eqno">(36)<a class="headerlink" href="#equation-a429fc65-c329-4b97-88ba-f0825a4c6d75" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\begin{aligned}
+\textbf{K} = k(\textbf{z},\textbf{z}) \\
+\textbf{k}_* = k(\textbf{z},\textbf{x}_*) \\
+\pmb{k}_* = k(\textbf{z},\textbf{z}).
+\end{aligned}
+\end{equation}\]</div>
+<p>The second distribution above, <span class="math notranslate nohighlight">\(p(\textbf{u} | \textbf{y})\)</span>, does not have a closed-form solution however, so we need to rely on variational inference to approximate it as a multivariate Gaussian <span class="math notranslate nohighlight">\(q(\textbf{u}) \sim \mathcal{N}(\textbf{m},\textbf{S})\)</span>. Similar to what we saw in the variational inference discussion above, both <span class="math notranslate nohighlight">\(\textbf{m}\)</span> and <span class="math notranslate nohighlight">\(\textbf{S}\)</span> (as well as <span class="math notranslate nohighlight">\(\textbf{z}\)</span>) can be optimised by minimising the variational free energy cost function <span class="math notranslate nohighlight">\(\mathcal{J}\big(q(\textbf{f}_*)\big)\)</span>. After which, we can produce an analytical solution for the approximate posterior mean and covariance as we have already seen, by once again replacing all occurrences of <span class="math notranslate nohighlight">\(\textbf{x}\)</span> with <span class="math notranslate nohighlight">\(\textbf{z}\)</span>, as well as re-defining the covariance matrices. This results in much cheaper inference than before as the covariance matrix <span class="math notranslate nohighlight">\(\textbf{K}\)</span> is now of size <span class="math notranslate nohighlight">\(m \times m\)</span>, hence the computational cost of the matrix inverse is now <span class="math notranslate nohighlight">\(\mathcal{O}(m^3)\)</span> as opposed to <span class="math notranslate nohighlight">\(\mathcal{O}(n^3)\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># - a GCM class without any parameterization</span>
+<span class="k">class</span> <span class="nc">GCM_no_param</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">time_stepping</span><span class="o">=</span><span class="n">time_method</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span> <span class="o">=</span> <span class="n">time_stepping</span>
+
+    <span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># X0 - initial conditions, dt - time increment, nt - number of forward steps to take</span>
+        <span class="c1"># param - parameters of our closure</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+            <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+
+
+<span class="c1"># - a GCM class including a linear parameterization in rhs of equation for tendency</span>
+
+
+<span class="k">class</span> <span class="nc">GCM</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">parameterization</span><span class="p">,</span> <span class="n">time_stepping</span><span class="o">=</span><span class="n">time_method</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span> <span class="o">=</span> <span class="n">parameterization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span> <span class="o">=</span> <span class="n">time_stepping</span>
+
+    <span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameterization</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># X0 - initial conditions, dt - time increment, nt - number of forward steps to take</span>
+        <span class="c1"># param - parameters of our closure</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+            <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+
+
+<span class="c1"># - a GCM class including a GP parameterization in rhs of equation for tendency</span>
+
+
+<span class="k">class</span> <span class="nc">GCM_GP</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">GP</span><span class="p">,</span> <span class="n">time_stepping</span><span class="o">=</span><span class="n">time_method</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GP</span> <span class="o">=</span> <span class="n">GP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span> <span class="o">=</span> <span class="n">time_stepping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stochastic</span> <span class="o">=</span> <span class="n">stochastic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local</span> <span class="o">=</span> <span class="n">local</span>
+
+    <span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">local</span><span class="p">:</span>  <span class="c1"># i.e. outputs are shape n*K</span>
+            <span class="n">X_ten</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># i.e. outputs are shape n x K</span>
+            <span class="n">X_augment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">X_ten</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">X_augment</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stochastic</span><span class="p">:</span>
+            <span class="n">f_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GP</span><span class="o">.</span><span class="n">predict_f_samples</span><span class="p">(</span>
+                <span class="n">X_ten</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="p">)</span>  <span class="c1"># produce 1 random sample from the posterior over functions</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f_mean</span><span class="p">,</span> <span class="n">f_variance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GP</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">X_ten</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">L96_eq1_xdot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">f_mean</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># X0 - initial conditions, dt - time increment, nt - number of forward steps to take</span>
+        <span class="c1"># param - parameters of our closure</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dt</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">X0</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nt</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_stepping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+            <span class="n">hist</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">time</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hist</span><span class="p">,</span> <span class="n">time</span>
+
+
+<span class="c1"># Define the function which will be used to track the optimisation of the models. Much of the code in the &#39;GP&#39;</span>
+<span class="c1"># function is borrowed from the example on the GPflow website:</span>
+<span class="c1"># https://gpflow.github.io/GPflow/2.4.0/notebooks/advanced/gps_for_big_data.html</span>
+
+
+<span class="k">def</span> <span class="nf">trainGP</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">766</span><span class="p">)</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="n">train_dataset</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">train_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">))</span>
+    <span class="n">training_loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">training_loss_closure</span><span class="p">(</span><span class="n">train_iter</span><span class="p">,</span> <span class="nb">compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">Adam</span><span class="p">()</span>
+
+    <span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+    <span class="k">def</span> <span class="nf">optimization_step</span><span class="p">(</span><span class="n">trainable_variables</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">training_loss</span><span class="p">,</span> <span class="n">trainable_variables</span><span class="p">)</span>
+
+    <span class="n">elbo_log</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">iters</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pred_error</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+        <span class="n">optimization_step</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">training_loss</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">prediction</span><span class="p">,</span> <span class="n">uncertainty</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">validation_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">pred_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">validation_data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">elbo_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+            <span class="n">iters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ELBO at step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">step</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ELBO at step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">iters</span><span class="p">,</span> <span class="n">elbo_log</span><span class="p">,</span> <span class="n">pred_error</span>
+
+
+<span class="k">def</span> <span class="nf">plot_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ELBO&quot;</span><span class="p">,</span> <span class="s2">&quot;MSE (Validation)&quot;</span><span class="p">]):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plots</span> <span class="o">=</span> <span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">plots</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;iteration&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="learn-the-sub-grid-tendencies-offline">
+<h2>Learn the sub-grid tendencies offline<a class="headerlink" href="#learn-the-sub-grid-tendencies-offline" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_steps</span> <span class="o">=</span> <span class="mi">20000</span>
+<span class="n">Forcing</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">time_steps</span>
+
+<span class="c1"># Create a &quot;real world&quot; with K=8 and J=32</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">L96</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">Forcing</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get training and validation data for the GP model</span>
+<span class="n">val_size</span> <span class="o">=</span> <span class="mi">4000</span>
+
+<span class="c1"># - Run the true state and output subgrid tendencies (the effect of Y on X is xytrue):</span>
+<span class="n">Xtrue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">xytrue</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_coupling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gcm_no_param</span> <span class="o">=</span> <span class="n">GCM_no_param</span><span class="p">(</span><span class="n">Forcing</span><span class="p">)</span>
+
+<span class="c1"># train:</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">Xtrue</span><span class="p">[:</span><span class="o">-</span><span class="n">val_size</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">Y_train</span> <span class="o">=</span> <span class="n">xytrue</span><span class="p">[:</span><span class="o">-</span><span class="n">val_size</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="c1"># test:</span>
+<span class="n">X_valid</span> <span class="o">=</span> <span class="n">Xtrue</span><span class="p">[</span><span class="o">-</span><span class="n">val_size</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">Y_valid</span> <span class="o">=</span> <span class="n">xytrue</span><span class="p">[</span><span class="o">-</span><span class="n">val_size</span><span class="p">:,</span> <span class="p">:]</span>
+
+<span class="n">n</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="local-mappings-with-a-linear-kernel">
+<h3>Local mappings with a linear kernel<a class="headerlink" href="#local-mappings-with-a-linear-kernel" title="Permalink to this headline">#</a></h3>
+<p>The linear GP kernel is equivalent to:</p>
+<p><span class="math notranslate nohighlight">\(k(\textbf{x},\textbf{x}') = \theta^2 \big(\textbf{x}\textbf{x}'^\text{T}\big)\)</span>, where <span class="math notranslate nohighlight">\(\theta\)</span> is a tunable hyperparameter.</p>
+<p>First we will build a GP with a linear kernel while assuming the outputs (i.e., each of the Ks) are independent.  The extension to learning non-linear functions is trivial. We simply define a new kernel, e.g., gpflow.kernels.Matern32(). Incorporating non-local information (i.e., from other ks (we have 8 ks in total)) is a
+little more tricky, but we will tackle this later.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">Y_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">x_valid</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># number of inducing variables</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">M</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+<span class="p">)</span>
+
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">Linear</span><span class="p">()</span>
+<span class="n">lik</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">likelihoods</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">()</span>
+<span class="n">gp_linear</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">SVGP</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">likelihood</span><span class="o">=</span><span class="n">lik</span><span class="p">,</span> <span class="n">inducing_variable</span><span class="o">=</span><span class="n">Z</span><span class="p">)</span>
+<span class="n">gp_linear</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">variance</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+<span class="n">gp_linear</span><span class="p">,</span> <span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span> <span class="o">=</span> <span class="n">trainGP</span><span class="p">(</span>
+    <span class="n">gp_linear</span><span class="p">,</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plot_loss</span><span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span><span class="p">)</span>
+<span class="n">gp_linear</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/618d54972e478edb9f0f5eecb4a3c8818d7ada4401aa35af98000b070aca50f1.png" src="../_images/618d54972e478edb9f0f5eecb4a3c8818d7ada4401aa35af98000b070aca50f1.png" />
+<div class="output text_html">&lt;gpflow.models.svgp.SVGP object at 0x7f58e1b9ee80&gt;
+<table>
+<thead>
+<tr><th>name                    </th><th>class    </th><th>transform       </th><th>prior  </th><th>trainable  </th><th>shape      </th><th>dtype  </th><th>value                                               </th></tr>
+</thead>
+<tbody>
+<tr><td>SVGP.kernel.variance    </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>0.9922619440901339                                  </td></tr>
+<tr><td>SVGP.likelihood.variance</td><td>Parameter</td><td>Softplus + Shift</td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>15.46902                                            </td></tr>
+<tr><td>SVGP.inducing_variable.Z</td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(50, 1)    </td><td>float64</td><td>[[-14.51073...                                      </td></tr>
+<tr><td>SVGP.q_mu               </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(50, 1)    </td><td>float64</td><td>[[9.50147776e-01...                                 </td></tr>
+<tr><td>SVGP.q_sqrt             </td><td>Parameter</td><td>FillTriangular  </td><td>       </td><td>True       </td><td>(1, 50, 50)</td><td>float64</td><td>[[[6.80571681e-02, 0.00000000e+00, 0.00000000e+00...</td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prediction_linGP</span><span class="p">,</span> <span class="n">uncertainty_linGP</span> <span class="o">=</span> <span class="n">gp_linear</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
+<span class="n">prediction_linGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prediction_linGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">uncertainty_linGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">uncertainty_linGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+<span class="n">n_std</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">31000</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1000</span>
+<span class="n">prediction_linGPplot</span> <span class="o">=</span> <span class="n">prediction_linGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+<span class="n">uncertainty_linGPplot</span> <span class="o">=</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_linGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prediction_linGPplot</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+    <span class="n">prediction_linGPplot</span> <span class="o">+</span> <span class="n">uncertainty_linGPplot</span><span class="p">,</span>
+    <span class="n">prediction_linGPplot</span> <span class="o">-</span> <span class="n">uncertainty_linGPplot</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">prediction_linGP</span><span class="p">)))</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_linGP</span><span class="p">)))</span>
+<span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">prediction_linGP</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1b862005fccf6f3f9f4099abcc5a07a5d42339bfc3b8dc2260eb7a790af0b07e.png" src="../_images/1b862005fccf6f3f9f4099abcc5a07a5d42339bfc3b8dc2260eb7a790af0b07e.png" />
+</div>
+</div>
+</div>
+<div class="section" id="local-mappings-with-a-non-linear-kernel">
+<h3>Local mappings with a non-linear kernel<a class="headerlink" href="#local-mappings-with-a-non-linear-kernel" title="Permalink to this headline">#</a></h3>
+<p>Here we are going to opt for a combination of 2 kernels: The Rational Quadratic kernel:</p>
+<p><span class="math notranslate nohighlight">\(k_1(\textbf{x},\textbf{x}') = \theta_1^2 \bigg(1 + \dfrac{\Vert \textbf{x} - \textbf{x}' \Vert^2}{2\theta_2^2\theta_3}\bigg)^{-\theta_3}\)</span></p>
+<p>and the linear kernel:</p>
+<p><span class="math notranslate nohighlight">\(k_2(\textbf{x},\textbf{x}') = \theta_4^2 \big(\textbf{x}\textbf{x}^\text{T}\big)\)</span></p>
+<p>such that our kernel becomes <span class="math notranslate nohighlight">\(k(\textbf{x},\textbf{x}') = k_1(\textbf{x},\textbf{x}') + k_2(\textbf{x},\textbf{x}')\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">Y_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">x_valid</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># number of inducing variables</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x_train</span><span class="p">),</span> <span class="n">M</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+<span class="p">)</span>
+
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">RationalQuadratic</span><span class="p">()</span> <span class="o">+</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">Linear</span><span class="p">()</span>
+<span class="n">lik</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">likelihoods</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">()</span>
+<span class="n">gp_nonlinear</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">SVGP</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">likelihood</span><span class="o">=</span><span class="n">lik</span><span class="p">,</span> <span class="n">inducing_variable</span><span class="o">=</span><span class="n">Z</span><span class="p">)</span>
+<span class="n">gp_nonlinear</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">variance</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+<span class="n">gp_nonlinear</span><span class="p">,</span> <span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span> <span class="o">=</span> <span class="n">trainGP</span><span class="p">(</span>
+    <span class="n">gp_nonlinear</span><span class="p">,</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plot_loss</span><span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span><span class="p">)</span>
+<span class="n">gp_nonlinear</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/29030156835a2fed0ce40ee2adbff1a52987e4ca0a293b0729f1be2c3600e8a8.png" src="../_images/29030156835a2fed0ce40ee2adbff1a52987e4ca0a293b0729f1be2c3600e8a8.png" />
+<div class="output text_html">&lt;gpflow.models.svgp.SVGP object at 0x7f5997d8cf70&gt;
+<table>
+<thead>
+<tr><th>name                               </th><th>class    </th><th>transform       </th><th>prior  </th><th>trainable  </th><th>shape      </th><th>dtype  </th><th>value                                               </th></tr>
+</thead>
+<tbody>
+<tr><td>SVGP.kernel.kernels[0].variance    </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>1.74892                                             </td></tr>
+<tr><td>SVGP.kernel.kernels[0].lengthscales</td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>3.69422                                             </td></tr>
+<tr><td>SVGP.kernel.kernels[0].alpha       </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>3.13103                                             </td></tr>
+<tr><td>SVGP.kernel.kernels[1].variance    </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>0.8428626627224527                                  </td></tr>
+<tr><td>SVGP.likelihood.variance           </td><td>Parameter</td><td>Softplus + Shift</td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>9.71508                                             </td></tr>
+<tr><td>SVGP.inducing_variable.Z           </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(50, 1)    </td><td>float64</td><td>[[-14.40122...                                      </td></tr>
+<tr><td>SVGP.q_mu                          </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(50, 1)    </td><td>float64</td><td>[[9.04107705e-01...                                 </td></tr>
+<tr><td>SVGP.q_sqrt                        </td><td>Parameter</td><td>FillTriangular  </td><td>       </td><td>True       </td><td>(1, 50, 50)</td><td>float64</td><td>[[[1.69896241e-01, 0.00000000e+00, 0.00000000e+00...</td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prediction_nonlinGP</span><span class="p">,</span> <span class="n">uncertainty_nonlinGP</span> <span class="o">=</span> <span class="n">gp_nonlinear</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
+<span class="n">prediction_nonlinGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prediction_nonlinGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">uncertainty_nonlinGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">uncertainty_nonlinGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+<span class="n">n_std</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">31000</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1000</span>
+<span class="n">prediction_nonlinGPplot</span> <span class="o">=</span> <span class="n">prediction_nonlinGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+<span class="n">uncertainty_nonlinGPplot</span> <span class="o">=</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_nonlinGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prediction_nonlinGPplot</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+    <span class="n">prediction_nonlinGPplot</span> <span class="o">+</span> <span class="n">uncertainty_nonlinGPplot</span><span class="p">,</span>
+    <span class="n">prediction_nonlinGPplot</span> <span class="o">-</span> <span class="n">uncertainty_nonlinGPplot</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">prediction_nonlinGP</span><span class="p">)))</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span>
+        <span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_nonlinGP</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3c834e00659b9065c5e67ef93b3d01554d757c705c85c65cdcf4580efb318d5c.png" src="../_images/3c834e00659b9065c5e67ef93b3d01554d757c705c85c65cdcf4580efb318d5c.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="implement-the-linear-gp-parameterisation-in-an-online-setting">
+<h2>Implement the linear GP parameterisation in an online setting<a class="headerlink" href="#implement-the-linear-gp-parameterisation-in-an-online-setting" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T_test</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">X_full</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T_test</span><span class="p">,</span> <span class="n">return_coupling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Full model</span>
+
+<span class="n">init_cond</span> <span class="o">=</span> <span class="n">Xtrue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="n">gcm_gp_det</span> <span class="o">=</span> <span class="n">GCM_GP</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">gp_nonlinear</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">Xgp_det</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_gp_det</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">gp_nonlinear</span><span class="p">)</span>
+
+<span class="n">gcm_gp_sto</span> <span class="o">=</span> <span class="n">GCM_GP</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">gp_nonlinear</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Xgp_sto</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_gp_sto</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">gp_nonlinear</span><span class="p">)</span>
+
+<span class="n">gcm_no_param</span> <span class="o">=</span> <span class="n">GCM_no_param</span><span class="p">(</span><span class="n">Forcing</span><span class="p">)</span>
+<span class="n">X_no_param</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_no_param</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
+
+<span class="n">naive_parameterization</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">naive_parameterization</span><span class="p">)</span>
+<span class="n">X_param</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mf">0.85439536</span><span class="p">,</span> <span class="mf">1.75218026</span><span class="p">])</span>
+
+<span class="n">time_i</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span> <span class="n">X_full</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Full L96&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span>
+    <span class="n">Xgp_det</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GP (nonlinear kernel det.)&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkorange&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span> <span class="n">Xgp_sto</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GP (nonlinear kernel stoch.)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span> <span class="n">X_no_param</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;no param&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkviolet&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span> <span class="n">X_param</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;polynomial&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;crimson&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/efc1c8018a443a023178305dbdb9d36ddcfff4330e18e9a15e40f6c10faa45c4.png" src="../_images/efc1c8018a443a023178305dbdb9d36ddcfff4330e18e9a15e40f6c10faa45c4.png" />
+</div>
+</div>
+</div>
+<div class="section" id="use-multi-task-gps-to-exploit-non-local-features">
+<h2>Use multi-task GPs to exploit non-local features<a class="headerlink" href="#use-multi-task-gps-to-exploit-non-local-features" title="Permalink to this headline">#</a></h2>
+<p>In the GP literature, it is common to see the multi-task learning problem framed the same set of inputs are used to learn each of the functional mappings to the various outputs:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-35db4150-1e12-4c59-9b60-4d8fcebcb8f8">
+<span class="eqno">(37)<a class="headerlink" href="#equation-35db4150-1e12-4c59-9b60-4d8fcebcb8f8" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\textbf{y}_k = f_k(\textbf{x}) + \pmb{\varepsilon}_k,
+\end{equation}\]</div>
+<p>however it is also possible to define a unique set of inputs which map to the corresponding <span class="math notranslate nohighlight">\(k\)</span>, i.e:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-469b5c1a-8c65-4a71-a0af-0f3afa0796d2">
+<span class="eqno">(38)<a class="headerlink" href="#equation-469b5c1a-8c65-4a71-a0af-0f3afa0796d2" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\textbf{y}_k = f_k(\textbf{x}_k) + \pmb{\varepsilon}_k.
+\end{equation}\]</div>
+<p>This is more applicable to our case as we have 8 coarse grid terms, each of which map to their own respective sub-grid terms. We then want to model for any potential correlation between the outputs <span class="math notranslate nohighlight">\(\textbf{y}_k\)</span>, and hence the various functions <span class="math notranslate nohighlight">\(f_k(\textbf{x}_k)\)</span>. One way to achieve this is through a concept known as <em>Linear models for coregionalisation</em> (see e.g., <a class="reference external" href="https://arxiv.org/pdf/1106.6251.pdf">Álvarez et al, 2012</a>), where we assume that the function <span class="math notranslate nohighlight">\(f(\textbf{x})\)</span> is drawn from the linear combination of some latent function <span class="math notranslate nohighlight">\(g(\textbf{x})\)</span>, such that:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-74e8b65f-9fd5-44ef-bd55-c379edd654b9">
+<span class="eqno">(39)<a class="headerlink" href="#equation-74e8b65f-9fd5-44ef-bd55-c379edd654b9" title="Permalink to this equation">#</a></span>\[\begin{equation}
+f(\textbf{x}) = \textbf{W}g(\textbf{x}),
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(\textbf{x}) \in \mathbb{R}^K\)</span>, <span class="math notranslate nohighlight">\(g(\textbf{x}) \in \mathbb{R}^L\)</span>, and <span class="math notranslate nohighlight">\(\textbf{W} \in \mathbb{R}^{K \times L}\)</span>, where <span class="math notranslate nohighlight">\(L \leq K\)</span>. The principle is that the outputs of <span class="math notranslate nohighlight">\(g(\textbf{x})\)</span> are uncorrelated, but through combining them with <span class="math notranslate nohighlight">\(\textbf{W}\)</span>, they become correlated. In GPflow, the only possibility for incorporating the unique input-output task pairing is via a simpler approach known as the <em>Intrinsic model for Coregionalisation</em> (see the <a class="reference external" href="https://gpflow.github.io/GPflow/2.4.0/notebooks/advanced/coregionalisation.html">docs</a>). In this approach we assume the covariance of the latent function values between two tasks is given by a linear combination of the input kernel:</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f9aa076c-320a-419d-a05c-9ef59029b3ad">
+<span class="eqno">(40)<a class="headerlink" href="#equation-f9aa076c-320a-419d-a05c-9ef59029b3ad" title="Permalink to this equation">#</a></span>\[\begin{equation}
+\text{cov}\big(f_i(\textbf{x}),f_j(\textbf{x}')\big) = k(\textbf{x},\textbf{x}')\cdot \text{B}_{ij},
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\textbf{B} = \textbf{W}\textbf{W}^\text{T} + \text{diag}(\kappa)\)</span>, and <span class="math notranslate nohighlight">\(\textbf{W} \in \mathbb{R}^{K \times L}\)</span>. The values of <span class="math notranslate nohighlight">\(\textbf{W}\)</span> and <span class="math notranslate nohighlight">\(\kappa\)</span> are optimised along with the kernel hyperparameters with the ELBO.</p>
+<p>We will use the same nonlinear kernel (Rational Quadratic + Linear) as before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gpflow.kernels</span> <span class="kn">import</span> <span class="n">Coregion</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">heterosked</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># separate noise variance for each task</span>
+
+<span class="c1"># in this case we use the idea of &#39;coregionalisation&#39; to model the dependence between outputs</span>
+<span class="n">task_id_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
+<span class="n">task_id_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ns</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
+
+<span class="c1"># augment the inputs with an index for which output each row belongs to</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">task_id_train</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="n">heterosked</span><span class="p">:</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">task_id_train</span><span class="p">)),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">likelihoods</span><span class="o">.</span><span class="n">SwitchedLikelihood</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">gpflow</span><span class="o">.</span><span class="n">likelihoods</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">)]</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+        <span class="n">Y_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+    <span class="p">)</span>
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">likelihoods</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">()</span>
+<span class="n">x_valid</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">task_id_test</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+<span class="p">)</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="mi">56</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">X_train</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">X_train</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]),</span> <span class="n">M</span> <span class="o">//</span> <span class="n">K</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">M</span> <span class="o">//</span> <span class="n">K</span><span class="p">)</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span> <span class="o">//</span> <span class="n">K</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">rank</span> <span class="o">=</span> <span class="n">K</span>  <span class="c1"># for larger data sets it may be quicker to set a rank lower than full-rank.</span>
+<span class="n">coreg</span> <span class="o">=</span> <span class="n">Coregion</span><span class="p">(</span>
+    <span class="n">output_dim</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span> <span class="n">active_dims</span><span class="o">=</span><span class="p">[</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">)</span>  <span class="c1"># the last column of the input data</span>
+<span class="c1"># contains the indices for each task</span>
+
+<span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">k1</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">active_dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
+<span class="n">k2</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">kernels</span><span class="o">.</span><span class="n">RationalQuadratic</span><span class="p">(</span><span class="n">active_dims</span><span class="o">=</span><span class="n">dims</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="n">k1</span> <span class="o">+</span> <span class="n">k2</span><span class="p">)</span> <span class="o">*</span> <span class="n">coreg</span>
+
+<span class="n">gp_nonlocal</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">SVGP</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">likelihood</span><span class="o">=</span><span class="n">lik</span><span class="p">,</span> <span class="n">inducing_variable</span><span class="o">=</span><span class="n">Z</span><span class="p">)</span>
+<span class="n">gp_nonlocal</span><span class="p">,</span> <span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span> <span class="o">=</span> <span class="n">trainGP</span><span class="p">(</span>
+    <span class="n">gp_nonlocal</span><span class="p">,</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">),</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plot_loss</span><span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">elbo</span><span class="p">,</span> <span class="n">pred_error</span><span class="p">)</span>
+<span class="n">gp_nonlocal</span>  <span class="c1"># print the model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/267264e7e789d3f1880b03e56c1e20351c6eab96f8ba3a3789a78182296671aa.png" src="../_images/267264e7e789d3f1880b03e56c1e20351c6eab96f8ba3a3789a78182296671aa.png" />
+<div class="output text_html">&lt;gpflow.models.svgp.SVGP object at 0x7f5997dfbf10&gt;
+<table>
+<thead>
+<tr><th>name                                          </th><th>class    </th><th>transform       </th><th>prior  </th><th>trainable  </th><th>shape      </th><th>dtype  </th><th>value                                  </th></tr>
+</thead>
+<tbody>
+<tr><td>SVGP.kernel.kernels[0].kernels[0].variance    </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>0.4072961154370557                     </td></tr>
+<tr><td>SVGP.kernel.kernels[0].kernels[1].variance    </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>1.71843                                </td></tr>
+<tr><td>SVGP.kernel.kernels[0].kernels[1].lengthscales</td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>3.11043                                </td></tr>
+<tr><td>SVGP.kernel.kernels[0].kernels[1].alpha       </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>0.3572930414186439                     </td></tr>
+<tr><td>SVGP.kernel.kernels[1].W                      </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(8, 8)     </td><td>float64</td><td>[[0.53944114, 0.53944114, 0.53944114...</td></tr>
+<tr><td>SVGP.kernel.kernels[1].kappa                  </td><td>Parameter</td><td>Softplus        </td><td>       </td><td>True       </td><td>(8,)       </td><td>float64</td><td>[0.81425451, 0.59073183, 0.44673422... </td></tr>
+<tr><td>SVGP.likelihood.variance                      </td><td>Parameter</td><td>Softplus + Shift</td><td>       </td><td>True       </td><td>()         </td><td>float64</td><td>1.88677                                </td></tr>
+<tr><td>SVGP.inducing_variable.Z                      </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(56, 2)    </td><td>float64</td><td>[[-14.70175, 0....                     </td></tr>
+<tr><td>SVGP.q_mu                                     </td><td>Parameter</td><td>Identity        </td><td>       </td><td>True       </td><td>(56, 1)    </td><td>float64</td><td>[[0.54210713...                        </td></tr>
+<tr><td>SVGP.q_sqrt                                   </td><td>Parameter</td><td>FillTriangular  </td><td>       </td><td>True       </td><td>(1, 56, 56)</td><td>float64</td><td>[[[0.35622662, 0., 0....               </td></tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prediction_nonlocGP</span><span class="p">,</span> <span class="n">uncertainty_nonlocGP</span> <span class="o">=</span> <span class="n">gp_nonlocal</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
+<span class="n">prediction_nonlocGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prediction_nonlocGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">uncertainty_nonlocGP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">uncertainty_nonlocGP</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+<span class="n">n_std</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">start</span> <span class="o">=</span> <span class="mi">31000</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1000</span>
+<span class="n">prediction_nonlocGPplot</span> <span class="o">=</span> <span class="n">prediction_nonlocGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+<span class="n">uncertainty_nonlocGPplot</span> <span class="o">=</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_nonlocGP</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prediction_nonlocGPplot</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Predicted values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
+    <span class="n">prediction_nonlocGPplot</span> <span class="o">+</span> <span class="n">uncertainty_nonlocGPplot</span><span class="p">,</span>
+    <span class="n">prediction_nonlocGPplot</span> <span class="o">-</span> <span class="n">uncertainty_nonlocGPplot</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;True values&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">prediction_nonlocGP</span><span class="p">)))</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span>
+        <span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span> <span class="n">n_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">uncertainty_nonlocGP</span><span class="p">))</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">X_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">Y_valid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ns</span> <span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">),</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/61a6a6dc8f1fea5d901d8bbcb8d4a23207c3d4c76f469d40c56a9b67720a5633.png" src="../_images/61a6a6dc8f1fea5d901d8bbcb8d4a23207c3d4c76f469d40c56a9b67720a5633.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T_test</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">X_full</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">T_test</span><span class="p">,</span> <span class="n">return_coupling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Full model</span>
+
+<span class="n">init_cond</span> <span class="o">=</span> <span class="n">Xtrue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="n">gcm_gp_nonlinear</span> <span class="o">=</span> <span class="n">GCM_GP</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">gp_nonlinear</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Xgp_nonlinear</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_gp_nonlinear</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">gp_nonlinear</span><span class="p">)</span>
+
+<span class="n">gcm_gp_nonlocal</span> <span class="o">=</span> <span class="n">GCM_GP</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">gp_nonlocal</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">Xgp_nonlocal</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_gp_nonlocal</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">gp_nonlocal</span><span class="p">)</span>
+
+<span class="n">gcm_gp_nonlocal_det</span> <span class="o">=</span> <span class="n">GCM_GP</span><span class="p">(</span><span class="n">Forcing</span><span class="p">,</span> <span class="n">gp_nonlocal</span><span class="p">,</span> <span class="n">stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">Xgp_nonlocal_det</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">gcm_gp_nonlocal_det</span><span class="p">(</span><span class="n">init_cond</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_test</span> <span class="o">/</span> <span class="n">dt</span><span class="p">),</span> <span class="n">gp_nonlocal</span><span class="p">)</span>
+
+<span class="n">time_i</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span> <span class="n">X_full</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Full L96&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span>
+    <span class="n">Xgp_nonlinear</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GP (nonlinear local kernel)&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span>
+    <span class="n">Xgp_nonlocal</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GP (nonlinear nonlocal kernel sto)&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;crimson&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">[:</span><span class="n">time_i</span><span class="p">],</span>
+    <span class="n">Xgp_nonlocal_det</span><span class="p">[:</span><span class="n">time_i</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;GP (nonlinear nonlocal kernel det)&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkviolet&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3814d3011f253486d8fe70cfbf6973b99eeeb55652f6d91a51488ed13a2d274d.png" src="../_images/3814d3011f253486d8fe70cfbf6973b99eeeb55652f6d91a51488ed13a2d274d.png" />
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="random_forest_parameterization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Random Forest</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="local_map_L96_and_Burgers.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CNNs and Polynomial Maps</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-lorenz-96">Recap: Lorenz 96</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-gaussian-processes-gps">Recap: Gaussian Processes (GPs)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-inference">Exact inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-inference">Variational inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-gps">Sparse GPs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learn-the-sub-grid-tendencies-offline">Learn the sub-grid tendencies offline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-mappings-with-a-linear-kernel">Local mappings with a linear kernel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-mappings-with-a-non-linear-kernel">Local mappings with a non-linear kernel</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implement-the-linear-gp-parameterisation-in-an-online-setting">Implement the linear GP parameterisation in an online setting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-multi-task-gps-to-exploit-non-local-features">Use multi-task GPs to exploit non-local features</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The M<sup>2</sup>LInES Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2024 Dhruv Balwada, Ryan Abernathey, Shantanu Acharya, et al. — License: MIT for code, CC-BY for text and figures.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
