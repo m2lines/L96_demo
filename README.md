@@ -186,3 +186,7 @@ Brajard, Julien, Alberto Carrassi, Marc Bocquet, and Laurent Bertino. “Combini
 Schneider, Tapio, Shiwei Lan, Andrew Stuart, and João Teixeira. “Earth System Modeling 2.0: A Blueprint for Models That Learn From Observations and Targeted High-Resolution Simulations.” Geophysical Research Letters 44, no. 24 (December 28, 2017): 12,396-12,417. https://doi.org/10.1002/2017GL076101.
 
 Wilks, Daniel S. “Effects of Stochastic Parametrizations in the Lorenz ’96 System.” Quarterly Journal of the Royal Meteorological Society 131, no. 606 (2005): 389–407. https://doi.org/10.1256/qj.04.03.
+
+## License
+
+The Learning Machine Learning with Lorenz-96 JupyterBook code is dual licensed: [MIT](./LICENSE) for code, [CC-BY](./LICENSE) for text and figures.
